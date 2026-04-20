@@ -1,12 +1,7 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { films } from "@/lib/films";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Films | CultRepo",
-  description:
-    "Explore the full catalog of CultRepo documentaries about the humans shaping technology.",
-};
+import { films } from "@/lib/films";
+import TransitionLink from "@/components/TransitionLink";
 
 export default function FilmsPage() {
   return (
@@ -19,7 +14,7 @@ export default function FilmsPage() {
 
         <div className="films-grid">
           {films.map((film) => (
-            <Link
+            <TransitionLink
               key={film.slug}
               href={`/films/${film.slug}`}
               className="film-card"
@@ -40,7 +35,7 @@ export default function FilmsPage() {
                 <span className="film-card-title">{film.title}</span>
                 <span className="film-card-status">{film.status}</span>
               </div>
-            </Link>
+            </TransitionLink>
           ))}
         </div>
       </div>

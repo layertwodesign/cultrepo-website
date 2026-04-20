@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import TransitionLink from "./TransitionLink";
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
@@ -28,14 +28,14 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Wordmark — hidden on home until intro triggers it via style injection */}
-      <Link
+      {/* Wordmark */}
+      <TransitionLink
         href="/"
         className={`top-wordmark ${isHome ? "" : "visible"}`}
         style={{ zIndex: 210 }}
       />
 
-      {/* Hamburger — hidden on home until intro triggers it */}
+      {/* Hamburger */}
       <button
         className={`hamburger ${isHome ? "" : "visible"} ${open ? "open" : ""}`}
         style={{ zIndex: 210 }}
@@ -49,15 +49,15 @@ export default function Navigation() {
       {/* Full-screen menu overlay */}
       <div className={`menu-overlay ${open ? "open" : ""}`}>
         <nav className="menu-nav">
-          <Link href="/" className={`menu-link ${pathname === "/" ? "active" : ""}`}>
+          <TransitionLink href="/" className={`menu-link ${pathname === "/" ? "active" : ""}`}>
             Home
-          </Link>
-          <Link href="/films" className={`menu-link ${pathname.startsWith("/films") ? "active" : ""}`}>
+          </TransitionLink>
+          <TransitionLink href="/films" className={`menu-link ${pathname.startsWith("/films") ? "active" : ""}`}>
             Films
-          </Link>
-          <Link href="/about" className={`menu-link ${pathname === "/about" ? "active" : ""}`}>
+          </TransitionLink>
+          <TransitionLink href="/about" className={`menu-link ${pathname === "/about" ? "active" : ""}`}>
             About
-          </Link>
+          </TransitionLink>
         </nav>
         <div className="menu-footer">
           <a href="https://youtube.com/@cultrepo" target="_blank" rel="noopener noreferrer" className="menu-footer-link">YouTube</a>

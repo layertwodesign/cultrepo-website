@@ -1,34 +1,20 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
+"use client";
+
+import { useParams } from "next/navigation";
 import { films, getFilmBySlug } from "@/lib/films";
-import type { Metadata } from "next";
+import TransitionLink from "@/components/TransitionLink";
 
-export function generateStaticParams() {
-  return films.map((film) => ({ slug: film.slug }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
+export default function FilmPage() {
+  const { slug } = useParams<{ slug: string }>();
   const film = getFilmBySlug(slug);
-  if (!film) return { title: "Film Not Found | CultRepo" };
-  return {
-    title: `${film.title} | CultRepo`,
-    description: film.description,
-  };
-}
 
-export default async function FilmPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const film = getFilmBySlug(slug);
-  if (!film) notFound();
+  if (!film) {
+    return (
+      <div className="page-container">
+        <p>Film not found.</p>
+      </div>
+    );
+  }
 
   const currentIndex = films.findIndex((f) => f.slug === slug);
   const nextFilm = films[(currentIndex + 1) % films.length];
@@ -64,17 +50,17 @@ export default async function FilmPage({
 
           {/* Nav */}
           <div className="film-detail-nav">
-            <Link href={`/films/${prevFilm.slug}`} className="film-detail-nav-link">
+            <TransitionLink href={`/films/${prevFilm.slug}`} className="film-detail-nav-link">
               <span className="film-detail-nav-arrow">&larr;</span>
               <span>{prevFilm.title}</span>
-            </Link>
-            <Link href="/films" className="film-detail-nav-link film-detail-nav-back">
+            </TransitionLink>
+            <TransitionLink href="/films" className="film-detail-nav-link film-detail-nav-back">
               All Films
-            </Link>
-            <Link href={`/films/${nextFilm.slug}`} className="film-detail-nav-link">
+            </TransitionLink>
+            <TransitionLink href={`/films/${nextFilm.slug}`} className="film-detail-nav-link">
               <span>{nextFilm.title}</span>
               <span className="film-detail-nav-arrow">&rarr;</span>
-            </Link>
+            </TransitionLink>
           </div>
         </div>
       </div>

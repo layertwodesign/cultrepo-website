@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import TransitionLink from "@/components/TransitionLink";
 
 const allItems = [
   { title: "Vite", status: "In Production", video: "/clips/vite.mp4" },
@@ -101,12 +102,14 @@ type IntroPhase =
   | "done";          // Intro complete
 
 export default function Home() {
-  const [introPhase, setIntroPhase] = useState<IntroPhase>("loading");
-  const [loadProgress, setLoadProgress] = useState(0);
-  const [textLines, setTextLines] = useState([false, false, false, false]);
-  const [revealed, setRevealed] = useState(false);
-  const [showUI, setShowUI] = useState(false);
-  const [revealedChars, setRevealedChars] = useState(0);
+  const hasSeenIntro = typeof window !== "undefined" && sessionStorage.getItem("cultrepo-intro-seen") === "1";
+  const [introPhase, setIntroPhase] = useState<IntroPhase>(hasSeenIntro ? "done" : "loading");
+  const [loadProgress, setLoadProgress] = useState(hasSeenIntro ? 100 : 0);
+  const [textLines, setTextLines] = useState(hasSeenIntro ? [true, true, true, true] : [false, false, false, false]);
+  const [revealed, setRevealed] = useState(hasSeenIntro);
+  const [showUI, setShowUI] = useState(hasSeenIntro);
+  const fullDescText = "CultRepo creates cinematic documentaries\nabout the people behind the technology\nshaping our era.";
+  const [revealedChars, setRevealedChars] = useState(hasSeenIntro ? fullDescText.length : 0);
   const [showCursor, setShowCursor] = useState(false);
   const [typing, setTyping] = useState(false);
   const [items] = useState(() => shuffle(allItems));
@@ -126,13 +129,13 @@ export default function Home() {
     hasDragged: false,
     startY: 0,
     dragStart: 0,
-    initialized: false,
+    initialized: hasSeenIntro,
     initStart: Date.now(),
     introReady: false,
     introStart: 0,
     introEnd: 0,
-    carouselBlocked: true,
-    introProgress: 0, // 0-1 progress of carousel intro animation
+    carouselBlocked: !hasSeenIntro,
+    introProgress: hasSeenIntro ? 1 : 0,
     introOffsetY: 0, // extra Y offset to push carousel below viewport initially
     lastInputTime: 0, // timestamp of last scroll/drag input
     snapping: false, // whether we're currently snapping to center
@@ -273,13 +276,12 @@ export default function Home() {
     // Start typewriter for bottom-left description
     const t2 = setTimeout(() => setShowCursor(true), 1200);
 
-    const fullText = "CultRepo creates cinematic documentaries\nabout the people behind the technology\nshaping our era.";
     let charIndex = 0;
     const t3 = setTimeout(() => {
       setTyping(true);
       const typeInterval = setInterval(() => {
         charIndex++;
-        if (charIndex <= fullText.length) {
+        if (charIndex <= fullDescText.length) {
           setRevealedChars(charIndex);
         } else {
           clearInterval(typeInterval);
@@ -288,6 +290,7 @@ export default function Home() {
           setTimeout(() => {
             setShowCursor(false);
             setIntroPhase("done");
+            sessionStorage.setItem("cultrepo-intro-seen", "1");
           }, 800);
         }
       }, 30);
@@ -686,7 +689,7 @@ export default function Home() {
             <img src="/ghost.png" alt="" className="bottom-ghost" />
             <p className="bottom-desc">
               {(() => {
-                const fullText = "CultRepo creates cinematic documentaries\nabout the people behind the technology\nshaping our era.";
+                const fullText = fullDescText;
                 const visible = fullText.slice(0, revealedChars);
                 const hidden = fullText.slice(revealedChars);
                 return (
@@ -698,6 +701,9 @@ export default function Home() {
                 );
               })()}
             </p>
+            <TransitionLink href="/about" className="home-cta">
+              Partner with Us
+            </TransitionLink>
           </div>
         )}
 

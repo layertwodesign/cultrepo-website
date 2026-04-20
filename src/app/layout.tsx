@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import { PageTransitionProvider } from "@/components/PageTransition";
 
 const interphases = localFont({
   src: [
@@ -37,9 +38,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${interphases.variable} ${interphasesMono.variable}`}>
       <body>
-        <Navigation />
-        {children}
-        <div className="film-grain" />
+        <PageTransitionProvider>
+          <Navigation />
+          {children}
+          <div className="film-grain" />
+        </PageTransitionProvider>
       </body>
     </html>
   );
