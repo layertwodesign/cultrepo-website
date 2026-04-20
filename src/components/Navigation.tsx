@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import TransitionLink from "./TransitionLink";
+import { useNavVisibility } from "./NavVisibility";
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { hidden } = useNavVisibility();
 
   // Close menu on route change
   useEffect(() => {
@@ -26,25 +28,31 @@ export default function Navigation() {
     };
   }, [open]);
 
+  // When nav is hidden (film page top), don't render the nav bar
+  // but always keep the menu overlay accessible
+  const navVisible = !hidden && !isHome;
+  const navVisibleHome = !hidden && isHome;
+
   return (
     <>
-      {/* Wordmark */}
-      <TransitionLink
-        href="/"
-        className={`top-wordmark ${isHome ? "" : "visible"}`}
-        style={{ zIndex: 210 }}
-      />
+      {/* Nav bar with gradient backdrop */}
+      <div className={`nav-bar ${hidden ? "nav-hidden" : ""} ${navVisible || open ? "nav-scrolled" : ""}`}>
+        {/* Wordmark */}
+        <TransitionLink
+          href="/"
+          className={`top-wordmark ${navVisibleHome ? "" : "visible"}`}
+        />
 
-      {/* Hamburger */}
-      <button
-        className={`hamburger ${isHome ? "" : "visible"} ${open ? "open" : ""}`}
-        style={{ zIndex: 210 }}
-        aria-label={open ? "Close menu" : "Open menu"}
-        onClick={() => setOpen(!open)}
-      >
-        <span />
-        <span />
-      </button>
+        {/* Hamburger */}
+        <button
+          className={`hamburger ${navVisibleHome ? "" : "visible"} ${open ? "open" : ""}`}
+          aria-label={open ? "Close menu" : "Open menu"}
+          onClick={() => setOpen(!open)}
+        >
+          <span />
+          <span />
+        </button>
+      </div>
 
       {/* Full-screen menu overlay */}
       <div className={`menu-overlay ${open ? "open" : ""}`}>
