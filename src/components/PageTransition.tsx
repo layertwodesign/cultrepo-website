@@ -12,6 +12,7 @@ import { useRouter, usePathname } from "next/navigation";
 
 type TransitionType = "fade" | "film-expand";
 type TransitionState = "idle" | "exiting" | "entering";
+type FilmPhase = "placed" | "expanding" | "done";
 
 type FilmExpandData = {
   rect: DOMRect;
@@ -40,7 +41,9 @@ export function PageTransitionProvider({
   const [state, setState] = useState<TransitionState>("idle");
   const [type, setType] = useState<TransitionType>("fade");
   const [filmData, setFilmData] = useState<FilmExpandData | null>(null);
+  const [filmPhase, setFilmPhase] = useState<FilmPhase>("placed");
   const prevPathname = useRef(pathname);
+  const filmRef = useRef<HTMLDivElement>(null);
 
   // Default fade transition
   const navigateTo = useCallback(
@@ -55,19 +58,29 @@ export function PageTransitionProvider({
     [pathname, router, state]
   );
 
-  // Film-expand transition: capture element rect, expand to fullscreen, then navigate
+  // Film-expand transition
   const navigateToFilm = useCallback(
     (href: string, el: HTMLElement, videoSrc: string) => {
       if (href === pathname || state !== "idle") return;
       const rect = el.getBoundingClientRect();
       setFilmData({ rect, videoSrc });
       setType("film-expand");
+      setFilmPhase("placed");
       setState("exiting");
 
-      // Navigate after expand animation
+      // Phase 1: element is placed at the card's position (set above)
+      // Phase 2: on next frame, trigger the expansion
+      // We need a small delay so the browser paints the initial position first
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setFilmPhase("expanding");
+        });
+      });
+
+      // Navigate after expand animation completes
       setTimeout(() => {
         router.push(href);
-      }, 700);
+      }, 750);
     },
     [pathname, router, state]
   );
@@ -81,32 +94,39 @@ export function PageTransitionProvider({
       setTimeout(() => {
         setState("idle");
         setFilmData(null);
+        setFilmPhase("placed");
         setType("fade");
       }, 500);
     }
   }, [pathname]);
 
-  // Compute film-expand inline styles
-  const filmStyle: React.CSSProperties | undefined =
-    filmData && state === "exiting"
-      ? {
-          position: "fixed",
-          left: filmData.rect.left,
-          top: filmData.rect.top,
-          width: filmData.rect.width,
-          height: filmData.rect.height,
-          borderRadius: "40px",
-        }
-      : filmData && state === "entering"
-        ? {
-            position: "fixed",
-            left: 0,
-            top: 0,
-            width: "100vw",
-            height: "100vh",
-            borderRadius: "0px",
-          }
-        : undefined;
+  // Compute film styles based on phase
+  let filmStyle: React.CSSProperties = {};
+  if (filmData) {
+    if (filmPhase === "placed") {
+      // Start at the card's exact position
+      filmStyle = {
+        left: filmData.rect.left,
+        top: filmData.rect.top,
+        width: filmData.rect.width,
+        height: filmData.rect.height,
+        borderRadius: 40,
+        opacity: 1,
+      };
+    } else if (filmPhase === "expanding") {
+      // Animate to fullscreen
+      filmStyle = {
+        left: 0,
+        top: 0,
+        width: "100vw",
+        height: "100vh",
+        borderRadius: 0,
+        opacity: 1,
+      };
+    }
+  }
+
+  const isFilmVisible = type === "film-expand" && filmData && state !== "idle";
 
   return (
     <TransitionContext.Provider value={{ navigateTo, navigateToFilm }}>
@@ -120,9 +140,10 @@ export function PageTransitionProvider({
       )}
 
       {/* Film-expand overlay */}
-      {type === "film-expand" && filmData && (
+      {isFilmVisible && (
         <div
-          className={`film-transition ${state}`}
+          ref={filmRef}
+          className={`film-transition ${state === "entering" ? "fade-out" : ""}`}
           aria-hidden="true"
           style={filmStyle}
         >
