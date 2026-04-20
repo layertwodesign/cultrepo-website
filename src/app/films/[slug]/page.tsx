@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { films, getFilmBySlug } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
 import { useNavVisibility } from "@/components/NavVisibility";
@@ -13,8 +13,69 @@ export default function FilmPage() {
   const { setHidden } = useNavVisibility();
   const { navigateTo } = useTransition();
   const [scrolled, setScrolled] = useState(false);
+  const [ytReady, setYtReady] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const progressRef = useRef(0);
+
+  // Simulate loading progress, then wait for YouTube
+  useEffect(() => {
+    if (!film?.youtubeId) return;
+    let raf: number;
+    const start = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      // Quick ramp to 70% in 1.5s, then slow crawl until YouTube is ready
+      if (!ytReady) {
+        const fast = Math.min(elapsed / 1500, 1) * 70;
+        const slow = Math.max(0, (elapsed - 1500) / 8000) * 25;
+        progressRef.current = Math.min(fast + slow, 95);
+      } else {
+        // YouTube ready — snap to 100
+        progressRef.current = Math.min(progressRef.current + 3, 100);
+      }
+      setLoadProgress(progressRef.current);
+      if (progressRef.current < 100) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [film?.youtubeId, ytReady]);
+
+  // Listen for YouTube iframe API messages
+  useEffect(() => {
+    if (!film?.youtubeId) return;
+
+    const onMessage = (e: MessageEvent) => {
+      if (typeof e.data !== "string") return;
+      try {
+        const data = JSON.parse(e.data);
+        // YouTube player sends info events; state 1 = playing
+        if (data.event === "onReady" || data.event === "initialDelivery") {
+          setYtReady(true);
+        }
+        if (data.event === "onStateChange" && data.info === 1) {
+          setYtReady(true);
+        }
+      } catch {
+        // not JSON, ignore
+      }
+    };
+
+    window.addEventListener("message", onMessage);
+
+    // Fallback: if we don't hear from YouTube in 4s, assume ready
+    const fallback = setTimeout(() => setYtReady(true), 4000);
+
+    return () => {
+      window.removeEventListener("message", onMessage);
+      clearTimeout(fallback);
+    };
+  }, [film?.youtubeId]);
+
+  const isLoaded = loadProgress >= 100;
 
   // Hide nav on mount, show on scroll past hero
   useEffect(() => {
@@ -27,7 +88,6 @@ export default function FilmPage() {
       setScrolled(pastThreshold);
       setHidden(window.scrollY <= threshold);
 
-      // Pause/resume YouTube when scrolling past hero
       const iframe = iframeRef.current;
       if (iframe?.contentWindow) {
         if (pastThreshold && !wasPaused) {
@@ -63,16 +123,41 @@ export default function FilmPage() {
     <div className="film-page">
       {/* Full-screen immersive video */}
       <section className="film-hero film-hero-immersive" ref={heroRef}>
-        {film.youtubeId ? (
+        {/* Clip video as background/loading state */}
+        <video
+          src={film.video}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="auto"
+          className={`film-hero-video film-hero-clip ${isLoaded ? "film-hero-clip-hidden" : ""}`}
+        />
+
+        {/* Loading bar overlay */}
+        {film.youtubeId && !isLoaded && (
+          <div className="film-loader">
+            <img src="/ghost.png" alt="" className="film-loader-ghost" />
+            <div className="film-loader-bar-wrap">
+              <div className="film-loader-bar" style={{ width: `${loadProgress}%` }} />
+            </div>
+          </div>
+        )}
+
+        {/* YouTube iframe — hidden until loaded */}
+        {film.youtubeId && (
           <iframe
             ref={iframeRef}
-            className="film-hero-iframe"
-            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
+            className={`film-hero-iframe ${isLoaded ? "film-hero-iframe-visible" : ""}`}
+            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             title={film.title}
           />
-        ) : (
+        )}
+
+        {/* Fallback for films without YouTube */}
+        {!film.youtubeId && (
           <video
             src={film.video}
             muted
@@ -84,7 +169,7 @@ export default function FilmPage() {
           />
         )}
 
-        {/* X close button — top right */}
+        {/* X close button */}
         <button
           className={`film-close ${scrolled ? "film-close-hidden" : ""}`}
           onClick={() => navigateTo("/")}
@@ -95,8 +180,8 @@ export default function FilmPage() {
           </svg>
         </button>
 
-        {/* Subtle scroll indicator at very bottom */}
-        <div className={`film-scroll-indicator ${scrolled ? "film-scroll-hidden" : ""}`}>
+        {/* Scroll indicator */}
+        <div className={`film-scroll-indicator ${scrolled || !isLoaded ? "film-scroll-hidden" : ""}`}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -105,14 +190,12 @@ export default function FilmPage() {
 
       {/* Editorial content below */}
       <section className="film-editorial">
-        {/* Title block */}
         <div className="film-ed-title-block">
           <span className="film-ed-status">{film.status}</span>
           <h1 className="film-ed-title">{film.title}</h1>
           <p className="film-ed-tagline">{film.description}</p>
         </div>
 
-        {/* Meta strip */}
         <div className="film-ed-meta-strip">
           <div className="film-ed-meta">
             <span className="film-ed-meta-key">Director</span>
@@ -128,15 +211,12 @@ export default function FilmPage() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="film-ed-divider" />
 
-        {/* Synopsis */}
         <div className="film-ed-synopsis">
           <p>{film.synopsis}</p>
         </div>
 
-        {/* Stills — editorial layout with varied aspect ratios */}
         <div className="film-ed-stills">
           <div className="film-ed-still film-ed-still-wide">
             <video src={film.video} muted loop playsInline autoPlay preload="metadata" />
@@ -154,10 +234,8 @@ export default function FilmPage() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="film-ed-divider" />
 
-        {/* Featuring */}
         <div className="film-ed-cast-section">
           <h2 className="film-ed-section-label">Featuring</h2>
           <div className="film-ed-cast">
@@ -174,10 +252,8 @@ export default function FilmPage() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="film-ed-divider" />
 
-        {/* Next / Prev */}
         <div className="film-ed-nav">
           <TransitionLink href={`/films/${prevFilm.slug}`} className="film-ed-nav-link">
             <span className="film-ed-nav-dir">Previous</span>
