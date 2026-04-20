@@ -40,12 +40,12 @@ export default function Navigation() {
         {/* Wordmark */}
         <TransitionLink
           href="/"
-          className={`top-wordmark ${navVisibleHome ? "" : "visible"}`}
+          className={`top-wordmark ${!hidden && !navVisibleHome ? "visible" : ""}`}
         />
 
-        {/* Hamburger */}
+        {/* Hamburger — hidden when nav is hidden (film page hero) */}
         <button
-          className={`hamburger ${navVisibleHome ? "" : "visible"} ${open ? "open" : ""}`}
+          className={`hamburger ${!hidden && !navVisibleHome ? "visible" : ""} ${open ? "open" : ""}`}
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen(!open)}
         >
