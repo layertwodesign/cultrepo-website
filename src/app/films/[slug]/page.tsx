@@ -14,15 +14,30 @@ export default function FilmPage() {
   const { navigateTo } = useTransition();
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Hide nav on mount, show on scroll past hero
   useEffect(() => {
     setHidden(true);
 
+    let wasPaused = false;
     const onScroll = () => {
       const threshold = window.innerHeight * 0.7;
-      setScrolled(window.scrollY > threshold);
+      const pastThreshold = window.scrollY > threshold;
+      setScrolled(pastThreshold);
       setHidden(window.scrollY <= threshold);
+
+      // Pause/resume YouTube when scrolling past hero
+      const iframe = iframeRef.current;
+      if (iframe?.contentWindow) {
+        if (pastThreshold && !wasPaused) {
+          iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', "*");
+          wasPaused = true;
+        } else if (!pastThreshold && wasPaused) {
+          iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
+          wasPaused = false;
+        }
+      }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -50,8 +65,9 @@ export default function FilmPage() {
       <section className="film-hero film-hero-immersive" ref={heroRef}>
         {film.youtubeId ? (
           <iframe
+            ref={iframeRef}
             className="film-hero-iframe"
-            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3`}
+            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             title={film.title}
