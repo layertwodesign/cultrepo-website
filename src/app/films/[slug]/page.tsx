@@ -116,7 +116,7 @@ export default function FilmPage() {
           <iframe
             ref={iframeRef}
             className={`film-hero-iframe ${ytPlaying ? "film-hero-iframe-visible" : ""}`}
-            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=0&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
+            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             title={film.title}

@@ -93,7 +93,7 @@ type IntroPhase =
   | "done";          // Intro complete
 
 export default function Home() {
-  const { navigateToFilm } = useTransition();
+  const { navigateTo } = useTransition();
   const hasSeenIntro = typeof window !== "undefined" && sessionStorage.getItem("cultrepo-intro-seen") === "1";
   const [introPhase, setIntroPhase] = useState<IntroPhase>(hasSeenIntro ? "done" : "loading");
   const [loadProgress, setLoadProgress] = useState(hasSeenIntro ? 100 : 0);
@@ -105,6 +105,10 @@ export default function Home() {
   const [showCursor, setShowCursor] = useState(false);
   const [typing, setTyping] = useState(false);
   const [items] = useState(() => shuffle(allItems));
+  const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
+  const [centeredSlug, setCenteredSlug] = useState<string | null>(null);
+  const ytPreloadRef = useRef<HTMLIFrameElement>(null);
+  const expandingIdxRef = useRef<number | null>(null);
   const [showDebug, setShowDebug] = useState(false);
   const [params, setParams] = useState<Params>(DEFAULTS);
   const paramsRef = useRef(params);
@@ -295,6 +299,26 @@ export default function Home() {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [introPhase]);
 
+  // Track centered carousel item for YouTube preloading
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const centered = itemRefs.current.findIndex(
+        (el) => el?.dataset.centered === "true"
+      );
+      if (centered >= 0 && items[centered]) {
+        const slug = items[centered].slug;
+        if (slug !== centeredSlug) {
+          setCenteredSlug(slug);
+        }
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [items, centeredSlug]);
+
+  // Get YouTube ID for preloading
+  const preloadFilm = centeredSlug ? films.find((f) => f.slug === centeredSlug) : null;
+  const preloadYtId = preloadFilm?.youtubeId;
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "d" || e.key === "D") setShowDebug((v) => !v);
@@ -364,6 +388,8 @@ export default function Home() {
         if (state.isDragging) state.dragStart += totalH;
       }
 
+      const expIdx = expandingIdxRef.current;
+
       itemRefs.current.forEach((el, idx) => {
         if (!el) return;
 
@@ -387,16 +413,26 @@ export default function Home() {
         const scaledW = effectiveBaseWidth * scale;
         const visualCenter = logicalCenter + offset;
         const top = visualCenter - scaledH / 2;
-        const left = (wrapperW - scaledW) / 2;
+
+        const finalW = effectiveBaseWidth * scale;
+        const finalH = finalW / (16 / 9);
+        const finalLeft = (wrapperW - finalW) / 2;
+
+        // If this item is expanding, skip — CSS transition handles it
+        if (expIdx === idx) {
+          return;
+        }
+
+        // If another item is expanding, fade this one out
+        if (expIdx !== null) {
+          el.style.opacity = "0";
+          return;
+        }
 
         let opacity = 1;
         if (norm > 0.85) {
           opacity *= 1 - (norm - 0.85) / 0.15;
         }
-
-        const finalW = effectiveBaseWidth * scale;
-        const finalH = finalW / (16 / 9);
-        const finalLeft = (wrapperW - finalW) / 2;
 
         const yWithOffset = top + state.introOffsetY;
         el.style.transform = `translate(${finalLeft}px, ${yWithOffset}px)`;
@@ -406,6 +442,13 @@ export default function Home() {
         el.style.zIndex = String(Math.round((1 - norm) * 5));
         el.style.borderRadius = `${p.borderRadius}px`;
         el.style.pointerEvents = scale < 0.3 ? "none" : "auto";
+
+        // Track centered item for YouTube preloading
+        if (norm < 0.1 && state.initialized) {
+          el.dataset.centered = "true";
+        } else {
+          delete el.dataset.centered;
+        }
 
         // Fade videos in during last 25% of intro animation
         const videoEl = el.querySelector("video") as HTMLVideoElement | null;
@@ -750,12 +793,36 @@ export default function Home() {
               >
                 <div
                   className="carousel-item-link"
-                  onClick={(e) => {
-                    if (!stateRef.current.hasDragged && stateRef.current.initialized) {
-                      const el = (e.currentTarget as HTMLElement).closest(".carousel-item") as HTMLElement;
-                      if (el) {
-                        navigateToFilm(`/films/${item.slug}`, el, item.video);
+                  onClick={() => {
+                    if (!stateRef.current.hasDragged && stateRef.current.initialized && expandingIdx === null) {
+                      // Start YouTube playback on the preloaded iframe (user gesture)
+                      const yt = ytPreloadRef.current;
+                      if (yt?.contentWindow) {
+                        yt.contentWindow.postMessage(
+                          '{"event":"command","func":"playVideo","args":""}', "*"
+                        );
                       }
+
+                      // Mark this item as expanding
+                      expandingIdxRef.current = idx;
+                      setExpandingIdx(idx);
+
+                      // Apply fullscreen styles to the actual card element
+                      const el = itemRefs.current[idx];
+                      if (el) {
+                        el.style.transition = "all 0.65s cubic-bezier(0.16, 1, 0.3, 1)";
+                        el.style.transform = "translate(0px, 0px)";
+                        el.style.width = "100vw";
+                        el.style.height = "100vh";
+                        el.style.borderRadius = "0px";
+                        el.style.zIndex = "999";
+                        el.style.opacity = "1";
+                      }
+
+                      // Navigate after expansion
+                      setTimeout(() => {
+                        navigateTo(`/films/${item.slug}`);
+                      }, 650);
                     }
                   }}
                 >
@@ -777,6 +844,17 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Preloaded YouTube iframe — hidden, loads centered film */}
+      {preloadYtId && (
+        <iframe
+          ref={ytPreloadRef}
+          className="yt-preload"
+          src={`https://www.youtube.com/embed/${preloadYtId}?autoplay=0&enablejsapi=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          title="Preload"
+        />
+      )}
 
       {/* Cursor-following VIEW FILM label */}
       <div ref={cursorLabelRef} className="cursor-label">View Film</div>

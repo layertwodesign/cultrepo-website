@@ -553,6 +553,19 @@ a { color: inherit; text-decoration: none; }
   border-radius: 0;
 }
 
+/* ============ YOUTUBE PRELOAD (hidden) ============ */
+.yt-preload {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  top: -10px;
+  left: -10px;
+  opacity: 0;
+  pointer-events: none;
+  border: none;
+  z-index: -1;
+}
+
 /* ============ CURSOR FOLLOW LABEL ============ */
 .cursor-label {
   position: fixed;
@@ -621,31 +634,6 @@ a { color: inherit; text-decoration: none; }
 .page-transition.entering .page-transition-ghost {
   opacity: 0;
   transform: scale(0.8);
-}
-
-/* ============ FILM-EXPAND TRANSITION ============ */
-.film-transition {
-  position: fixed;
-  z-index: 300;
-  overflow: hidden;
-  pointer-events: none;
-  border: 1px solid rgba(115, 112, 102, 0.25);
-  transition:
-    left 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    top 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    height 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    border-radius 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.65s ease,
-    opacity 0.4s ease;
-}
-.film-transition.fade-out {
-  opacity: 0;
-}
-.film-transition-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 /* ============ HOME CTA ============ */
