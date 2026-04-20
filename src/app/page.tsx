@@ -632,13 +632,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* Top-left wordmark */}
-      <div className={`top-wordmark ${showUI ? "visible" : ""}`} />
-
-      {/* Hamburger menu — top right */}
-      <button className={`hamburger ${showUI ? "visible" : ""}`} aria-label="Menu">
-        <span /><span />
-      </button>
+      {/* Nav visibility trigger — tells layout nav to show */}
+      {showUI && <style>{`.top-wordmark, .hamburger { opacity: 1 !important; }`}</style>}
 
       {/* Camera ruler lines — left and right edges */}
       <div className="camera-ruler camera-ruler-left" />
@@ -774,9 +769,6 @@ export default function Home() {
 
       {/* Cursor-following VIEW FILM label */}
       <div ref={cursorLabelRef} className="cursor-label">View Film</div>
-
-      {/* Film grain overlay */}
-      <div className="film-grain" />
     </>
   );
 }
