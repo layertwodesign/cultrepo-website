@@ -13,45 +13,17 @@ export default function FilmPage() {
   const { setHidden } = useNavVisibility();
   const { navigateTo } = useTransition();
   const [scrolled, setScrolled] = useState(false);
-  const [ytPlaying, setYtPlaying] = useState(false);
+  const [showYt, setShowYt] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Listen for YouTube to start playing, then crossfade from clip
+  // Delay mounting YouTube iframe so the preloaded player from homepage
+  // keeps playing uninterrupted. After delay, mount and crossfade.
   useEffect(() => {
     if (!film?.youtubeId) return;
-
-    const onMessage = (e: MessageEvent) => {
-      if (typeof e.data !== "string") return;
-      try {
-        const data = JSON.parse(e.data);
-        // State 1 = playing
-        if (data.event === "onStateChange" && data.info === 1) {
-          setYtPlaying(true);
-        }
-        // Also catch onReady and start playback
-        if (data.event === "onReady" || data.event === "initialDelivery") {
-          const iframe = iframeRef.current;
-          if (iframe?.contentWindow) {
-            iframe.contentWindow.postMessage(
-              '{"event":"command","func":"playVideo","args":""}', "*"
-            );
-          }
-        }
-      } catch {
-        // ignore
-      }
-    };
-
-    window.addEventListener("message", onMessage);
-
-    // Fallback — if YouTube doesn't signal in 6s, reveal it anyway
-    const fallback = setTimeout(() => setYtPlaying(true), 6000);
-
-    return () => {
-      window.removeEventListener("message", onMessage);
-      clearTimeout(fallback);
-    };
+    // Wait for the card expansion transition to complete, then mount YouTube
+    const timer = setTimeout(() => setShowYt(true), 800);
+    return () => clearTimeout(timer);
   }, [film?.youtubeId]);
 
   // Hide nav on mount, show on scroll past hero
@@ -108,14 +80,14 @@ export default function FilmPage() {
           playsInline
           autoPlay
           preload="auto"
-          className={`film-hero-video film-hero-clip ${ytPlaying ? "film-hero-clip-hidden" : ""}`}
+          className={`film-hero-video film-hero-clip ${showYt ? "film-hero-clip-hidden" : ""}`}
         />
 
-        {/* YouTube iframe — loads silently, crossfades in when playing */}
-        {film.youtubeId && (
+        {/* YouTube iframe — delayed mount, crossfades in over the clip */}
+        {film.youtubeId && showYt && (
           <iframe
             ref={iframeRef}
-            className={`film-hero-iframe ${ytPlaying ? "film-hero-iframe-visible" : ""}`}
+            className="film-hero-iframe film-hero-iframe-visible"
             src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
