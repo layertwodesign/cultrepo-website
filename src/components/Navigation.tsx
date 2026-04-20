@@ -56,6 +56,16 @@ export default function Navigation() {
 
       {/* Full-screen menu overlay */}
       <div className={`menu-overlay ${open ? "open" : ""}`}>
+        {/* Close button inside menu */}
+        <button
+          className="menu-close"
+          aria-label="Close menu"
+          onClick={() => setOpen(false)}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
         <nav className="menu-nav">
           <TransitionLink href="/" className={`menu-link ${pathname === "/" ? "active" : ""}`}>
             Home
