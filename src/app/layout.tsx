@@ -39,6 +39,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${interphases.variable} ${interphasesMono.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" />
+        <link rel="preconnect" href="https://www.google.com" />
+      </head>
       <body>
         <NavVisibilityProvider>
           <PageTransitionProvider>
