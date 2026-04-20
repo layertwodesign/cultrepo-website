@@ -21,10 +21,18 @@ export default function FilmPage() {
   const prevFilm = films[(currentIndex - 1 + films.length) % films.length];
 
   return (
-    <div className="page-container">
-      <div className="film-detail">
-        {/* Video hero */}
-        <div className="film-detail-video-wrap">
+    <div className="film-page">
+      {/* Full-screen video hero */}
+      <section className="film-hero">
+        {film.youtubeId ? (
+          <iframe
+            className="film-hero-iframe"
+            src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={film.title}
+          />
+        ) : (
           <video
             src={film.video}
             muted
@@ -32,23 +40,86 @@ export default function FilmPage() {
             playsInline
             autoPlay
             preload="auto"
-            className="film-detail-video"
+            className="film-hero-video"
           />
+        )}
+        {/* Gradient fade at bottom */}
+        <div className="film-hero-fade" />
+        {/* Title overlay */}
+        <div className="film-hero-overlay">
+          <span className="film-hero-status">{film.status}</span>
+          <h1 className="film-hero-title">{film.title}</h1>
+          <p className="film-hero-tagline">{film.description}</p>
+          <div className="film-hero-scroll-hint">
+            <span>Scroll to explore</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      {/* Scrollable content below */}
+      <section className="film-content">
+        {/* Synopsis */}
+        <div className="film-section">
+          <div className="film-section-grid">
+            <div className="film-section-sidebar">
+              <h2 className="film-section-label">Synopsis</h2>
+              <div className="film-meta">
+                <div className="film-meta-item">
+                  <span className="film-meta-key">Year</span>
+                  <span className="film-meta-val">{film.year}</span>
+                </div>
+                <div className="film-meta-item">
+                  <span className="film-meta-key">Runtime</span>
+                  <span className="film-meta-val">{film.duration}</span>
+                </div>
+                <div className="film-meta-item">
+                  <span className="film-meta-key">Director</span>
+                  <span className="film-meta-val">{film.director}</span>
+                </div>
+              </div>
+            </div>
+            <div className="film-section-body">
+              <p className="film-synopsis">{film.synopsis}</p>
+            </div>
+          </div>
         </div>
 
-        {/* Info */}
-        <div className="film-detail-info">
-          <div className="film-detail-header">
-            <div>
-              <span className="film-detail-status">{film.status}</span>
-              <h1 className="film-detail-title">{film.title}</h1>
+        {/* Stills */}
+        <div className="film-section">
+          <h2 className="film-section-label">Stills</h2>
+          <div className="film-stills">
+            <div className="film-still">
+              <video src={film.video} muted loop playsInline autoPlay preload="metadata" className="film-still-media" />
             </div>
-            <span className="film-detail-year">{film.year}</span>
+            <div className="film-still">
+              <video src={film.video} muted loop playsInline autoPlay preload="metadata" className="film-still-media" style={{ objectPosition: "center 30%" }} />
+            </div>
+            <div className="film-still">
+              <video src={film.video} muted loop playsInline autoPlay preload="metadata" className="film-still-media" style={{ objectPosition: "center 70%" }} />
+            </div>
           </div>
+        </div>
 
-          <p className="film-detail-desc">{film.description}</p>
+        {/* Cast */}
+        <div className="film-section">
+          <h2 className="film-section-label">Featuring</h2>
+          <div className="film-cast">
+            {film.cast.map((name) => (
+              <div key={name} className="film-cast-member">
+                <div className="film-cast-avatar">
+                  {name.split(" ").map((n) => n[0]).join("")}
+                </div>
+                <span className="film-cast-name">{name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* Nav */}
+        {/* Nav */}
+        <div className="film-section film-bottom-nav">
           <div className="film-detail-nav">
             <TransitionLink href={`/films/${prevFilm.slug}`} className="film-detail-nav-link">
               <span className="film-detail-nav-arrow">&larr;</span>
@@ -63,7 +134,7 @@ export default function FilmPage() {
             </TransitionLink>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

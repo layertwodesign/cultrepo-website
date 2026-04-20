@@ -2,24 +2,15 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import TransitionLink from "@/components/TransitionLink";
+import { useTransition } from "@/components/PageTransition";
+import { films } from "@/lib/films";
 
-const allItems = [
-  { title: "Vite", status: "In Production", video: "/clips/vite.mp4" },
-  { title: "Kubernetes", status: "Coming Soon", video: "/clips/kubernetes.mp4" },
-  { title: "React", status: "In Production", video: "/clips/reactjs.mp4" },
-  { title: "GraphQL", status: "Post-Production", video: "/clips/graphql.mp4" },
-  { title: "Node.js", status: "In Production", video: "/clips/nodejs.mp4" },
-  { title: "Local First", status: "Coming Soon", video: "/clips/localfirst.mp4" },
-  { title: "Elixir", status: "Post-Production", video: "/clips/elixir.mp4" },
-  { title: "Angular", status: "In Production", video: "/clips/angular.mp4" },
-  { title: "Vue.js", status: "Coming Soon", video: "/clips/vuejs.mp4" },
-  { title: "Python", status: "In Production", video: "/clips/python.mp4" },
-  { title: "Ember.js", status: "Post-Production", video: "/clips/emberjs.mp4" },
-  { title: "Ruby on Rails", status: "In Production", video: "/clips/rails.mp4" },
-  { title: "Java", status: "In Production", video: "/clips/java.mp4" },
-  { title: "IntelliJ", status: "Coming Soon", video: "/clips/intellij.mp4" },
-  { title: "Prometheus", status: "Post-Production", video: "/clips/prometheus.mp4" },
-];
+const allItems = films.map((f) => ({
+  title: f.title,
+  slug: f.slug,
+  status: f.status,
+  video: f.video,
+}));
 
 // Right-side ticker data
 const tickerData = [
@@ -102,6 +93,7 @@ type IntroPhase =
   | "done";          // Intro complete
 
 export default function Home() {
+  const { navigateTo } = useTransition();
   const hasSeenIntro = typeof window !== "undefined" && sessionStorage.getItem("cultrepo-intro-seen") === "1";
   const [introPhase, setIntroPhase] = useState<IntroPhase>(hasSeenIntro ? "done" : "loading");
   const [loadProgress, setLoadProgress] = useState(hasSeenIntro ? 100 : 0);
@@ -753,7 +745,14 @@ export default function Home() {
                   }
                 }}
               >
-                <div className="carousel-item-link">
+                <div
+                  className="carousel-item-link"
+                  onClick={() => {
+                    if (!stateRef.current.hasDragged && stateRef.current.initialized) {
+                      navigateTo(`/films/${item.slug}`);
+                    }
+                  }}
+                >
                   <video
                     ref={(el) => { videoRefs.current[idx] = el; }}
                     src={item.video}
