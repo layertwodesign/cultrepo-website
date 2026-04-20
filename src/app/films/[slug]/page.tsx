@@ -13,18 +13,8 @@ export default function FilmPage() {
   const { setHidden } = useNavVisibility();
   const { navigateTo } = useTransition();
   const [scrolled, setScrolled] = useState(false);
-  const [showYt, setShowYt] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
-  // Delay mounting YouTube iframe so the preloaded player from homepage
-  // keeps playing uninterrupted. After delay, mount and crossfade.
-  useEffect(() => {
-    if (!film?.youtubeId) return;
-    // Wait for the card expansion transition to complete, then mount YouTube
-    const timer = setTimeout(() => setShowYt(true), 800);
-    return () => clearTimeout(timer);
-  }, [film?.youtubeId]);
 
   // Hide nav on mount, show on scroll past hero
   useEffect(() => {
@@ -80,11 +70,11 @@ export default function FilmPage() {
           playsInline
           autoPlay
           preload="auto"
-          className={`film-hero-video film-hero-clip ${showYt ? "film-hero-clip-hidden" : ""}`}
+          className="film-hero-video film-hero-clip"
         />
 
-        {/* YouTube iframe — delayed mount, crossfades in over the clip */}
-        {film.youtubeId && showYt && (
+        {/* YouTube iframe — mounts immediately, crossfades in over clip */}
+        {film.youtubeId && (
           <iframe
             ref={iframeRef}
             className="film-hero-iframe film-hero-iframe-visible"

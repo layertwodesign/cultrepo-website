@@ -795,14 +795,6 @@ export default function Home() {
                   className="carousel-item-link"
                   onClick={() => {
                     if (!stateRef.current.hasDragged && stateRef.current.initialized && expandingIdx === null) {
-                      // Start YouTube playback on the preloaded iframe (user gesture)
-                      const yt = ytPreloadRef.current;
-                      if (yt?.contentWindow) {
-                        yt.contentWindow.postMessage(
-                          '{"event":"command","func":"playVideo","args":""}', "*"
-                        );
-                      }
-
                       // Mark this item as expanding
                       expandingIdxRef.current = idx;
                       setExpandingIdx(idx);
