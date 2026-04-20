@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import { PageTransitionProvider } from "@/components/PageTransition";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const interphases = localFont({
   src: [
@@ -39,6 +40,7 @@ export default function RootLayout({
     <html lang="en" className={`${interphases.variable} ${interphasesMono.variable}`}>
       <body>
         <PageTransitionProvider>
+          <SmoothScroll />
           <Navigation />
           {children}
           <div className="film-grain" />

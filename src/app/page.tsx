@@ -93,7 +93,7 @@ type IntroPhase =
   | "done";          // Intro complete
 
 export default function Home() {
-  const { navigateTo } = useTransition();
+  const { navigateToFilm } = useTransition();
   const hasSeenIntro = typeof window !== "undefined" && sessionStorage.getItem("cultrepo-intro-seen") === "1";
   const [introPhase, setIntroPhase] = useState<IntroPhase>(hasSeenIntro ? "done" : "loading");
   const [loadProgress, setLoadProgress] = useState(hasSeenIntro ? 100 : 0);
@@ -307,13 +307,16 @@ export default function Home() {
     const state = stateRef.current;
     const initDuration = 2800;
     state.initStart = Date.now();
-    // Carousel starts blocked until intro reaches carousel phase
-    state.introReady = false;
-    state.introStart = 0;
-    state.introEnd = 0;
-    state.target = 0;
-    state.current = 0;
-    state.carouselBlocked = true;
+
+    if (!hasSeenIntro) {
+      // Carousel starts blocked until intro reaches carousel phase
+      state.introReady = false;
+      state.introStart = 0;
+      state.introEnd = 0;
+      state.target = 0;
+      state.current = 0;
+      state.carouselBlocked = true;
+    }
 
     function scaleAt(norm: number, p: Params) {
       const plateauEnd = p.scalePlateau;
@@ -747,9 +750,12 @@ export default function Home() {
               >
                 <div
                   className="carousel-item-link"
-                  onClick={() => {
+                  onClick={(e) => {
                     if (!stateRef.current.hasDragged && stateRef.current.initialized) {
-                      navigateTo(`/films/${item.slug}`);
+                      const el = (e.currentTarget as HTMLElement).closest(".carousel-item") as HTMLElement;
+                      if (el) {
+                        navigateToFilm(`/films/${item.slug}`, el, item.video);
+                      }
                     }
                   }}
                 >
