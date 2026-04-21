@@ -265,7 +265,7 @@ export default function Home() {
   // Phase: text-hold → shrink
   useEffect(() => {
     if (introPhase !== "text-hold") return;
-    const t = setTimeout(() => setIntroPhase("shrink"), 800);
+    const t = setTimeout(() => setIntroPhase("shrink"), 500);
     return () => clearTimeout(t);
   }, [introPhase]);
 
@@ -281,7 +281,7 @@ export default function Home() {
     // Transition to carousel phase after shrink animation completes
     const t = setTimeout(() => {
       setIntroPhase("carousel");
-    }, 1400);
+    }, 1000);
     return () => clearTimeout(t);
   }, [introPhase]);
 
@@ -350,7 +350,7 @@ export default function Home() {
 
   useEffect(() => {
     const state = stateRef.current;
-    const initDuration = 2800;
+    const initDuration = 1800;
 
     // Don't re-block the carousel if it's already initialized (returning from another page)
     if (!state.initialized) {
