@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
+import StippleOverlay from "@/components/StippleOverlay";
 import { films } from "@/lib/films";
 
 const allItems = films.map((f) => ({
@@ -106,7 +107,9 @@ export default function Home() {
   const [typing, setTyping] = useState(false);
   const [items] = useState(() => shuffle(allItems));
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
+  const [stippleIn, setStippleIn] = useState(false);
   const [centeredSlug, setCenteredSlug] = useState<string | null>(null);
+  const pendingSlugRef = useRef<string | null>(null);
   const ytPreloadRef = useRef<HTMLIFrameElement>(null);
   const expandingIdxRef = useRef<number | null>(null);
   const [showDebug, setShowDebug] = useState(false);
@@ -795,14 +798,17 @@ export default function Home() {
                   className="carousel-item-link"
                   onClick={() => {
                     if (!stateRef.current.hasDragged && stateRef.current.initialized && expandingIdx === null) {
+                      pendingSlugRef.current = item.slug;
+
                       // Mark this item as expanding
                       expandingIdxRef.current = idx;
                       setExpandingIdx(idx);
+                      setStippleIn(true);
 
                       // Apply fullscreen styles to the actual card element
                       const el = itemRefs.current[idx];
                       if (el) {
-                        el.style.transition = "all 0.65s cubic-bezier(0.16, 1, 0.3, 1)";
+                        el.style.transition = "all 0.55s cubic-bezier(0.16, 1, 0.3, 1)";
                         el.style.transform = "translate(0px, 0px)";
                         el.style.width = "100vw";
                         el.style.height = "100vh";
@@ -810,11 +816,6 @@ export default function Home() {
                         el.style.zIndex = "999";
                         el.style.opacity = "1";
                       }
-
-                      // Navigate after expansion
-                      setTimeout(() => {
-                        navigateTo(`/films/${item.slug}`);
-                      }, 650);
                     }
                   }}
                 >
@@ -831,6 +832,20 @@ export default function Home() {
                     <span className="carousel-overlay-status">{item.status}</span>
                   </div>
                 </div>
+                {expandingIdx === idx && (
+                  <StippleOverlay
+                    direction="in"
+                    running={stippleIn}
+                    duration={400}
+                    style={{ zIndex: 10 }}
+                    onComplete={() => {
+                      // Stipple fully covered — navigate now
+                      if (pendingSlugRef.current) {
+                        navigateTo(`/films/${pendingSlugRef.current}`, { skipOverlay: true });
+                      }
+                    }}
+                  />
+                )}
               </div>
             ))}
           </div>

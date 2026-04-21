@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { films, getFilmBySlug } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
+import StippleOverlay from "@/components/StippleOverlay";
 import { useNavVisibility } from "@/components/NavVisibility";
 import { useTransition } from "@/components/PageTransition";
 
@@ -13,8 +14,48 @@ export default function FilmPage() {
   const { setHidden } = useNavVisibility();
   const { navigateTo } = useTransition();
   const [scrolled, setScrolled] = useState(false);
+  const [ytReady, setYtReady] = useState(false);
+  const [stippleOut, setStippleOut] = useState(false);
+  const [stippleDone, setStippleDone] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Listen for YouTube to start playing, then trigger stipple-out
+  useEffect(() => {
+    if (!film?.youtubeId) return;
+
+    const onMessage = (e: MessageEvent) => {
+      if (typeof e.data !== "string") return;
+      try {
+        const data = JSON.parse(e.data);
+        if (data.event === "onStateChange" && data.info === 1) {
+          setYtReady(true);
+        }
+        if (data.event === "onReady" || data.event === "initialDelivery") {
+          const iframe = iframeRef.current;
+          if (iframe?.contentWindow) {
+            iframe.contentWindow.postMessage(
+              '{"event":"command","func":"playVideo","args":""}', "*"
+            );
+          }
+        }
+      } catch { /* ignore */ }
+    };
+
+    window.addEventListener("message", onMessage);
+    const fallback = setTimeout(() => setYtReady(true), 4000);
+    return () => {
+      window.removeEventListener("message", onMessage);
+      clearTimeout(fallback);
+    };
+  }, [film?.youtubeId]);
+
+  // When YouTube is ready, start stipple-out
+  useEffect(() => {
+    if (ytReady && !stippleOut) {
+      setStippleOut(true);
+    }
+  }, [ytReady, stippleOut]);
 
   // Hide nav on mount, show on scroll past hero
   useEffect(() => {
@@ -73,7 +114,7 @@ export default function FilmPage() {
           className="film-hero-video film-hero-clip"
         />
 
-        {/* YouTube iframe — mounts immediately, crossfades in over clip */}
+        {/* YouTube iframe — behind stipple, plays when ready */}
         {film.youtubeId && (
           <iframe
             ref={iframeRef}
@@ -82,6 +123,17 @@ export default function FilmPage() {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             title={film.title}
+          />
+        )}
+
+        {/* Stipple overlay — starts fully covered, reveals when YouTube plays */}
+        {film.youtubeId && !stippleDone && (
+          <StippleOverlay
+            direction="out"
+            running={stippleOut}
+            duration={450}
+            style={{ zIndex: 5 }}
+            onComplete={() => setStippleDone(true)}
           />
         )}
 
