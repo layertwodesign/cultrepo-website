@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
 type Props = {
-  direction: "in" | "out"; // in = dots cover, out = dots reveal
+  direction: "in" | "out";
   running: boolean;
   duration?: number;
   onComplete?: () => void;
@@ -11,18 +11,77 @@ type Props = {
   style?: React.CSSProperties;
 };
 
-type Dot = { x: number; y: number; delay: number };
+const VERT = `
+attribute vec2 a_pos;
+attribute float a_threshold;
+uniform float u_progress;
+uniform float u_pointSize;
 
-function generateDots(count: number): Dot[] {
-  const dots: Dot[] = [];
-  for (let i = 0; i < count; i++) {
-    dots.push({
-      x: Math.random(),
-      y: Math.random(),
-      delay: Math.random(),
-    });
+void main() {
+  gl_Position = vec4(a_pos * 2.0 - 1.0, 0.0, 1.0);
+  gl_Position.y *= -1.0;
+
+  // Dot appears when progress exceeds its threshold
+  float edge = smoothstep(a_threshold - 0.08, a_threshold + 0.02, u_progress);
+  gl_PointSize = u_pointSize * edge;
+}
+`;
+
+const FRAG = `
+precision mediump float;
+void main() {
+  // Circle shape
+  vec2 c = gl_PointCoord - 0.5;
+  if (dot(c, c) > 0.25) discard;
+  gl_FragColor = vec4(0.039, 0.039, 0.039, 1.0); // #0a0a0a
+}
+`;
+
+const DOT_COUNT = 200000;
+
+function createShader(gl: WebGLRenderingContext, type: number, src: string) {
+  const s = gl.createShader(type)!;
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  return s;
+}
+
+function initGL(canvas: HTMLCanvasElement) {
+  const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: false })!;
+  if (!gl) return null;
+
+  const vs = createShader(gl, gl.VERTEX_SHADER, VERT);
+  const fs = createShader(gl, gl.FRAGMENT_SHADER, FRAG);
+  const prog = gl.createProgram()!;
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  // Generate random dot positions + thresholds
+  const data = new Float32Array(DOT_COUNT * 3);
+  for (let i = 0; i < DOT_COUNT; i++) {
+    data[i * 3] = Math.random();     // x [0,1]
+    data[i * 3 + 1] = Math.random(); // y [0,1]
+    data[i * 3 + 2] = Math.random(); // threshold [0,1]
   }
-  return dots;
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+
+  const aPos = gl.getAttribLocation(prog, "a_pos");
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 12, 0);
+
+  const aThreshold = gl.getAttribLocation(prog, "a_threshold");
+  gl.enableVertexAttribArray(aThreshold);
+  gl.vertexAttribPointer(aThreshold, 1, gl.FLOAT, false, 12, 8);
+
+  const uProgress = gl.getUniformLocation(prog, "u_progress");
+  const uPointSize = gl.getUniformLocation(prog, "u_pointSize");
+
+  return { gl, uProgress, uPointSize };
 }
 
 export default function StippleOverlay({
@@ -34,101 +93,74 @@ export default function StippleOverlay({
   style,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dotsRef = useRef<Dot[]>(generateDots(2500));
-  const animRef = useRef<number>(0);
+  const glRef = useRef<ReturnType<typeof initGL>>(null);
+  const animRef = useRef(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
-  const draw = useCallback(
-    (startTime: number) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+  // Initialize WebGL once
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    glRef.current = initGL(canvas);
 
-      const now = Date.now();
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+    // Draw initial state
+    const ctx = glRef.current;
+    if (!ctx) return;
+    const { gl, uProgress, uPointSize } = ctx;
+    gl.viewport(0, 0, canvas.width, canvas.height);
 
-      // direction: "in" = dots grow to cover, "out" = dots shrink to reveal
-      const p = direction === "in" ? progress : 1 - progress;
+    // Point size: enough to cover at full density
+    // At 200K dots on 1920x1080, each dot needs ~3px radius to guarantee overlap
+    const area = rect.width * rect.height;
+    const dotArea = area / DOT_COUNT;
+    const radius = Math.sqrt(dotArea / Math.PI) * dpr * 2.2;
+    gl.uniform1f(uPointSize, Math.max(radius, 3.0));
 
-      const w = canvas.width;
-      const h = canvas.height;
-      const dpr = window.devicePixelRatio || 1;
-      const maxR = 14 * dpr;
+    // Initial state
+    const initialProgress = direction === "out" ? 1.0 : 0.0;
+    gl.uniform1f(uProgress, initialProgress);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS, 0, DOT_COUNT);
+  }, [direction]);
 
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "#0a0a0a";
+  // Run animation
+  useEffect(() => {
+    if (!running) return;
+    const ctx = glRef.current;
+    const canvas = canvasRef.current;
+    if (!ctx || !canvas) return;
 
-      // Batch all dots into one path for performance
-      ctx.beginPath();
-      const dots = dotsRef.current;
-      for (let i = 0; i < dots.length; i++) {
-        const dot = dots[i];
-        // Stagger: each dot appears at a slightly different time
-        const dotP = Math.max(0, Math.min(1, (p - dot.delay * 0.25) / 0.75));
-        // Ease in quad for snappy feel
-        const eased = dotP * dotP;
-        const r = eased * maxR;
-        if (r > 0.3) {
-          const x = dot.x * w;
-          const y = dot.y * h;
-          ctx.moveTo(x + r, y);
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-        }
-      }
-      ctx.fill();
+    const { gl, uProgress } = ctx;
+    const start = Date.now();
 
-      if (progress < 1) {
-        animRef.current = requestAnimationFrame(() => draw(startTime));
+    function frame() {
+      const elapsed = Date.now() - start;
+      const t = Math.min(elapsed / duration, 1);
+
+      // in: 0→1, out: 1→0
+      const progress = direction === "in" ? t : 1 - t;
+
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(uProgress, progress);
+      gl.drawArrays(gl.POINTS, 0, DOT_COUNT);
+
+      if (t < 1) {
+        animRef.current = requestAnimationFrame(frame);
       } else {
         onCompleteRef.current?.();
       }
-    },
-    [direction, duration]
-  );
-
-  // Size canvas and run animation when running changes
-  useEffect(() => {
-    if (!running) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-
-    const startTime = Date.now();
-    animRef.current = requestAnimationFrame(() => draw(startTime));
-
-    return () => {
-      cancelAnimationFrame(animRef.current);
-    };
-  }, [running, draw]);
-
-  // Initial state: if direction is "out" and not running yet, fill solid
-  useEffect(() => {
-    if (running) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-
-    if (direction === "out") {
-      // Start fully covered
-      ctx.fillStyle = "#0a0a0a";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-  }, [running, direction]);
+
+    animRef.current = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [running, direction, duration]);
 
   return (
     <canvas
