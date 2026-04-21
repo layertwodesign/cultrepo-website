@@ -30,7 +30,7 @@ precision mediump float;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
   if (dot(c, c) > 0.25) discard;
-  gl_FragColor = vec4(0.082, 0.078, 0.063, 1.0);
+  gl_FragColor = vec4(0.051, 0.067, 0.059, 1.0);
 }
 `;
 
@@ -207,7 +207,7 @@ export default function StippleOverlay({
         style={{
           position: "absolute",
           inset: 0,
-          background: "#151410",
+          background: "#0D110F",
           opacity: 0,
           transition: "none",
         }}
