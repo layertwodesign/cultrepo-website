@@ -974,13 +974,16 @@ a { color: inherit; text-decoration: none; }
 
 /* Close button */
 .fp-close {
-  width: 44px; height: 44px; flex-shrink: 0; align-self: flex-start;
+  position: fixed; top: 32px; right: calc(253px + 40px);
+  width: 44px; height: 44px;
   background: rgba(250, 255, 255, 0.06);
   border: none; border-radius: 10px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: #FAFFFF;
-  transition: background 0.3s ease;
+  color: #FAFFFF; z-index: 100;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s ease;
 }
+.fp-close.fp-entered { opacity: 1; transform: translateY(0); }
 .fp-close:hover { background: rgba(250, 255, 255, 0.1); }
 
 /* Two-column layout */
