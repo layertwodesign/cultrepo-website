@@ -36,10 +36,12 @@ export default function FilmPage() {
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
 
-      // Animate border-radius on bordered sections
+      // Animate border-radius — reaches 50px quickly (by second section)
       document.querySelectorAll<HTMLElement>(".fp-section").forEach((el) => {
         const rect = el.getBoundingClientRect();
-        const progress = Math.max(0, Math.min(1, 1 - rect.top / vh));
+        // Starts animating when element enters bottom 80% of viewport,
+        // reaches max when element is at 40% from top
+        const progress = Math.max(0, Math.min(1, (1 - rect.top / vh) * 2.5));
         const radius = 12 + progress * 38; // 12px → 50px
         el.style.borderRadius = `${radius}px`;
       });
