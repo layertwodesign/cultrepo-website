@@ -1021,7 +1021,7 @@ a { color: inherit; text-decoration: none; }
 .fp-video {
   position: relative; aspect-ratio: 16 / 9;
   border-radius: 12px; overflow: hidden; background: #000;
-  border: 1px solid #282C26;
+  outline: 1px solid #282C26; outline-offset: -1px;
 }
 .fp-video-iframe, .fp-video-fallback {
   position: absolute; inset: 0; width: 100%; height: 100%;
