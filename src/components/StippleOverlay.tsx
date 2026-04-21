@@ -14,15 +14,13 @@ type Props = {
 const VERT = `
 attribute vec2 a_pos;
 attribute float a_threshold;
-uniform float u_progress;
+uniform float u_dotProgress;
 uniform float u_pointSize;
 
 void main() {
   gl_Position = vec4(a_pos * 2.0 - 1.0, 0.0, 1.0);
   gl_Position.y *= -1.0;
-
-  // Tight smoothstep — dots snap in/out quickly for dense coverage
-  float edge = smoothstep(a_threshold - 0.05, a_threshold + 0.01, u_progress);
+  float edge = smoothstep(a_threshold - 0.05, a_threshold + 0.01, u_dotProgress);
   gl_PointSize = u_pointSize * edge;
 }
 `;
@@ -30,10 +28,9 @@ void main() {
 const FRAG = `
 precision mediump float;
 void main() {
-  // Circle shape
   vec2 c = gl_PointCoord - 0.5;
   if (dot(c, c) > 0.25) discard;
-  gl_FragColor = vec4(0.039, 0.039, 0.039, 1.0); // #0a0a0a
+  gl_FragColor = vec4(0.039, 0.039, 0.039, 1.0);
 }
 `;
 
@@ -58,12 +55,11 @@ function initGL(canvas: HTMLCanvasElement) {
   gl.linkProgram(prog);
   gl.useProgram(prog);
 
-  // Generate random dot positions + thresholds
   const data = new Float32Array(DOT_COUNT * 3);
   for (let i = 0; i < DOT_COUNT; i++) {
-    data[i * 3] = Math.random();     // x [0,1]
-    data[i * 3 + 1] = Math.random(); // y [0,1]
-    data[i * 3 + 2] = Math.random(); // threshold [0,1]
+    data[i * 3] = Math.random();
+    data[i * 3 + 1] = Math.random();
+    data[i * 3 + 2] = Math.random();
   }
 
   const buf = gl.createBuffer();
@@ -78,27 +74,28 @@ function initGL(canvas: HTMLCanvasElement) {
   gl.enableVertexAttribArray(aThreshold);
   gl.vertexAttribPointer(aThreshold, 1, gl.FLOAT, false, 12, 8);
 
-  const uProgress = gl.getUniformLocation(prog, "u_progress");
+  const uDotProgress = gl.getUniformLocation(prog, "u_dotProgress");
   const uPointSize = gl.getUniformLocation(prog, "u_pointSize");
 
-  return { gl, uProgress, uPointSize };
+  return { gl, uDotProgress, uPointSize };
 }
 
 export default function StippleOverlay({
   direction,
   running,
-  duration = 350,
+  duration = 500,
   onComplete,
   className,
   style,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const solidRef = useRef<HTMLDivElement>(null);
   const glRef = useRef<ReturnType<typeof initGL>>(null);
   const animRef = useRef(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
-  // Initialize WebGL once
+  // Initialize WebGL
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -108,46 +105,77 @@ export default function StippleOverlay({
     canvas.height = rect.height * dpr;
     glRef.current = initGL(canvas);
 
-    // Draw initial state
     const ctx = glRef.current;
     if (!ctx) return;
-    const { gl, uProgress, uPointSize } = ctx;
+    const { gl, uDotProgress, uPointSize } = ctx;
     gl.viewport(0, 0, canvas.width, canvas.height);
 
-    // Point size: generous overlap to guarantee zero gaps
     const area = rect.width * rect.height;
     const dotArea = area / DOT_COUNT;
     const radius = Math.sqrt(dotArea / Math.PI) * dpr * 3.0;
     gl.uniform1f(uPointSize, Math.max(radius, 4.0));
 
-    // Initial state
-    const initialProgress = direction === "out" ? 1.0 : 0.0;
-    gl.uniform1f(uProgress, initialProgress);
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.POINTS, 0, DOT_COUNT);
+    // Initial draw
+    if (direction === "out") {
+      // Start fully covered: dots at full + solid black visible
+      gl.uniform1f(uDotProgress, 1.0);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.POINTS, 0, DOT_COUNT);
+      if (solidRef.current) solidRef.current.style.opacity = "1";
+    } else {
+      gl.uniform1f(uDotProgress, 0.0);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      if (solidRef.current) solidRef.current.style.opacity = "0";
+    }
   }, [direction]);
 
-  // Run animation
+  // Animate
   useEffect(() => {
     if (!running) return;
     const ctx = glRef.current;
     const canvas = canvasRef.current;
+    const solid = solidRef.current;
     if (!ctx || !canvas) return;
 
-    const { gl, uProgress } = ctx;
+    const { gl, uDotProgress } = ctx;
     const start = Date.now();
+
+    /*
+     * "in" animation (covering):
+     *   0.0–0.6: dots appear (stipple phase)
+     *   0.5–1.0: solid black fades in over dots (overlap for seamless merge)
+     *
+     * "out" animation (revealing):
+     *   0.0–0.5: solid black fades out, dots visible underneath
+     *   0.4–1.0: dots disappear (stipple phase, overlap for continuity)
+     */
 
     function frame() {
       const elapsed = Date.now() - start;
       const t = Math.min(elapsed / duration, 1);
 
-      // in: 0→1, out: 1→0
-      const progress = direction === "in" ? t : 1 - t;
+      if (direction === "in") {
+        // Dots: progress 0→1 over first 60% of time
+        const dotT = Math.min(t / 0.6, 1);
+        gl.uniform1f(uDotProgress, dotT);
+
+        // Solid: fade in during last 50%
+        const solidT = Math.max(0, (t - 0.5) / 0.5);
+        if (solid) solid.style.opacity = String(solidT);
+      } else {
+        // Solid: fade out during first 50%
+        const solidT = 1 - Math.min(t / 0.5, 1);
+        if (solid) solid.style.opacity = String(solidT);
+
+        // Dots: progress 1→0 starting at 40%
+        const dotT = t < 0.4 ? 1 : 1 - (t - 0.4) / 0.6;
+        gl.uniform1f(uDotProgress, Math.max(0, dotT));
+      }
 
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(uProgress, progress);
       gl.drawArrays(gl.POINTS, 0, DOT_COUNT);
 
       if (t < 1) {
@@ -162,8 +190,7 @@ export default function StippleOverlay({
   }, [running, direction, duration]);
 
   return (
-    <canvas
-      ref={canvasRef}
+    <div
       className={className}
       style={{
         position: "absolute",
@@ -173,6 +200,28 @@ export default function StippleOverlay({
         pointerEvents: "none",
         ...style,
       }}
-    />
+    >
+      {/* Solid black layer — fades in after dots cover, fades out before dots reveal */}
+      <div
+        ref={solidRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "#0a0a0a",
+          opacity: 0,
+          transition: "none",
+        }}
+      />
+      {/* WebGL dot canvas */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
+    </div>
   );
 }
