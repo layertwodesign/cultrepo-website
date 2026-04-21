@@ -109,13 +109,6 @@ export default function FilmPage() {
 
   return (
     <div className="fp" ref={pageRef}>
-      {/* X close button */}
-      <button className={`fp-close ${entered ? "fp-entered" : ""}`} onClick={() => navigateTo("/")} aria-label="Close">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      </button>
-
       <div className="fp-layout">
         {/* ===== MAIN CONTENT (LEFT) ===== */}
         <div className={`fp-main ${entered ? "fp-entered" : ""}`}>
@@ -238,6 +231,13 @@ export default function FilmPage() {
 
         {/* ===== SIDEBAR (RIGHT, STICKY) ===== */}
         <aside className={`fp-sidebar ${entered ? "fp-entered" : ""}`}>
+          {/* X close button — inside sidebar for alignment */}
+          <button className="fp-close" onClick={() => navigateTo("/")} aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+
           {/* The Film card */}
           <div className="fp-sb-card fp-sb-film">
             <span className="fp-sb-label">The Film</span>
