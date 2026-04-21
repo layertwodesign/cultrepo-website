@@ -1297,6 +1297,371 @@ a { color: inherit; text-decoration: none; }
   color: #8AFDC9;
 }
 
+/* Cast role */
+.film-ed-cast-role {
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(250, 255, 255, 0.25);
+  letter-spacing: 0.02em;
+}
+.film-ed-cast-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Extra videos */
+.film-ed-extras {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+}
+.film-ed-extra-video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #282C26;
+  margin-bottom: 10px;
+}
+.film-ed-extra-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.film-ed-extra-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(250, 255, 255, 0.5);
+}
+
+/* Sponsors */
+.film-ed-sponsors-section {
+  padding-bottom: 48px;
+}
+.film-ed-sponsors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.film-ed-sponsor {
+  padding: 18px 36px;
+  border: 1px solid rgba(250, 255, 255, 0.08);
+  border-radius: 8px;
+  font-family: var(--font-interphases), sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: rgba(250, 255, 255, 0.4);
+  letter-spacing: -0.01em;
+}
+.film-ed-sponsor-cta-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(250, 255, 255, 0.3);
+  margin-bottom: 16px;
+}
+.film-ed-sponsor-cta {
+  display: inline-block;
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #67FCB4;
+  border: 1px solid rgba(103, 252, 180, 0.3);
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.film-ed-sponsor-cta:hover {
+  background: #67FCB4;
+  color: #0D110F;
+}
+
+/* Tech chips */
+.film-ed-tech-section {
+  padding-bottom: 48px;
+}
+.film-ed-techs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.film-ed-tech-chip {
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: rgba(250, 255, 255, 0.5);
+  background: rgba(250, 255, 255, 0.04);
+  border: 1px solid rgba(250, 255, 255, 0.08);
+  padding: 8px 16px;
+  border-radius: 100px;
+}
+
+/* Stills section */
+.film-ed-stills-section {
+  padding-bottom: 48px;
+}
+
+/* Timeline */
+.film-ed-timeline-section {
+  padding-bottom: 48px;
+}
+.film-ed-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+.film-ed-timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+.film-ed-timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(250, 255, 255, 0.08);
+  border: 2px solid rgba(250, 255, 255, 0.15);
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+.film-ed-timeline-step.done .film-ed-timeline-dot {
+  background: #67FCB4;
+  border-color: #67FCB4;
+}
+.film-ed-timeline-line {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: rgba(250, 255, 255, 0.08);
+}
+.film-ed-timeline-step.done .film-ed-timeline-line {
+  background: #67FCB4;
+}
+.film-ed-timeline-label {
+  margin-top: 12px;
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(250, 255, 255, 0.3);
+  text-align: center;
+}
+.film-ed-timeline-step.done .film-ed-timeline-label {
+  color: rgba(250, 255, 255, 0.6);
+}
+
+/* Fundraising */
+.film-ed-fundraise {
+  padding-bottom: 48px;
+}
+.film-ed-fundraise-desc {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(250, 255, 255, 0.4);
+  margin-bottom: 24px;
+  max-width: 480px;
+}
+.film-ed-fundraise-bar-wrap {
+  width: 100%;
+  max-width: 480px;
+  height: 6px;
+  background: rgba(250, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.film-ed-fundraise-bar {
+  height: 100%;
+  background: #67FCB4;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+.film-ed-fundraise-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.film-ed-fundraise-raised {
+  font-weight: 500;
+  font-size: 15px;
+  color: #67FCB4;
+}
+.film-ed-fundraise-goal {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(250, 255, 255, 0.3);
+}
+.film-ed-fundraise-tiers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.film-ed-fundraise-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border: 1px solid rgba(250, 255, 255, 0.08);
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  color: #FAFFFF;
+}
+.film-ed-fundraise-tier:hover {
+  border-color: rgba(103, 252, 180, 0.3);
+  background: rgba(103, 252, 180, 0.04);
+}
+.film-ed-fundraise-tier.featured {
+  border-color: rgba(103, 252, 180, 0.3);
+  background: rgba(103, 252, 180, 0.06);
+}
+.film-ed-tier-price {
+  font-family: var(--font-interphases), sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.film-ed-tier-label {
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(250, 255, 255, 0.4);
+}
+
+/* Related films */
+.film-ed-related {
+  padding-bottom: 48px;
+}
+.film-ed-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.film-ed-related-card {
+  text-decoration: none;
+  color: inherit;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(250, 255, 255, 0.06);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.film-ed-related-card:hover {
+  border-color: rgba(250, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+.film-ed-related-video-wrap {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #282C26;
+}
+.film-ed-related-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.film-ed-related-info {
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.film-ed-related-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #FAFFFF;
+}
+.film-ed-related-status {
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #67FCB4;
+}
+
+/* Share */
+.film-ed-share {
+  padding-bottom: 48px;
+}
+.film-ed-share-actions {
+  display: flex;
+  gap: 12px;
+}
+.film-ed-share-btn {
+  display: inline-block;
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 12px 24px;
+  border: 1px solid rgba(250, 255, 255, 0.1);
+  color: rgba(250, 255, 255, 0.5);
+  text-decoration: none;
+  transition: border-color 0.3s ease, color 0.3s ease;
+  border-radius: 6px;
+}
+.film-ed-share-btn:hover {
+  border-color: rgba(250, 255, 255, 0.25);
+  color: #FAFFFF;
+}
+.film-ed-share-btn.primary {
+  background: #67FCB4;
+  color: #0D110F;
+  border-color: #67FCB4;
+}
+.film-ed-share-btn.primary:hover {
+  background: #8AFDC9;
+  border-color: #8AFDC9;
+}
+
+/* Footer CTA band */
+.film-ed-footer-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 48px 0;
+}
+.film-ed-footer-cta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.film-ed-footer-cta-label {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(250, 255, 255, 0.3);
+}
+.film-ed-footer-cta-link {
+  font-family: var(--font-interphases), sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #67FCB4;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.film-ed-footer-cta-link:hover {
+  color: #8AFDC9;
+}
+
 /* ============ MOBILE ============ */
 @media screen and (max-width: 991px) {
   .hero-title { font-size: clamp(27px, 7.5vw, 48px); }
@@ -1322,6 +1687,13 @@ a { color: inherit; text-decoration: none; }
   .film-ed-nav { flex-direction: column; gap: 32px; align-items: center; }
   .film-ed-nav-right { text-align: center; align-items: center; }
   .film-ed-cast { grid-template-columns: 1fr 1fr; }
+  .film-ed-extras { grid-template-columns: 1fr; }
+  .film-ed-fundraise-tiers { grid-template-columns: repeat(2, 1fr); }
+  .film-ed-related-grid { grid-template-columns: 1fr; }
+  .film-ed-timeline { flex-wrap: wrap; gap: 16px; }
+  .film-ed-timeline-line { display: none; }
+  .film-ed-footer-cta { grid-template-columns: 1fr; }
+  .film-ed-share-actions { flex-direction: column; }
   .menu-footer { gap: 20px; bottom: 28px; }
 }
 @media screen and (max-width: 600px) {
