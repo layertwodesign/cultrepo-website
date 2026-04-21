@@ -1067,7 +1067,7 @@ a { color: inherit; text-decoration: none; }
 /* The Humans */
 .fp-humans-heading {
   font-family: var(--font-interphases), sans-serif;
-  font-weight: 300; font-size: 32px; font-style: italic;
+  font-weight: 700; font-size: 32px;
   color: #FAFFFF; margin-bottom: 24px;
 }
 .fp-crew-heading { margin-top: 48px; }
@@ -1185,7 +1185,7 @@ a { color: inherit; text-decoration: none; }
 .fp-sb-film-title {
   display: block; font-family: var(--font-interphases), sans-serif;
   font-weight: 700; font-size: 22px; line-height: 0.95;
-  letter-spacing: -0.06em; text-transform: uppercase;
+  letter-spacing: -0.06em;
   color: #FAFFFF; margin-bottom: 9px;
 }
 .fp-sb-film-desc {
