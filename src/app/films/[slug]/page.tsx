@@ -17,12 +17,31 @@ export default function FilmPage() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const pageRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Scroll-based: border-radius animation + active section tracking + parallax
+  // Scroll-based: border-radius animation + active section tracking + parallax + pause/play
   useEffect(() => {
+    let videoPaused = false;
     const onScroll = () => {
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
+
+      // Pause YouTube when video scrolls out of view, resume when back
+      const videoEl = document.getElementById("section-film");
+      if (videoEl) {
+        const rect = videoEl.getBoundingClientRect();
+        const outOfView = rect.bottom < 0;
+        const iframe = iframeRef.current;
+        if (iframe?.contentWindow) {
+          if (outOfView && !videoPaused) {
+            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', "*");
+            videoPaused = true;
+          } else if (!outOfView && videoPaused) {
+            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
+            videoPaused = false;
+          }
+        }
+      }
 
       // Animate border-radius — reaches 50px quickly (by second section)
       document.querySelectorAll<HTMLElement>(".fp-section").forEach((el) => {
@@ -100,8 +119,9 @@ export default function FilmPage() {
           <section className="fp-video" id="section-film">
             {film.youtubeId ? (
               <iframe
+                ref={iframeRef}
                 className="fp-video-iframe"
-                src={`https://www.youtube.com/embed/${film.youtubeId}?rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
+                src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title={film.title}
