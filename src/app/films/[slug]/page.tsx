@@ -150,26 +150,34 @@ export default function FilmPage() {
           {/* The Humans */}
           <section className="fp-section" id="section-humans">
             <span className="fp-label">The Humans</span>
-            <div className="fp-humans">
+
+            {/* Featuring — large portrait cards */}
+            <h3 className="fp-humans-heading">Featuring</h3>
+            <div className="fp-featuring">
               {film.cast.map((person) => (
-                <div key={person.name} className="fp-human">
-                  <div className="fp-human-photo">
-                    <span className="fp-human-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+                <div key={person.name} className="fp-featuring-card">
+                  <div className="fp-featuring-photo">
+                    <span className="fp-featuring-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
                   </div>
-                  <div className="fp-human-info">
-                    <span className="fp-human-name">{person.name}</span>
-                    <span className="fp-human-role">{person.role}</span>
+                  <div className="fp-featuring-info">
+                    <span className="fp-featuring-name">{person.name}</span>
+                    <span className="fp-featuring-role">{person.role}</span>
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Crew — smaller inline */}
+            <h3 className="fp-humans-heading fp-crew-heading">Crew</h3>
+            <div className="fp-crew">
               {film.crew.map((person) => (
-                <div key={person.name + person.role} className="fp-human">
-                  <div className="fp-human-photo fp-human-photo-crew">
-                    <span className="fp-human-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+                <div key={person.name + person.role} className="fp-crew-member">
+                  <div className="fp-crew-photo">
+                    <span className="fp-crew-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
                   </div>
-                  <div className="fp-human-info">
-                    <span className="fp-human-name">{person.name}</span>
-                    <span className="fp-human-role">{person.role}</span>
+                  <div className="fp-crew-info">
+                    <span className="fp-crew-role">{person.role}</span>
+                    <span className="fp-crew-name">{person.name}</span>
                   </div>
                 </div>
               ))}
