@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
-import StippleOverlay from "@/components/StippleOverlay";
 import { films } from "@/lib/films";
 
 const allItems = films.map((f) => ({
@@ -127,7 +126,6 @@ export default function Home() {
   }, []);
   const [items] = useState(() => shuffle(allItems));
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
-  const [stippleIn, setStippleIn] = useState(false);
   const [centeredSlug, setCenteredSlug] = useState<string | null>(null);
   const pendingSlugRef = useRef<string | null>(null);
   const ytPreloadRef = useRef<HTMLIFrameElement>(null);
@@ -697,7 +695,7 @@ export default function Home() {
       )}
 
       {/* Nav visibility trigger — tells layout nav to show */}
-      {showUI && <style>{`.top-wordmark, .hamburger { opacity: 1 !important; pointer-events: auto !important; }`}</style>}
+      {showUI && <style>{`.top-wordmark { opacity: 1 !important; pointer-events: auto !important; }`}</style>}
 
       {/* Camera ruler lines — left and right edges */}
       <div className="camera-ruler camera-ruler-left" />
@@ -823,19 +821,34 @@ export default function Home() {
                       // Mark this item as expanding
                       expandingIdxRef.current = idx;
                       setExpandingIdx(idx);
-                      setStippleIn(true);
 
-                      // Apply fullscreen styles to the actual card element
+                      // Calculate the target position: where the video sits on the film page
+                      const pad = 27;
+                      const sidebarW = 253;
+                      const gap = 16;
+                      const targetLeft = pad;
+                      const targetTop = 40;
+                      const targetW = window.innerWidth - pad - gap - sidebarW - pad;
+                      const targetH = targetW * 9 / 16;
+
                       const el = itemRefs.current[idx];
                       if (el) {
-                        el.style.transition = "all 0.55s cubic-bezier(0.16, 1, 0.3, 1)";
-                        el.style.transform = "translate(0px, 0px)";
-                        el.style.width = "100vw";
-                        el.style.height = "100vh";
-                        el.style.borderRadius = "0px";
+                        el.style.transition = "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+                        el.style.transform = `translate(${targetLeft}px, ${targetTop}px)`;
+                        el.style.width = `${targetW}px`;
+                        el.style.height = `${targetH}px`;
+                        el.style.borderRadius = "12px";
                         el.style.zIndex = "999";
                         el.style.opacity = "1";
+                        el.style.border = "none";
                       }
+
+                      // Navigate after animation
+                      setTimeout(() => {
+                        if (pendingSlugRef.current) {
+                          navigateTo(`/films/${pendingSlugRef.current}`, { skipOverlay: true });
+                        }
+                      }, 600);
                     }
                   }}
                 >
@@ -852,20 +865,6 @@ export default function Home() {
                     <span className="carousel-overlay-status">{item.status}</span>
                   </div>
                 </div>
-                {expandingIdx === idx && (
-                  <StippleOverlay
-                    direction="in"
-                    running={stippleIn}
-                    duration={400}
-                    style={{ zIndex: 10 }}
-                    onComplete={() => {
-                      // Stipple fully covered — navigate now
-                      if (pendingSlugRef.current) {
-                        navigateTo(`/films/${pendingSlugRef.current}`, { skipOverlay: true });
-                      }
-                    }}
-                  />
-                )}
               </div>
             ))}
           </div>

@@ -4,13 +4,11 @@ import { useParams } from "next/navigation";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { films, getFilmBySlug, getRelatedFilms } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
-import { useNavVisibility } from "@/components/NavVisibility";
 import { useTransition } from "@/components/PageTransition";
 
 export default function FilmPage() {
   const { slug } = useParams<{ slug: string }>();
   const film = getFilmBySlug(slug);
-  const { setHidden } = useNavVisibility();
   const { navigateTo } = useTransition();
   const [activeSection, setActiveSection] = useState("film");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
@@ -19,16 +17,6 @@ export default function FilmPage() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const pageRef = useRef<HTMLDivElement>(null);
-
-  // Hide nav initially, show after small scroll
-  useEffect(() => {
-    setHidden(true);
-    const onScroll = () => {
-      setHidden(window.scrollY <= 60);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { window.removeEventListener("scroll", onScroll); setHidden(false); };
-  }, [setHidden]);
 
   // Scroll-based: border-radius animation + active section tracking + parallax
   useEffect(() => {

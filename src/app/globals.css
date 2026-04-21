@@ -221,31 +221,6 @@ a { color: inherit; text-decoration: none; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='120'%3E%3Cline x1='4' y1='0' x2='14' y2='0' stroke='%23454940' stroke-width='1'/%3E%3Cline x1='9' y1='24' x2='14' y2='24' stroke='%23454940' stroke-width='1'/%3E%3Cline x1='9' y1='48' x2='14' y2='48' stroke='%23454940' stroke-width='1'/%3E%3Cline x1='9' y1='72' x2='14' y2='72' stroke='%23454940' stroke-width='1'/%3E%3Cline x1='9' y1='96' x2='14' y2='96' stroke='%23454940' stroke-width='1'/%3E%3C/svg%3E");
 }
 
-/* ============ NAV BAR ============ */
-.nav-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 200;
-  padding: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.nav-bar.nav-hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-10px);
-}
-.nav-bar.nav-scrolled::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  height: 100px;
-  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.9) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: -1;
-}
-
 /* ============ HAMBURGER ============ */
 .hamburger {
   position: fixed;
@@ -1139,8 +1114,8 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 14px; display: block;
 }
 .fp-sb-film { position: relative; }
-.fp-sb-film-row { display: flex; gap: 16px; align-items: flex-start; }
-.fp-sb-film-info { flex: 1; }
+.fp-sb-film-row { display: flex; gap: 16px; align-items: stretch; }
+.fp-sb-film-info { flex: 1; display: flex; flex-direction: column; }
 .fp-sb-film-title {
   display: block; font-family: var(--font-interphases), sans-serif;
   font-weight: 700; font-size: 22px; line-height: 0.95;
@@ -1149,11 +1124,12 @@ a { color: inherit; text-decoration: none; }
 }
 .fp-sb-film-desc {
   display: block; font-size: 10px; line-height: 1.3;
-  color: #ADB0A0; max-width: 130px;
+  color: #ADB0A0;
 }
 .fp-sb-poster {
-  width: 76px; height: 108px; border-radius: 7px;
-  overflow: hidden; background: #282C26; flex-shrink: 0; cursor: pointer;
+  width: 76px; flex-shrink: 0; border-radius: 7px;
+  overflow: hidden; background: #282C26; cursor: pointer;
+  align-self: stretch;
 }
 .fp-sb-poster video { width: 100%; height: 100%; object-fit: cover; }
 .fp-sb-divider { height: 1px; background: #282C26; margin: 14px 0; }
