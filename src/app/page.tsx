@@ -95,16 +95,36 @@ type IntroPhase =
 
 export default function Home() {
   const { navigateTo } = useTransition();
-  const hasSeenIntro = typeof window !== "undefined" && sessionStorage.getItem("cultrepo-intro-seen") === "1";
-  const [introPhase, setIntroPhase] = useState<IntroPhase>(hasSeenIntro ? "done" : "loading");
-  const [loadProgress, setLoadProgress] = useState(hasSeenIntro ? 100 : 0);
-  const [textLines, setTextLines] = useState(hasSeenIntro ? [true, true, true, true] : [false, false, false, false]);
-  const [revealed, setRevealed] = useState(hasSeenIntro);
-  const [showUI, setShowUI] = useState(hasSeenIntro);
+  // Check sessionStorage after mount to avoid hydration mismatch
+  const [hasSeenIntro, setHasSeenIntro] = useState(false);
+  const [introPhase, setIntroPhase] = useState<IntroPhase>("loading");
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [textLines, setTextLines] = useState([false, false, false, false]);
+  const [revealed, setRevealed] = useState(false);
+  const [showUI, setShowUI] = useState(false);
   const fullDescText = "CultRepo creates cinematic documentaries\nabout the people behind the technology\nshaping our era.";
-  const [revealedChars, setRevealedChars] = useState(hasSeenIntro ? fullDescText.length : 0);
+  const [revealedChars, setRevealedChars] = useState(0);
   const [showCursor, setShowCursor] = useState(false);
   const [typing, setTyping] = useState(false);
+
+  // Hydration-safe: check sessionStorage on mount
+  useEffect(() => {
+    if (sessionStorage.getItem("cultrepo-intro-seen") === "1") {
+      setHasSeenIntro(true);
+      setIntroPhase("done");
+      setLoadProgress(100);
+      setTextLines([true, true, true, true]);
+      setRevealed(true);
+      setShowUI(true);
+      setRevealedChars(fullDescText.length);
+      // Unblock carousel immediately
+      const s = stateRef.current;
+      s.initialized = true;
+      s.carouselBlocked = false;
+      s.introProgress = 1;
+      s.introOffsetY = 0;
+    }
+  }, []);
   const [items] = useState(() => shuffle(allItems));
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
   const [stippleIn, setStippleIn] = useState(false);
@@ -128,16 +148,16 @@ export default function Home() {
     hasDragged: false,
     startY: 0,
     dragStart: 0,
-    initialized: hasSeenIntro,
+    initialized: false,
     initStart: Date.now(),
     introReady: false,
     introStart: 0,
     introEnd: 0,
-    carouselBlocked: !hasSeenIntro,
-    introProgress: hasSeenIntro ? 1 : 0,
-    introOffsetY: 0, // extra Y offset to push carousel below viewport initially
-    lastInputTime: 0, // timestamp of last scroll/drag input
-    snapping: false, // whether we're currently snapping to center
+    carouselBlocked: true,
+    introProgress: 0,
+    introOffsetY: 0,
+    lastInputTime: 0,
+    snapping: false,
   });
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
