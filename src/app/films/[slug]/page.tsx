@@ -136,14 +136,16 @@ export default function FilmPage() {
           </section>
 
           {/* Parallax images */}
-          <div className="fp-images-row">
-            <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[0] = el; }}>
-              <video src={film.video} muted loop playsInline autoPlay preload="metadata" className="fp-parallax-img" data-src={film.video} onClick={openLightbox} />
+          {film.stills.length >= 2 && (
+            <div className="fp-images-row">
+              <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[0] = el; }}>
+                <img src={film.stills[0]} alt="" className="fp-parallax-img" data-src={film.stills[0]} onClick={openLightbox} />
+              </div>
+              <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[1] = el; }}>
+                <img src={film.stills[1]} alt="" className="fp-parallax-img" data-src={film.stills[1]} onClick={openLightbox} />
+              </div>
             </div>
-            <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[1] = el; }}>
-              <video src={film.video} muted loop playsInline autoPlay preload="metadata" className="fp-parallax-img" style={{ objectPosition: "center 30%" }} data-src={film.video} onClick={openLightbox} />
-            </div>
-          </div>
+          )}
 
           {/* The Humans */}
           <section className="fp-section" id="section-humans">
@@ -175,9 +177,22 @@ export default function FilmPage() {
           </section>
 
           {/* More parallax images */}
-          <div className="fp-image-frame fp-image-full fp-section" ref={(el) => { parallaxRefs.current[2] = el; }}>
-            <video src={film.video} muted loop playsInline autoPlay preload="metadata" className="fp-parallax-img" style={{ objectPosition: "center 70%" }} data-src={film.video} onClick={openLightbox} />
-          </div>
+          {film.stills.length >= 3 && (
+            <div className="fp-image-frame fp-image-full fp-section" ref={(el) => { parallaxRefs.current[2] = el; }}>
+              <img src={film.stills[2]} alt="" className="fp-parallax-img" data-src={film.stills[2]} onClick={openLightbox} />
+            </div>
+          )}
+
+          {/* Additional stills grid */}
+          {film.stills.length > 3 && (
+            <div className="fp-images-row">
+              {film.stills.slice(3, 5).map((src, i) => (
+                <div key={src} className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[3 + i] = el; }}>
+                  <img src={src} alt="" className="fp-parallax-img" data-src={src} onClick={openLightbox} />
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Sponsors */}
           {film.sponsors.length > 0 && (
@@ -309,7 +324,11 @@ export default function FilmPage() {
       {/* Lightbox */}
       {lightboxSrc && (
         <div className={`fp-lightbox ${lightboxOpen ? "open" : ""}`} onClick={closeLightbox}>
-          <video src={lightboxSrc} muted loop playsInline autoPlay className="fp-lightbox-media" />
+          {lightboxSrc.endsWith(".mp4") ? (
+            <video src={lightboxSrc} muted loop playsInline autoPlay className="fp-lightbox-media" />
+          ) : (
+            <img src={lightboxSrc} alt="" className="fp-lightbox-media" />
+          )}
         </div>
       )}
     </div>

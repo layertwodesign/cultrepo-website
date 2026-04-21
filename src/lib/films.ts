@@ -17,6 +17,7 @@ export type Film = {
   technologies: string[];
   sponsors: { name: string }[];
   extras: { title: string; youtubeId: string }[];
+  stills: string[];
   timeline: { label: string; done: boolean }[];
   fundraising: { goal: number; raised: number } | null;
 };
@@ -48,6 +49,7 @@ export const films: Film[] = [
     technologies: ["Vite", "Vue.js", "JavaScript", "TypeScript", "ESM"],
     sponsors: [{ name: "StackBlitz" }, { name: "Vercel" }],
     extras: [],
+    stills: ["/stills/vite/evan-1.jpg","/stills/vite/evan-2.jpg","/stills/vite/evan-3.jpg","/stills/vite/vite-2.jpg","/stills/vite/anthony-1.jpg","/stills/vite/anthony-2.jpg","/stills/vite/matias-1.jpg","/stills/vite/matias-anthony.jpg","/stills/vite/bjorn-1.jpg","/stills/vite/sapphi-1.jpg","/stills/vite/vladimir-1.jpg","/stills/vite/fred-1.jpg","/stills/vite/eric-1.jpg","/stills/vite/dominik-1.jpg","/stills/vite/theo-1.jpg","/stills/vite/rich-1.jpg"],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -83,6 +85,7 @@ export const films: Film[] = [
     extras: [
       { title: "Behind the Scenes", youtubeId: "318elIq37PE" },
     ],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -117,6 +120,7 @@ export const films: Film[] = [
     technologies: ["React", "JavaScript", "JSX", "Virtual DOM"],
     sponsors: [{ name: "IBM" }],
     extras: [],
+    stills: ["/stills/general/mark-1.jpg","/stills/general/david-1.jpg"],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -149,6 +153,7 @@ export const films: Film[] = [
     technologies: ["GraphQL", "API Design", "JavaScript"],
     sponsors: [{ name: "Prisma" }, { name: "Apollo" }],
     extras: [],
+    stills: ["/stills/general/theo-2.jpg","/stills/general/ryan-1.jpg"],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -183,6 +188,7 @@ export const films: Film[] = [
     technologies: ["Node.js", "JavaScript", "V8", "npm", "Deno"],
     sponsors: [{ name: "IBM" }, { name: "Google" }],
     extras: [],
+    stills: ["/stills/general/pedro-1.jpg","/stills/general/rich-2.jpg"],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -215,6 +221,7 @@ export const films: Film[] = [
     technologies: ["CRDTs", "Automerge", "Local-first", "P2P"],
     sponsors: [],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: false },
@@ -248,6 +255,7 @@ export const films: Film[] = [
     technologies: ["Elixir", "Erlang", "BEAM", "Phoenix", "OTP"],
     sponsors: [{ name: "DockYard" }],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -281,6 +289,7 @@ export const films: Film[] = [
     technologies: ["Angular", "TypeScript", "JavaScript", "RxJS"],
     sponsors: [{ name: "Google" }],
     extras: [],
+    stills: ["/stills/angular/misko-1.jpg","/stills/angular/misko-2.jpg"],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -314,6 +323,7 @@ export const films: Film[] = [
     technologies: ["Vue.js", "JavaScript", "Composition API"],
     sponsors: [],
     extras: [],
+    stills: ["/stills/vuejs/evan-headshot.jpg"],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -348,6 +358,7 @@ export const films: Film[] = [
     technologies: ["Python", "CPython", "PyPI", "Machine Learning"],
     sponsors: [{ name: "Google" }, { name: "Microsoft" }],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -381,6 +392,7 @@ export const films: Film[] = [
     technologies: ["Ember.js", "JavaScript", "Glimmer"],
     sponsors: [],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -415,6 +427,7 @@ export const films: Film[] = [
     technologies: ["Ruby on Rails", "Ruby", "MVC", "ActiveRecord"],
     sponsors: [{ name: "Shopify" }],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -448,6 +461,7 @@ export const films: Film[] = [
     technologies: ["Java", "JVM", "Spring", "Android"],
     sponsors: [],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -480,6 +494,7 @@ export const films: Film[] = [
     technologies: ["IntelliJ IDEA", "JetBrains", "Kotlin", "Java"],
     sponsors: [{ name: "JetBrains" }],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -512,6 +527,7 @@ export const films: Film[] = [
     technologies: ["Prometheus", "Grafana", "Cloud Native", "CNCF"],
     sponsors: [{ name: "Red Hat" }],
     extras: [],
+    stills: [],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
