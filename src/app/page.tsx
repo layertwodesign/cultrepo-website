@@ -351,10 +351,10 @@ export default function Home() {
   useEffect(() => {
     const state = stateRef.current;
     const initDuration = 2800;
-    state.initStart = Date.now();
 
-    if (!hasSeenIntro) {
-      // Carousel starts blocked until intro reaches carousel phase
+    // Don't re-block the carousel if it's already initialized (returning from another page)
+    if (!state.initialized) {
+      state.initStart = Date.now();
       state.introReady = false;
       state.introStart = 0;
       state.introEnd = 0;
