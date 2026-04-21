@@ -26,9 +26,33 @@ export default function FilmPage() {
     return () => clearTimeout(t);
   }, []);
 
+  // Track if user manually paused via YouTube controls
+  const userPausedRef = useRef(false);
+  const scrollPausedRef = useRef(false);
+
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (typeof e.data !== "string") return;
+      try {
+        const data = JSON.parse(e.data);
+        if (data.event === "onStateChange") {
+          // State 2 = paused, State 1 = playing
+          if (data.info === 2 && !scrollPausedRef.current) {
+            // Paused but NOT by our scroll logic — user clicked pause
+            userPausedRef.current = true;
+          } else if (data.info === 1) {
+            // Playing — user clicked play, clear the manual pause flag
+            userPausedRef.current = false;
+          }
+        }
+      } catch { /* ignore */ }
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
+
   // Scroll-based: border-radius animation + active section tracking + parallax + pause/play
   useEffect(() => {
-    let videoPaused = false;
     const onScroll = () => {
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
@@ -40,12 +64,15 @@ export default function FilmPage() {
         const outOfView = rect.bottom < 0;
         const iframe = iframeRef.current;
         if (iframe?.contentWindow) {
-          if (outOfView && !videoPaused) {
+          if (outOfView && !scrollPausedRef.current) {
+            scrollPausedRef.current = true;
             iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', "*");
-            videoPaused = true;
-          } else if (!outOfView && videoPaused) {
-            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
-            videoPaused = false;
+          } else if (!outOfView && scrollPausedRef.current) {
+            scrollPausedRef.current = false;
+            // Only resume if user didn't manually pause
+            if (!userPausedRef.current) {
+              iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
+            }
           }
         }
       }
