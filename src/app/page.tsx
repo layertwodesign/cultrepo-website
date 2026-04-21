@@ -823,12 +823,13 @@ export default function Home() {
                       setExpandingIdx(idx);
 
                       // Calculate the target position: where the video sits on the film page
-                      const pad = 27;
+                      const padLeft = 27;
+                      const padRight = 40;
                       const sidebarW = 253;
                       const gap = 16;
-                      const targetLeft = pad;
+                      const targetLeft = padLeft;
                       const targetTop = 40;
-                      const targetW = window.innerWidth - pad - gap - sidebarW - pad;
+                      const targetW = window.innerWidth - padLeft - gap - sidebarW - padRight;
                       const targetH = targetW * 9 / 16;
 
                       const el = itemRefs.current[idx];
