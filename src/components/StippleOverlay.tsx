@@ -21,8 +21,8 @@ void main() {
   gl_Position = vec4(a_pos * 2.0 - 1.0, 0.0, 1.0);
   gl_Position.y *= -1.0;
 
-  // Dot appears when progress exceeds its threshold
-  float edge = smoothstep(a_threshold - 0.08, a_threshold + 0.02, u_progress);
+  // Tight smoothstep — dots snap in/out quickly for dense coverage
+  float edge = smoothstep(a_threshold - 0.05, a_threshold + 0.01, u_progress);
   gl_PointSize = u_pointSize * edge;
 }
 `;
@@ -37,7 +37,7 @@ void main() {
 }
 `;
 
-const DOT_COUNT = 200000;
+const DOT_COUNT = 400000;
 
 function createShader(gl: WebGLRenderingContext, type: number, src: string) {
   const s = gl.createShader(type)!;
@@ -114,12 +114,11 @@ export default function StippleOverlay({
     const { gl, uProgress, uPointSize } = ctx;
     gl.viewport(0, 0, canvas.width, canvas.height);
 
-    // Point size: enough to cover at full density
-    // At 200K dots on 1920x1080, each dot needs ~3px radius to guarantee overlap
+    // Point size: generous overlap to guarantee zero gaps
     const area = rect.width * rect.height;
     const dotArea = area / DOT_COUNT;
-    const radius = Math.sqrt(dotArea / Math.PI) * dpr * 2.2;
-    gl.uniform1f(uPointSize, Math.max(radius, 3.0));
+    const radius = Math.sqrt(dotArea / Math.PI) * dpr * 3.0;
+    gl.uniform1f(uPointSize, Math.max(radius, 4.0));
 
     // Initial state
     const initialProgress = direction === "out" ? 1.0 : 0.0;

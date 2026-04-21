@@ -43,7 +43,8 @@ export default function FilmPage() {
     };
 
     window.addEventListener("message", onMessage);
-    const fallback = setTimeout(() => setYtReady(true), 4000);
+    // Fallback — if YouTube doesn't signal playing in 3s, reveal anyway
+    const fallback = setTimeout(() => setYtReady(true), 3000);
     return () => {
       window.removeEventListener("message", onMessage);
       clearTimeout(fallback);
