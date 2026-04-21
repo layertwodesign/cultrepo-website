@@ -77,7 +77,7 @@ function Slider({ label, value, min, max, step, onChange }: {
       <span style={{ width: 100, flexShrink: 0 }}>{label}</span>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        style={{ flex: 1, accentColor: "#e8e4df" }} />
+        style={{ flex: 1, accentColor: "#FAFFFF" }} />
       <span style={{ width: 50, textAlign: "right", fontFamily: "monospace" }}>{value.toFixed(1)}</span>
     </label>
   );
@@ -688,7 +688,7 @@ export default function Home() {
           position: "fixed", top: 60, right: 16, zIndex: 999,
           background: "rgba(0,0,0,0.9)", border: "1px solid rgba(255,255,255,0.15)",
           borderRadius: 8, padding: "16px 20px", width: 340,
-          color: "#e8e4df", fontFamily: "var(--font-interphases), sans-serif",
+          color: "#FAFFFF", fontFamily: "var(--font-interphases), sans-serif",
           pointerEvents: "auto",
         }}>
           <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
@@ -735,7 +735,7 @@ export default function Home() {
                 const hidden = fullText.slice(revealedChars);
                 return (
                   <>
-                    <span style={{ color: "rgba(232, 228, 223, 0.5)" }}>{visible}</span>
+                    <span style={{ color: "rgba(250, 255, 255, 0.5)" }}>{visible}</span>
                     {showCursor && <span className={`typewriter-cursor ${!typing ? "blink" : ""}`} />}
                     <span style={{ color: "transparent" }}>{hidden}</span>
                   </>
