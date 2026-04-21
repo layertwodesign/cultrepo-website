@@ -10,6 +10,7 @@ export default function FilmPage() {
   const { slug } = useParams<{ slug: string }>();
   const film = getFilmBySlug(slug);
   const { navigateTo } = useTransition();
+  const [entered, setEntered] = useState(false);
   const [activeSection, setActiveSection] = useState("film");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxRect, setLightboxRect] = useState<DOMRect | null>(null);
@@ -18,6 +19,12 @@ export default function FilmPage() {
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const pageRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Entrance animation — stagger in sidebar + content
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 50);
+    return () => clearTimeout(t);
+  }, []);
 
   // Scroll-based: border-radius animation + active section tracking + parallax + pause/play
   useEffect(() => {
@@ -103,7 +110,7 @@ export default function FilmPage() {
   return (
     <div className="fp" ref={pageRef}>
       {/* X close button */}
-      <button className="fp-close" onClick={() => navigateTo("/")} aria-label="Close">
+      <button className={`fp-close ${entered ? "fp-entered" : ""}`} onClick={() => navigateTo("/")} aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
@@ -111,7 +118,7 @@ export default function FilmPage() {
 
       <div className="fp-layout">
         {/* ===== MAIN CONTENT (LEFT) ===== */}
-        <div className="fp-main">
+        <div className={`fp-main ${entered ? "fp-entered" : ""}`}>
 
           {/* YouTube embed */}
           <section className="fp-video" id="section-film">
@@ -230,7 +237,7 @@ export default function FilmPage() {
         </div>
 
         {/* ===== SIDEBAR (RIGHT, STICKY) ===== */}
-        <aside className="fp-sidebar">
+        <aside className={`fp-sidebar ${entered ? "fp-entered" : ""}`}>
           {/* The Film card */}
           <div className="fp-sb-card fp-sb-film">
             <span className="fp-sb-label">The Film</span>

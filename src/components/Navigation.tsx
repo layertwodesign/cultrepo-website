@@ -8,6 +8,7 @@ export default function Navigation() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isFilm = pathname.startsWith("/films/") && pathname !== "/films";
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
@@ -18,10 +19,10 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Wordmark — hidden on homepage until intro shows it */}
+      {/* Wordmark — hidden on homepage and film pages */}
       <TransitionLink
         href="/"
-        className={`top-wordmark ${isHome ? "" : "visible"}`}
+        className={`top-wordmark ${!isHome && !isFilm ? "visible" : ""}`}
         style={{ zIndex: 210 }}
       />
 

@@ -727,7 +727,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="main">
+      <div className={`main ${expandingIdx !== null ? "film-exiting" : ""}`}>
         {/* Hero heading — top left (visible after shrink completes) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
           <div className={`hero ${showUI ? "with-wordmark" : ""}`}>
@@ -828,7 +828,7 @@ export default function Home() {
                       const sidebarW = 253;
                       const gap = 16;
                       const targetLeft = padLeft;
-                      const targetTop = 40;
+                      const targetTop = 32;
                       const targetW = window.innerWidth - padLeft - gap - sidebarW - padRight;
                       const targetH = targetW * 9 / 16;
 
