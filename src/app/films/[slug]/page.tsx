@@ -239,9 +239,19 @@ export default function FilmPage() {
                 <span className="fp-sb-film-title">{film.title}</span>
                 <span className="fp-sb-film-desc">{film.description}</span>
               </div>
-              <div className="fp-sb-poster" data-src={film.video} onClick={openLightbox}>
-                <video src={film.video} muted loop playsInline autoPlay preload="metadata" />
-              </div>
+              {film.poster ? (
+                <img
+                  src={film.poster}
+                  alt={`${film.title} poster`}
+                  className="fp-sb-poster-img"
+                  data-src={film.poster}
+                  onClick={openLightbox}
+                />
+              ) : (
+                <div className="fp-sb-poster" data-src={film.video} onClick={openLightbox}>
+                  <video src={film.video} muted loop playsInline autoPlay preload="metadata" />
+                </div>
+              )}
             </div>
             <div className="fp-sb-divider" />
             <div className="fp-sb-meta-grid">

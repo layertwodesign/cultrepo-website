@@ -1114,8 +1114,8 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 14px; display: block;
 }
 .fp-sb-film { position: relative; }
-.fp-sb-film-row { display: flex; gap: 16px; align-items: stretch; }
-.fp-sb-film-info { flex: 1; display: flex; flex-direction: column; }
+.fp-sb-film-row { display: flex; gap: 12px; align-items: flex-start; }
+.fp-sb-film-info { flex: 1; min-width: 0; }
 .fp-sb-film-title {
   display: block; font-family: var(--font-interphases), sans-serif;
   font-weight: 700; font-size: 22px; line-height: 0.95;
@@ -1126,10 +1126,16 @@ a { color: inherit; text-decoration: none; }
   display: block; font-size: 10px; line-height: 1.3;
   color: #ADB0A0;
 }
-.fp-sb-poster {
+/* Poster image — maintains aspect ratio, aligns top-right */
+.fp-sb-poster-img {
   width: 76px; flex-shrink: 0; border-radius: 7px;
+  object-fit: contain; object-position: top right;
+  cursor: pointer; display: block;
+}
+/* Fallback video poster */
+.fp-sb-poster {
+  width: 76px; height: 108px; flex-shrink: 0; border-radius: 7px;
   overflow: hidden; background: #282C26; cursor: pointer;
-  align-self: stretch;
 }
 .fp-sb-poster video { width: 100%; height: 100%; object-fit: cover; }
 .fp-sb-divider { height: 1px; background: #282C26; margin: 14px 0; }
