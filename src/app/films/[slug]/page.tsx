@@ -141,7 +141,7 @@ export default function FilmPage() {
         <div className={`fp-main ${entered ? "fp-entered" : ""}`}>
 
           {/* YouTube embed */}
-          <section className="fp-video" id="section-film">
+          <section className="fp-video fp-section" id="section-film">
             {film.youtubeId ? (
               <iframe
                 ref={iframeRef}
