@@ -825,7 +825,7 @@ export default function Home() {
                       // Calculate the target position: where the video sits on the film page
                       const padLeft = 27;
                       const padRight = 40;
-                      const sidebarW = 253;
+                      const sidebarW = 370;
                       const gap = 16;
                       const targetLeft = padLeft;
                       const targetTop = 32;
