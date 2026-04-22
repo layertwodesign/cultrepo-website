@@ -986,7 +986,7 @@ a { color: inherit; text-decoration: none; }
 /* Two-column layout */
 .fp-layout {
   display: flex; gap: 16px;
-  padding: 32px 40px 80px 27px;
+  padding: 32px 40px 80px 40px;
 }
 .fp-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
 

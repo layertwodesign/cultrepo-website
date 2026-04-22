@@ -823,7 +823,7 @@ export default function Home() {
                       setExpandingIdx(idx);
 
                       // Calculate the target position: where the video sits on the film page
-                      const padLeft = 27;
+                      const padLeft = 40;
                       const padRight = 40;
                       const sidebarW = 370;
                       const gap = 16;
