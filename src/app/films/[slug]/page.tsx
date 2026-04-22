@@ -290,11 +290,13 @@ export default function FilmPage() {
 
           {/* The Film card */}
           <div className="fp-sb-card fp-sb-film">
-            <span className="fp-sb-label">The Film</span>
             <div className="fp-sb-film-row">
               <div className="fp-sb-film-info">
-                <span className="fp-sb-film-title">{film.title}</span>
-                <span className="fp-sb-film-desc">{film.description}</span>
+                <span className="fp-sb-label">The Film</span>
+                <div className="fp-sb-film-bottom">
+                  <span className="fp-sb-film-title">{film.title}</span>
+                  <span className="fp-sb-film-desc">{film.description}</span>
+                </div>
               </div>
               {film.poster ? (
                 <img

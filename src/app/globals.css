@@ -1180,8 +1180,13 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 14px; display: block;
 }
 .fp-sb-film { position: relative; }
-.fp-sb-film-row { display: flex; gap: 12px; align-items: flex-start; }
-.fp-sb-film-info { flex: 1; min-width: 0; }
+.fp-sb-film-row { display: flex; gap: 12px; align-items: stretch; }
+.fp-sb-film-info {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.fp-sb-film-info .fp-sb-label { margin-bottom: 0; }
+.fp-sb-film-bottom { display: flex; flex-direction: column; gap: 6px; }
 .fp-sb-film-title {
   display: block; font-family: var(--font-interphases), sans-serif;
   font-weight: 700; font-size: 22px; line-height: 0.95;
