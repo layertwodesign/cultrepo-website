@@ -418,12 +418,12 @@ export default function Home() {
           state.current -= totalH;
           state.target -= totalH;
           if (state.isDragging) state.dragStart -= totalH;
-          state.loopCount++;
+          if (state.initialized) state.loopCount++;
         } else if (state.current < 0) {
           state.current += totalH;
           state.target += totalH;
           if (state.isDragging) state.dragStart += totalH;
-          state.loopCount++;
+          if (state.initialized) state.loopCount++;
         }
         if (state.loopCount >= 10) {
           state.carouselDone = true;
