@@ -729,6 +729,7 @@ export default function Home() {
 
       {/* Nav visibility trigger — tells layout nav to show */}
       {showUI && <style>{`.top-wordmark { opacity: 1 !important; pointer-events: auto !important; }`}</style>}
+      {expandingIdx !== null && <style>{`.top-wordmark { opacity: 0 !important; transition: opacity 0.35s ease !important; }`}</style>}
 
       {/* Camera ruler lines — left and right edges */}
       <div className="camera-ruler camera-ruler-left" />
