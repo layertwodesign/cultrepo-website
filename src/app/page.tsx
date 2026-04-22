@@ -834,6 +834,9 @@ export default function Home() {
 
                       const el = itemRefs.current[idx];
                       if (el) {
+                        // Reset hover scale immediately
+                        el.style.scale = "1";
+                        el.style.pointerEvents = "none";
                         el.style.transition = "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
                         el.style.transform = `translate(${targetLeft}px, ${targetTop}px)`;
                         el.style.width = `${targetW}px`;
