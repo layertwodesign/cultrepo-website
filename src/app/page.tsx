@@ -93,7 +93,7 @@ type IntroPhase =
   | "done";          // Intro complete
 
 export default function Home() {
-  const { navigateTo } = useTransition();
+  const { navigateTo, setFilmRect } = useTransition();
   // Check sessionStorage after mount to avoid hydration mismatch
   const [hasSeenIntro, setHasSeenIntro] = useState(false);
   const [introPhase, setIntroPhase] = useState<IntroPhase>("loading");
@@ -844,12 +844,17 @@ export default function Home() {
                         el.style.border = "none";
                       }
 
-                      // Navigate after animation
+                      // Navigate after animation — capture final rect for seamless handoff
                       setTimeout(() => {
+                        const el2 = itemRefs.current[idx];
+                        if (el2) {
+                          const r = el2.getBoundingClientRect();
+                          setFilmRect({ left: r.left, top: r.top, width: r.width, height: r.height });
+                        }
                         if (pendingSlugRef.current) {
                           navigateTo(`/films/${pendingSlugRef.current}`, { skipOverlay: true });
                         }
-                      }, 600);
+                      }, 620);
                     }
                   }}
                 >

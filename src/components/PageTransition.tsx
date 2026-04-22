@@ -12,10 +12,16 @@ import { useRouter, usePathname } from "next/navigation";
 
 type TransitionState = "idle" | "exiting" | "entering";
 
+type FilmTransitionRect = { left: number; top: number; width: number; height: number } | null;
+
 const TransitionContext = createContext<{
   navigateTo: (href: string, opts?: { skipOverlay?: boolean }) => void;
+  setFilmRect: (rect: FilmTransitionRect) => void;
+  consumeFilmRect: () => FilmTransitionRect;
 }>({
   navigateTo: () => {},
+  setFilmRect: () => {},
+  consumeFilmRect: () => null,
 });
 
 export function useTransition() {
@@ -34,13 +40,23 @@ export function PageTransitionProvider({
   const prevPathname = useRef(pathname);
   const stateRef = useRef(state);
   stateRef.current = state;
+  const filmRectRef = useRef<FilmTransitionRect>(null);
+
+  const setFilmRect = useCallback((rect: FilmTransitionRect) => {
+    filmRectRef.current = rect;
+  }, []);
+
+  const consumeFilmRect = useCallback(() => {
+    const rect = filmRectRef.current;
+    filmRectRef.current = null;
+    return rect;
+  }, []);
 
   const navigateTo = useCallback(
     (href: string, opts?: { skipOverlay?: boolean }) => {
       if (href === pathname || stateRef.current !== "idle") return;
 
       if (opts?.skipOverlay) {
-        // Navigate immediately, no fade overlay
         setShowOverlay(false);
         router.push(href);
       } else {
@@ -54,7 +70,6 @@ export function PageTransitionProvider({
     [pathname, router]
   );
 
-  // On route change → enter animation
   useEffect(() => {
     if (pathname !== prevPathname.current) {
       prevPathname.current = pathname;
@@ -65,7 +80,6 @@ export function PageTransitionProvider({
           setState("idle");
         }, 500);
       } else {
-        // No overlay — just reset
         window.scrollTo(0, 0);
         setState("idle");
         setShowOverlay(true);
@@ -74,10 +88,9 @@ export function PageTransitionProvider({
   }, [pathname, showOverlay]);
 
   return (
-    <TransitionContext.Provider value={{ navigateTo }}>
+    <TransitionContext.Provider value={{ navigateTo, setFilmRect, consumeFilmRect }}>
       {children}
 
-      {/* Default fade overlay — only shown for non-stipple transitions */}
       {showOverlay && (
         <div className={`page-transition ${state}`} aria-hidden="true">
           <img src="/ghost.png" alt="" className="page-transition-ghost" />

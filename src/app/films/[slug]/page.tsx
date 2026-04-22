@@ -9,7 +9,7 @@ import { useTransition } from "@/components/PageTransition";
 export default function FilmPage() {
   const { slug } = useParams<{ slug: string }>();
   const film = getFilmBySlug(slug);
-  const { navigateTo } = useTransition();
+  const { navigateTo, consumeFilmRect } = useTransition();
   const [entered, setEntered] = useState(false);
   const [activeSection, setActiveSection] = useState("film");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
@@ -19,12 +19,47 @@ export default function FilmPage() {
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const pageRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoSectionRef = useRef<HTMLElement>(null);
 
-  // Entrance animation — stagger in sidebar + content
+  // Seamless handoff: if coming from carousel, position video at the card's final rect
+  // then animate to its natural position
   useEffect(() => {
-    const t = setTimeout(() => setEntered(true), 50);
-    return () => clearTimeout(t);
-  }, []);
+    const rect = consumeFilmRect();
+    const el = videoSectionRef.current;
+    if (!rect || !el) {
+      setEntered(true);
+      return;
+    }
+
+    // Get the video's natural position
+    const natural = el.getBoundingClientRect();
+
+    // Start at the card's final position
+    el.style.position = "fixed";
+    el.style.left = `${rect.left}px`;
+    el.style.top = `${rect.top}px`;
+    el.style.width = `${rect.width}px`;
+    el.style.height = `${rect.height}px`;
+    el.style.zIndex = "999";
+    el.style.transition = "none";
+
+    // Next frame: animate to natural position
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.style.transition = "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+        el.style.left = `${natural.left}px`;
+        el.style.top = `${natural.top}px`;
+        el.style.width = `${natural.width}px`;
+        el.style.height = `${natural.height}px`;
+
+        // After settle, clear inline styles and show rest of content
+        setTimeout(() => {
+          el.style.cssText = "";
+          setEntered(true);
+        }, 520);
+      });
+    });
+  }, [consumeFilmRect]);
 
   // Track if user manually paused via YouTube controls
   const userPausedRef = useRef(false);
@@ -141,7 +176,7 @@ export default function FilmPage() {
         <div className={`fp-main ${entered ? "fp-entered" : ""}`}>
 
           {/* YouTube embed */}
-          <section className="fp-video fp-section" id="section-film">
+          <section className="fp-video fp-section" id="section-film" ref={videoSectionRef}>
             {film.youtubeId ? (
               <iframe
                 ref={iframeRef}
