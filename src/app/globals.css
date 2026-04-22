@@ -1037,7 +1037,7 @@ a { color: inherit; text-decoration: none; }
 .fp-label {
   display: block;
   font-family: var(--font-interphases-mono), monospace;
-  font-size: 10px; font-weight: 400;
+  font-size: 12px; font-weight: 400;
   text-transform: uppercase; letter-spacing: 0.05em;
   color: #ADB0A0; margin-bottom: 24px;
 }
