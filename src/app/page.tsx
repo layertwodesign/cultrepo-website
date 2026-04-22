@@ -102,6 +102,7 @@ export default function Home() {
   const [revealed, setRevealed] = useState(false);
   const [showUI, setShowUI] = useState(false);
   const [showGradient, setShowGradient] = useState(false);
+  const [gridRevealed, setGridRevealed] = useState(false);
   const fullDescText = "CultRepo creates cinematic documentaries\nabout the people behind the technology\nshaping our era.";
   const [revealedChars, setRevealedChars] = useState(0);
   const [showCursor, setShowCursor] = useState(false);
@@ -159,6 +160,7 @@ export default function Home() {
     snapping: false,
     loopCount: 0,
     carouselDone: false,
+    gridNotified: false,
   });
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -428,6 +430,10 @@ export default function Home() {
           const centerOffset = wrapperH / 2 - itemH / 2;
           const nearestIdx = Math.round((state.current + centerOffset) / slotH);
           state.target = nearestIdx * slotH - centerOffset;
+          if (!state.gridNotified) {
+            state.gridNotified = true;
+            setGridRevealed(true);
+          }
         }
       }
 
@@ -535,10 +541,6 @@ export default function Home() {
         const timeSinceInput = Date.now() - state.lastInputTime;
         const velocity = Math.abs(state.target - state.current);
 
-        // Auto-scroll when no recent user input
-        if (!state.carouselDone && !state.isDragging && timeSinceInput > 2000) {
-          state.target += totalH / (5 * 60);
-        }
 
         if (!state.isDragging && timeSinceInput > 300 && velocity < 20 && !state.snapping) {
           // Snap target to nearest slot that centers an item
@@ -912,37 +914,41 @@ export default function Home() {
       </div>
 
       {/* ============ FILM GRID SECTION ============ */}
-      <section className="home-grid-section">
-        <div className="home-grid">
-          {films.map((film) => (
-            <div
-              key={film.slug}
-              className="home-grid-card"
-              onClick={() => navigateTo(`/films/${film.slug}`)}
-            >
-              <video
-                src={film.video}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                className="home-grid-video"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
+      {gridRevealed && (
+        <section className="home-grid-section">
+          <div className="home-grid">
+            {films.map((film) => (
+              <div
+                key={film.slug}
+                className="home-grid-card"
+                onClick={() => navigateTo(`/films/${film.slug}`)}
+              >
+                <video
+                  src={film.video}
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="home-grid-video"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ============ FOOTER ============ */}
-      <footer className="home-footer">
-        <span className="home-footer-brand">CultRepo</span>
-        <nav className="home-footer-nav">
-          <TransitionLink href="/about">About</TransitionLink>
-          <TransitionLink href="/films">Films</TransitionLink>
-          <TransitionLink href="/about">Sponsor</TransitionLink>
-        </nav>
-        <span className="home-footer-credit">Site by LayerTwo</span>
-      </footer>
+      {gridRevealed && (
+        <footer className="home-footer">
+          <span className="home-footer-brand">CultRepo</span>
+          <nav className="home-footer-nav">
+            <TransitionLink href="/about">About</TransitionLink>
+            <TransitionLink href="/films">Films</TransitionLink>
+            <TransitionLink href="/about">Sponsor</TransitionLink>
+          </nav>
+          <span className="home-footer-credit">Site by LayerTwo</span>
+        </footer>
+      )}
 
       {/* Preloaded YouTube iframe — hidden, loads centered film */}
       {preloadYtId && (
