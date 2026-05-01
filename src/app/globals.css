@@ -1203,7 +1203,7 @@ button, input, textarea, select {
   align-items: center;
 }
 .film-card-title {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 22px;
   color: #FAFFFF;
 }
@@ -1394,7 +1394,7 @@ button, input, textarea, select {
 .fp-status-headline {
   font-family: var(--font-interphases), sans-serif;
   font-size: clamp(18px, 1.8vw, 22px);
-  font-weight: 500;
+  font-weight: 600;
   color: #FAFFFF;
   margin-bottom: 24px;
 }
