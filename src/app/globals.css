@@ -894,6 +894,15 @@ button, input, textarea, select {
   max-width: 480px;
   height: auto;
   display: block;
+  animation: ghostBob 5s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes ghostBob {
+  0%, 100% { transform: translateY(-10px); }
+  50%      { transform: translateY(10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-story-ghost img { animation: none; }
 }
 .about-story-text {
   font-family: var(--font-interphases), sans-serif;
