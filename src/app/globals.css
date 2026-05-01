@@ -700,7 +700,7 @@ a { color: inherit; text-decoration: none; }
 }
 .menu-link {
   font-family: var(--font-interphases), sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(48px, 8vw, 96px);
   line-height: 1.1;
   letter-spacing: -0.03em;
