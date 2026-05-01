@@ -721,7 +721,7 @@ a { color: inherit; text-decoration: none; }
 }
 .menu-cta-row {
   display: flex;
-  gap: 24px;
+  gap: clamp(24px, 5vw, 96px);
   margin-top: 56px;
 }
 .menu-cta {
