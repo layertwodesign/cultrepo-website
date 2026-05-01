@@ -8,6 +8,7 @@ import {
 import Reveal from "@/components/Reveal";
 import Typewriter from "@/components/Typewriter";
 import CountUp from "@/components/CountUp";
+import InvertOnView from "@/components/InvertOnView";
 import TeamMember from "./TeamMember";
 
 export const metadata: Metadata = {
@@ -167,17 +168,19 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="about-final-cta">
-        <Reveal>
-          <h2 className="about-final-cta-title">Sponsor a film.</h2>
-          <p className="about-final-cta-sub">
-            Reach builders, engineers, and technical leaders.
-          </p>
-          <TransitionLink href="/sponsorship" className="about-cta-button">
-            Sponsorship
-          </TransitionLink>
-        </Reveal>
-      </section>
+      <InvertOnView>
+        <section className="about-final-cta">
+          <Reveal>
+            <h2 className="about-final-cta-title">Sponsor a film.</h2>
+            <p className="about-final-cta-sub">
+              Reach builders, engineers, and technical leaders.
+            </p>
+            <TransitionLink href="/sponsorship" className="about-cta-button">
+              Sponsorship
+            </TransitionLink>
+          </Reveal>
+        </section>
+      </InvertOnView>
     </div>
   );
 }
