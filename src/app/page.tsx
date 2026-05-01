@@ -791,7 +791,7 @@ export default function Home() {
                 );
               })()}
             </p>
-            <TransitionLink href="/about" className="home-cta">
+            <TransitionLink href="/sponsorship" className="home-cta">
               Sponsorship
             </TransitionLink>
           </div>

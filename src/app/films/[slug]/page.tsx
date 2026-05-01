@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { films, getFilmBySlug, getRelatedFilms } from "@/lib/films";
+import { films, getFilmBySlug } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 
@@ -162,7 +162,6 @@ export default function FilmPage() {
 
   if (!film) return <div className="page-container"><p>Film not found.</p></div>;
 
-  const related = getRelatedFilms(slug, 3);
   const isFundraising = film.status === "Fundraising";
 
   const scrollTo = (id: string) => {
@@ -190,6 +189,42 @@ export default function FilmPage() {
               <video src={film.video} controls playsInline preload="auto" className="fp-video-fallback" />
             )}
           </section>
+
+          {/* Status — only when film not yet released */}
+          {film.status !== "Released" && (
+            <section className="fp-section fp-status-section">
+              <span className="fp-label">{isFundraising ? "Fundraising" : "Coming Soon"}</span>
+              <p className="fp-status-headline">
+                {isFundraising
+                  ? `In production — targeting ${film.year}`
+                  : `${film.status} — targeting ${film.year}`}
+              </p>
+              {film.timeline.length > 0 && (
+                <div className="fp-status-timeline">
+                  {film.timeline.map((step) => (
+                    <div key={step.label} className={`fp-status-step ${step.done ? "done" : ""}`}>
+                      <span className="fp-status-dot" />
+                      <span>{step.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {film.fundraising && (
+                <div className="fp-fundraising">
+                  <div className="fp-fundraising-bar">
+                    <div
+                      className="fp-fundraising-fill"
+                      style={{ width: `${Math.min(100, (film.fundraising.raised / film.fundraising.goal) * 100)}%` }}
+                    />
+                  </div>
+                  <div className="fp-fundraising-meta">
+                    <span>${film.fundraising.raised.toLocaleString()} raised</span>
+                    <span>${film.fundraising.goal.toLocaleString()} goal</span>
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
 
           {/* About */}
           <section className="fp-section" id="section-about">
@@ -288,30 +323,6 @@ export default function FilmPage() {
             </div>
           </section>
 
-          {/* Related films */}
-          <section className="fp-section">
-            <span className="fp-label">More Films</span>
-            <div className="fp-related">
-              {related.map((r) => (
-                <TransitionLink key={r.slug} href={`/films/${r.slug}`} className="fp-related-card">
-                  <div className="fp-related-thumb">
-                    <video src={r.video} muted loop playsInline autoPlay preload="metadata" />
-                  </div>
-                  <div className="fp-related-info">
-                    <span className="fp-related-title">{r.title}</span>
-                    <span className="fp-related-status">{r.status}</span>
-                  </div>
-                </TransitionLink>
-              ))}
-            </div>
-          </section>
-
-          {/* Footer CTAs */}
-          <div className="fp-footer-cta">
-            <TransitionLink href="/about" className="fp-footer-link">Partner with CultRepo &rarr;</TransitionLink>
-            <TransitionLink href="/films" className="fp-footer-link">View All Films &rarr;</TransitionLink>
-          </div>
-
         </div>
 
         {/* ===== SIDEBAR (RIGHT, STICKY) ===== */}
@@ -333,7 +344,7 @@ export default function FilmPage() {
                   <span className="fp-sb-film-desc">{film.description}</span>
                 </div>
               </div>
-              {film.poster ? (
+              {film.poster && (
                 <img
                   src={film.poster}
                   alt={`${film.title} poster`}
@@ -341,10 +352,6 @@ export default function FilmPage() {
                   data-src={film.poster}
                   onClick={openLightbox}
                 />
-              ) : (
-                <div className="fp-sb-poster" data-src={film.video} onClick={openLightbox}>
-                  <video src={film.video} muted loop playsInline autoPlay preload="metadata" />
-                </div>
               )}
             </div>
             <div className="fp-sb-divider" />
@@ -392,6 +399,25 @@ export default function FilmPage() {
           )}
         </aside>
       </div>
+
+      {/* More Films — full-width grid below the layout */}
+      <section className="fp-more-films">
+        <span className="fp-label fp-more-films-label">More Films</span>
+        <div className="films-grid">
+          {films.filter((f) => f.slug !== slug).map((f) => (
+            <TransitionLink key={f.slug} href={`/films/${f.slug}`} className="film-card">
+              <div className="film-card-video-wrap">
+                <video src={f.video} muted loop playsInline autoPlay preload="metadata" className="film-card-video" />
+                <div className="film-card-overlay" />
+              </div>
+              <div className="film-card-info">
+                <span className="film-card-title">{f.title}</span>
+                <span className="film-card-status">{f.status}</span>
+              </div>
+            </TransitionLink>
+          ))}
+        </div>
+      </section>
 
       {/* Lightbox */}
       {lightboxSrc && (

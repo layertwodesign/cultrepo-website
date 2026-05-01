@@ -8,8 +8,7 @@ export default function FilmsPage() {
     <div className="page-container">
       <div className="films-content">
         <section className="films-header">
-          <p className="about-label">Films</p>
-          <h1 className="films-title">The Archive</h1>
+          <h1 className="films-title">Films</h1>
         </section>
 
         <div className="films-grid">
