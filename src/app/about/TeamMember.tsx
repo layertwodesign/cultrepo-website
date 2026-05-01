@@ -1,12 +1,15 @@
+import Typewriter from "@/components/Typewriter";
+
 type Props = {
   name: string;
   role: string;
   photo: string;
   bio: string;
   email?: string;
+  bioStartDelay?: number;
 };
 
-export default function TeamMember({ name, role, photo, bio, email }: Props) {
+export default function TeamMember({ name, role, photo, bio, email, bioStartDelay = 0 }: Props) {
   return (
     <div className="team-member">
       <div className="team-member-portrait">
@@ -17,7 +20,12 @@ export default function TeamMember({ name, role, photo, bio, email }: Props) {
         <span className="team-member-role">{role}</span>
       </div>
       <div className="team-member-bio">
-        <p>{bio}</p>
+        <Typewriter
+          text={bio}
+          speed={10}
+          startDelay={bioStartDelay}
+          className="team-member-bio-text"
+        />
         {email && (
           <a href={`mailto:${email}`} className="team-member-email">
             {email}

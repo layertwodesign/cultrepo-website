@@ -105,6 +105,23 @@ export default function AboutPage() {
             not about them.
           </p>
         </Reveal>
+        <div className="about-hero-trusted">
+          <Reveal delay={300}>
+            <span className="about-partners-label">Trusted by</span>
+          </Reveal>
+          <Reveal delay={420}>
+            <div className="about-partners-logos">
+              {sponsors.map((p) => (
+                <img
+                  key={p.slug}
+                  src={`/partners/${p.slug}.png`}
+                  alt={p.name}
+                  className="about-partner-logo"
+                />
+              ))}
+            </div>
+          </Reveal>
+        </div>
       </section>
 
       <section className="about-image-break">
@@ -144,28 +161,10 @@ export default function AboutPage() {
         <div className="team-grid">
           {team.map((m, i) => (
             <Reveal key={m.name} delay={i * 100}>
-              <TeamMember {...m} />
+              <TeamMember {...m} bioStartDelay={400 + i * 200} />
             </Reveal>
           ))}
         </div>
-      </section>
-
-      <section className="about-partners">
-        <Reveal>
-          <span className="about-partners-label">Trusted by</span>
-        </Reveal>
-        <Reveal delay={120}>
-          <div className="about-partners-logos">
-            {sponsors.map((p) => (
-              <img
-                key={p.slug}
-                src={`/partners/${p.slug}.png`}
-                alt={p.name}
-                className="about-partner-logo"
-              />
-            ))}
-          </div>
-        </Reveal>
       </section>
 
       <section className="about-final-cta">
