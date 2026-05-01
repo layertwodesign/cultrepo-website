@@ -792,7 +792,7 @@ export default function Home() {
               })()}
             </p>
             <TransitionLink href="/about" className="home-cta">
-              Partner with Us
+              Sponsorship
             </TransitionLink>
           </div>
         )}
