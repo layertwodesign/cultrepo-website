@@ -34,7 +34,9 @@ body.invert {
   color: #0D110F;
 }
 body.invert .about-final-cta-button,
-body.invert .about-cta-button {
+body.invert .about-cta-button,
+body.invert .about-final-cta-button:visited,
+body.invert .about-cta-button:visited {
   background: #0D110F;
   color: #87FF38;
 }
@@ -900,6 +902,9 @@ button, input, textarea, select {
 }
 
 /* ============ ABOUT PAGE — EDITORIAL ============ */
+.about-editorial {
+  padding-bottom: 0;
+}
 .about-editorial > section {
   margin-bottom: clamp(96px, 14vw, 200px);
 }
@@ -1239,7 +1244,8 @@ button, input, textarea, select {
   margin: 0 auto 32px;
   text-align: center;
 }
-.about-cta-button {
+.about-cta-button,
+.about-cta-button:visited {
   display: inline-block;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 12px;
