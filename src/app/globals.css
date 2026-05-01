@@ -958,15 +958,16 @@ button, input, textarea, select {
 .about-partners {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 24px;
 }
-.about-partners-intro {
-  font-family: var(--font-interphases), sans-serif;
-  font-size: clamp(18px, 1.6vw, 22px);
-  font-weight: 300;
-  line-height: 1.5;
-  color: rgba(250, 255, 255, 0.55);
-  max-width: 640px;
+.about-partners-label {
+  display: inline-block;
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 255, 255, 0.4);
 }
 .about-partners-logos {
   display: flex;

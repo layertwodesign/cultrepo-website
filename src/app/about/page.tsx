@@ -154,10 +154,7 @@ export default function AboutPage() {
 
       <section className="about-partners">
         <Reveal>
-          <p className="about-partners-intro">
-            We&apos;ve worked with organizations that believe in documenting the
-            people behind technology.
-          </p>
+          <span className="about-partners-label">Trusted by</span>
         </Reveal>
         <Reveal delay={120}>
           <div className="about-partners-logos">
