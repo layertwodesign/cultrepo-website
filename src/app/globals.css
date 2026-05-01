@@ -630,7 +630,8 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #87FF38;
-  border: 1px solid rgba(135, 255, 56, 0.3);
+  background: #1A1E19;
+  border-radius: 8px;
   padding: 10px 20px;
   text-decoration: none;
   transition: background 0.3s ease, color 0.3s ease;
@@ -885,15 +886,16 @@ a { color: inherit; text-decoration: none; }
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #0D110F;
-  background: #87FF38;
+  color: #87FF38;
+  background: #1A1E19;
   padding: 14px 36px;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
 .about-cta-button:hover {
-  background: #8AFDC9;
+  background: #87FF38;
+  color: #0D110F;
   transform: translateY(-1px);
 }
 
