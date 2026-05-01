@@ -126,7 +126,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="about-image-break">
+      <section className="about-image-break corner-frame">
         <Reveal>
           <img src="/about/backstage-1.jpg" alt="" />
         </Reveal>
@@ -143,20 +143,24 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="about-numbers">
-        {community.map((c, i) => (
-          <Reveal key={c.label} delay={i * 120}>
-            <div className="about-number">
-              <span className="about-number-value">
-                <CountUp to={c.to} suffix={c.suffix} decimals={c.decimals} />
-              </span>
-              <div className="about-number-meta">
-                <span className="about-number-icon">{c.icon}</span>
-                <span className="about-number-label">{c.label}</span>
-              </div>
-            </div>
-          </Reveal>
-        ))}
+      <section className="about-numbers-section">
+        <div className="about-numbers-frame corner-frame">
+          <div className="about-numbers">
+            {community.map((c, i) => (
+              <Reveal key={c.label} delay={i * 120}>
+                <div className="about-number">
+                  <span className="about-number-value">
+                    <CountUp to={c.to} suffix={c.suffix} decimals={c.decimals} />
+                  </span>
+                  <div className="about-number-meta">
+                    <span className="about-number-icon">{c.icon}</span>
+                    <span className="about-number-label">{c.label}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="about-team-section">

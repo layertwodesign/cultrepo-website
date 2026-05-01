@@ -217,6 +217,36 @@ button, input, textarea, select {
   font-size: clamp(36px, 4.5vw, 75px);
 }
 
+/* Corner-tick frame: 4 small squares positioned at the outer corners of an
+   element. Used to subtly mark a "container" — either a rounded image or a
+   logical content frame — without drawing a full border. */
+.corner-frame {
+  position: relative;
+}
+.corner-frame::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  pointer-events: none;
+  z-index: 2;
+  background-color: transparent;
+  background-image:
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF);
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
+  background-position: top left, top right, bottom left, bottom right;
+}
+body.invert .corner-frame::before {
+  background-image:
+    linear-gradient(#0D110F, #0D110F),
+    linear-gradient(#0D110F, #0D110F),
+    linear-gradient(#0D110F, #0D110F),
+    linear-gradient(#0D110F, #0D110F);
+}
+
 /* Scroll-triggered reveal animation */
 .reveal {
   opacity: 0;
@@ -972,6 +1002,9 @@ button, input, textarea, select {
 }
 
 /* Numbers — display-size, no card chrome */
+.about-numbers-frame {
+  padding: 64px 48px;
+}
 .about-numbers {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1044,19 +1077,21 @@ button, input, textarea, select {
   opacity: 1;
 }
 
-/* Full-bleed editorial image break */
+/* Editorial image break — contained, with rounded corners + corner ticks */
 .about-image-break {
   position: relative;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
   height: clamp(380px, 75vh, 760px);
-  overflow: hidden;
+}
+.about-image-break .reveal {
+  width: 100%;
+  height: 100%;
 }
 .about-image-break img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 16px;
 }
 
 .about-final-block {
