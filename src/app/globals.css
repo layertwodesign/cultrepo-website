@@ -923,19 +923,16 @@ a { color: inherit; text-decoration: none; }
   text-decoration: none;
   color: inherit;
   display: block;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(250, 255, 255, 0.06);
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 .film-card:hover {
-  border-color: rgba(250, 255, 255, 0.15);
   transform: translateY(-2px);
 }
 .film-card-video-wrap {
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  border-radius: 12px;
   background: #282C26;
 }
 .film-card-video {
@@ -950,14 +947,14 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
 }
 .film-card-info {
-  padding: 16px 18px;
+  padding: 16px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .film-card-title {
   font-weight: 500;
-  font-size: 15px;
+  font-size: 22px;
   color: #FAFFFF;
 }
 .film-card-status {
@@ -966,7 +963,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #87FF38;
+  color: #ADB0A0;
 }
 
 /* ============ FILM PAGE (Figma layout) ============ */
