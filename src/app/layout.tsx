@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import SiteFooter from "@/components/SiteFooter";
 import { PageTransitionProvider } from "@/components/PageTransition";
 import { NavVisibilityProvider } from "@/components/NavVisibility";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -52,6 +53,7 @@ export default function RootLayout({
             <div className="camera-ruler camera-ruler-left" />
             <div className="camera-ruler camera-ruler-right" />
             {children}
+            <SiteFooter />
             <div className="film-grain" />
           </PageTransitionProvider>
         </NavVisibilityProvider>

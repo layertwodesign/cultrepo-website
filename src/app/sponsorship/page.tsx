@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SponsorshipForm from "./SponsorshipForm";
 
 export const metadata: Metadata = {
   title: "Sponsorship | CultRepo",
@@ -8,29 +9,18 @@ export const metadata: Metadata = {
 
 export default function SponsorshipPage() {
   return (
-    <div className="page-container">
-      <div className="about-content">
-        <section className="about-hero">
-          <p className="about-label">Sponsorship</p>
-          <h1 className="about-title">
-            Reach the people<br />
-            who build the future.
-          </h1>
-          <p className="about-subtitle">
-            Partner with CultRepo to put your brand in front of an audience of
-            builders, engineers, and technical leaders who watch our films.
+    <div className="sponsorship-page">
+      <div className="sponsorship-layout">
+        <div className="sponsorship-content">
+          <h1 className="sponsorship-title">Sponsor Our Work</h1>
+          <p className="sponsorship-sub">
+            We&apos;re happy to chat about a partnership.
           </p>
-        </section>
-
-        <section className="about-section about-cta">
-          <h2 className="about-cta-title">Let&apos;s talk</h2>
-          <p className="about-section-text">
-            Reach out and we&apos;ll send our partnership deck.
-          </p>
-          <a href="mailto:emma@cultrepo.com" className="about-cta-button">
-            Get in Touch
-          </a>
-        </section>
+          <SponsorshipForm />
+        </div>
+        <div className="sponsorship-ghost">
+          <img src="/ghost.png" alt="" />
+        </div>
       </div>
     </div>
   );
