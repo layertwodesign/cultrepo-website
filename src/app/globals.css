@@ -920,35 +920,18 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   gap: 16px;
 }
-.team-member-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-  color: inherit;
-}
 .team-member-portrait {
   aspect-ratio: 3 / 4;
   border-radius: 12px;
   overflow: hidden;
   background: #D8D8CA;
   border: 1px solid #282C26;
-  transition: border-color 0.3s ease;
 }
 .team-member-portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
-.team-member-card:hover .team-member-portrait,
-.team-member.open .team-member-portrait {
-  border-color: #454940;
 }
 .team-member-info {
   display: flex;
@@ -984,7 +967,8 @@ a { color: inherit; text-decoration: none; }
 .team-member-email {
   font-family: var(--font-interphases-mono), monospace;
   font-size: 11px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: #87FF38;
   text-decoration: none;
   align-self: flex-start;
