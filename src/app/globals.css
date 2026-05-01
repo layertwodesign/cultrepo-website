@@ -692,9 +692,11 @@ a { color: inherit; text-decoration: none; }
 }
 .menu-nav {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 56px;
 }
 .menu-link {
   font-family: var(--font-interphases), sans-serif;
@@ -702,11 +704,13 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(48px, 8vw, 96px);
   line-height: 1.1;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
   color: rgba(250, 255, 255, 0.25);
   text-decoration: none;
   transition: color 0.3s ease, transform 0.3s ease;
   display: block;
+}
+@media screen and (max-width: 768px) {
+  .menu-nav { flex-direction: column; gap: 8px; }
 }
 .menu-link:hover,
 .menu-link.active {
