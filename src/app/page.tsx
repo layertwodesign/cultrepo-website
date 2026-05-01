@@ -731,9 +731,6 @@ export default function Home() {
       {showUI && <style>{`.top-wordmark { opacity: 1 !important; pointer-events: auto !important; }`}</style>}
       {expandingIdx !== null && <style>{`.top-wordmark { opacity: 0 !important; transition: opacity 0.35s ease !important; }`}</style>}
 
-      {/* Camera ruler lines — left and right edges */}
-      <div className="camera-ruler camera-ruler-left" />
-      <div className="camera-ruler camera-ruler-right" />
 
       {showDebug && (
         <div style={{

@@ -49,6 +49,8 @@ export default function RootLayout({
           <PageTransitionProvider>
             <SmoothScroll />
             <Navigation />
+            <div className="camera-ruler camera-ruler-left" />
+            <div className="camera-ruler camera-ruler-right" />
             {children}
             <div className="film-grain" />
           </PageTransitionProvider>
