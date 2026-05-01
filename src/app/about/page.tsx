@@ -1,98 +1,112 @@
 import type { Metadata } from "next";
+import TransitionLink from "@/components/TransitionLink";
+import {
+  YouTubeIcon,
+  InstagramIcon,
+  XIcon,
+} from "@/components/SocialIcons";
+import TeamMember from "./TeamMember";
 
 export const metadata: Metadata = {
   title: "About | CultRepo",
   description:
-    "CultRepo creates cinematic documentaries about the humans shaping technology. Partner with us to tell the stories that matter.",
+    "Independent documentaries about the humans behind open source and the systems shaping modern technology.",
 };
 
-const sponsors = [
-  "IBM",
-  "Red Hat",
-  "Google",
+const team = [
+  {
+    name: "Emma Tracey",
+    role: "CEO",
+    photo: "/team/emma.webp",
+    bio: "Serial founder who started her career as a journalist and never stopped chasing stories. A long-time open source advocate, Emma cares about getting recognition into the hands of the people quietly maintaining the systems everyone else depends on.",
+    email: "emma@cultrepo.com",
+  },
+  {
+    name: "Josiah McGarvie",
+    role: "Filmmaker",
+    photo: "/team/josiah.webp",
+    bio: "Australian filmmaker, eight years deep in tech documentaries. Co-founded the original YouTube channel with Emma and assembled the team behind films on Kubernetes, Vue.js, GraphQL, Elixir, Vite, Argo, eBPF, PyTorch, Envoy, Prometheus, and Ember.js.",
+    email: "josiah@cultrepo.com",
+  },
+  {
+    name: "Ida Bechtle",
+    role: "Filmmaker",
+    photo: "/team/ida.webp",
+    bio: "Joined when the YouTube channel was barely a channel. She has been a quiet engine behind its growth, with a knack for finding the human moment inside a technical story. Off-set: cats, puzzles, and a strong opinion about coffee.",
+    email: "ida@cultrepo.com",
+  },
+  {
+    name: "Guillermo Lopez",
+    role: "Filmmaker",
+    photo: "/team/guillermo.webp",
+    bio: "Filmmaker and producer who came up in advertising before turning fully to tech documentaries. Brings a sharper narrative spine to production. Credits include Kubernetes, Prometheus, Angular, Vite, TypeScript, the Investors Masterclass, and various minidocs.",
+    email: "guillermo@cultrepo.com",
+  },
 ];
+
+const community = [
+  { value: "250K", label: "YouTube Subscribers", icon: <YouTubeIcon size={28} /> },
+  { value: "15M", label: "YouTube Views", icon: <YouTubeIcon size={28} /> },
+  { value: "5K", label: "Instagram Followers", icon: <InstagramIcon size={26} /> },
+  { value: "12.5K", label: "X Followers", icon: <XIcon size={24} /> },
+];
+
+const sponsors = ["IBM", "Red Hat", "Google", "JetBrains", "Shopify"];
 
 export default function AboutPage() {
   return (
     <div className="page-container">
       <div className="about-content">
-        {/* Hero section */}
         <section className="about-hero">
-          <p className="about-label">About</p>
           <h1 className="about-title">
-            Cinema for the builders<br />
-            shaping our era.
+            Films about the humans<br />
+            behind the systems<br />
+            we use every day.
           </h1>
           <p className="about-subtitle">
-            Long-form documentaries about the humans behind open source,
-            infrastructure, and emerging systems.
+            Independent. Long-form. Made with the people who built the things,
+            not about them.
           </p>
         </section>
 
-        {/* Mission */}
         <section className="about-section">
-          <h2 className="about-section-label">Mission</h2>
+          <h2 className="about-section-label">The Story</h2>
           <p className="about-section-text">
-            Tell the human stories behind the technology shaping our era.
-            We focus on the people, decisions, failures, and obsessions behind
-            the code — not tutorials, not hype. Films about people.
+            Founded in 2018 as Honeypot, Cult.Repo is an independent media
+            platform telling the human stories behind technology — with a
+            particular focus on the people who build and maintain open source.
+            What started as a single YouTube channel has grown into a small
+            studio of filmmakers chasing the stories that don&apos;t fit into a
+            blog post or a release note.
           </p>
         </section>
 
-        {/* What we do */}
         <section className="about-section">
-          <h2 className="about-section-label">What We Do</h2>
-          <div className="about-grid">
-            <div className="about-card">
-              <h3 className="about-card-title">Documentary Films</h3>
-              <p className="about-card-text">
-                Cinematic stories about the creators and maintainers building
-                foundational systems.
-              </p>
-            </div>
-            <div className="about-card">
-              <h3 className="about-card-title">Human-Centered Storytelling</h3>
-              <p className="about-card-text">
-                Focused on the decisions, tensions, and motivations behind the
-                code.
-              </p>
-            </div>
-            <div className="about-card">
-              <h3 className="about-card-title">A Living Archive</h3>
-              <p className="about-card-text">
-                Documenting the culture of open source before it disappears
-                into abstraction.
-              </p>
-            </div>
+          <h2 className="about-section-label">Community</h2>
+          <div className="community-grid">
+            {community.map((c) => (
+              <div key={c.label} className="community-stat">
+                <div className="community-stat-icon">{c.icon}</div>
+                <div className="community-stat-text">
+                  <span className="community-stat-value">{c.value}</span>
+                  <span className="community-stat-label">{c.label}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Stats */}
         <section className="about-section">
-          <h2 className="about-section-label">By the Numbers</h2>
-          <div className="about-stats">
-            <div className="about-stat">
-              <span className="about-stat-number">350K+</span>
-              <span className="about-stat-label">YouTube Subscribers</span>
-            </div>
-            <div className="about-stat">
-              <span className="about-stat-number">22M+</span>
-              <span className="about-stat-label">Total Views</span>
-            </div>
-            <div className="about-stat">
-              <span className="about-stat-number">15+</span>
-              <span className="about-stat-label">Films</span>
-            </div>
+          <h2 className="about-section-label">The Team</h2>
+          <div className="team-grid">
+            {team.map((m) => (
+              <TeamMember key={m.name} {...m} />
+            ))}
           </div>
         </section>
 
-        {/* Sponsors */}
         <section className="about-section">
           <h2 className="about-section-label">Past Partners</h2>
-          <p className="about-section-text" style={{ marginBottom: 32 }}>
-            We work with organizations that believe in the value of
-            documenting the people behind technology.
-          </p>
           <div className="about-sponsors">
             {sponsors.map((name) => (
               <div key={name} className="about-sponsor">
@@ -102,16 +116,14 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA */}
         <section className="about-section about-cta">
-          <h2 className="about-cta-title">Partner with CultRepo</h2>
+          <h2 className="about-cta-title">Sponsor a film</h2>
           <p className="about-section-text">
-            Reach an audience of builders, engineers, and technical leaders
-            through cinematic storytelling.
+            Reach an audience of builders, engineers, and technical leaders.
           </p>
-          <a href="mailto:emma@cultrepo.com" className="about-cta-button">
-            Get in Touch
-          </a>
+          <TransitionLink href="/sponsorship" className="about-cta-button">
+            Sponsorship
+          </TransitionLink>
         </section>
       </div>
     </div>
