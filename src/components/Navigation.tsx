@@ -29,7 +29,7 @@ export default function Navigation() {
       {/* Hamburger — always visible */}
       <button
         className={`hamburger visible ${open ? "open" : ""}`}
-        style={{ zIndex: 210 }}
+        style={{ zIndex: 10000 }}
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen(!open)}
       >
