@@ -8,7 +8,7 @@ type Props = {
   threshold?: number;
 };
 
-export default function InvertOnView({ children, className = "", threshold = 0.5 }: Props) {
+export default function InvertOnView({ children, className = "", threshold = 0.25 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

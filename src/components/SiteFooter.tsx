@@ -3,9 +3,13 @@
 import { usePathname } from "next/navigation";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
 
-export default function SiteFooter() {
+type Props = {
+  force?: boolean;
+};
+
+export default function SiteFooter({ force = false }: Props) {
   const pathname = usePathname();
-  if (pathname === "/") return null;
+  if (!force && (pathname === "/" || pathname === "/about")) return null;
 
   return (
     <footer className="site-footer">
