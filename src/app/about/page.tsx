@@ -75,7 +75,7 @@ export default function AboutPage() {
       </section>
 
       <section className="about-image-break">
-        <img src="/stills/general/ryan-1.jpg" alt="" />
+        <img src="/about/backstage-1.jpg" alt="" />
       </section>
 
       <section className="about-story">

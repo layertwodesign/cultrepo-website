@@ -221,7 +221,10 @@ export const films: Film[] = [
     technologies: ["CRDTs", "Automerge", "Local-first", "P2P"],
     sponsors: [],
     extras: [],
-    stills: [],
+    stills: [
+      "/stills/local-first/martin-kleppmann.jpg",
+      "/stills/local-first/adam-wiggins.jpg",
+    ],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: false },
@@ -358,7 +361,13 @@ export const films: Film[] = [
     technologies: ["Python", "CPython", "PyPI", "Machine Learning"],
     sponsors: [{ name: "Google" }, { name: "Microsoft" }],
     extras: [],
-    stills: [],
+    stills: [
+      "/stills/python/guido-1.jpg",
+      "/stills/python/brett-cannon.jpg",
+      "/stills/python/peter-wang.jpg",
+      "/stills/python/mariatta.jpg",
+      "/stills/python/travis-oliphant.jpg",
+    ],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
@@ -461,7 +470,10 @@ export const films: Film[] = [
     technologies: ["Java", "JVM", "Spring", "Android"],
     sponsors: [],
     extras: [],
-    stills: [],
+    stills: [
+      "/stills/java/james-gosling.jpg",
+      "/stills/java/brian-goetz.jpg",
+    ],
     timeline: [
       { label: "Pre-Production", done: true },
       { label: "Filming", done: true },
