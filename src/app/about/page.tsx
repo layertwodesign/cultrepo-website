@@ -136,7 +136,7 @@ export default function AboutPage() {
             <img src="/ghost.svg" alt="" />
           </Reveal>
           <div className="about-story-text">
-            <Typewriter text={STORY_TEXT} speed={12} />
+            <Typewriter text={STORY_TEXT} speed={32} />
           </div>
         </div>
       </section>
