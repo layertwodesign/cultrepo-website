@@ -5,6 +5,9 @@ import {
   InstagramIcon,
   XIcon,
 } from "@/components/SocialIcons";
+import Reveal from "@/components/Reveal";
+import Typewriter from "@/components/Typewriter";
+import CountUp from "@/components/CountUp";
 import TeamMember from "./TeamMember";
 
 export const metadata: Metadata = {
@@ -45,10 +48,34 @@ const team = [
 ];
 
 const community = [
-  { value: "250K", label: "YouTube Subscribers", icon: <YouTubeIcon size={14} /> },
-  { value: "15M", label: "YouTube Views", icon: <YouTubeIcon size={14} /> },
-  { value: "5K", label: "Instagram Followers", icon: <InstagramIcon size={14} /> },
-  { value: "12.5K", label: "X Followers", icon: <XIcon size={12} /> },
+  {
+    to: 250,
+    suffix: "K",
+    decimals: 0,
+    label: "YouTube Subscribers",
+    icon: <YouTubeIcon size={14} />,
+  },
+  {
+    to: 15,
+    suffix: "M",
+    decimals: 0,
+    label: "YouTube Views",
+    icon: <YouTubeIcon size={14} />,
+  },
+  {
+    to: 5,
+    suffix: "K",
+    decimals: 0,
+    label: "Instagram Followers",
+    icon: <InstagramIcon size={14} />,
+  },
+  {
+    to: 12.5,
+    suffix: "K",
+    decimals: 1,
+    label: "X Followers",
+    icon: <XIcon size={12} />,
+  },
 ];
 
 const sponsors = [
@@ -59,85 +86,103 @@ const sponsors = [
   { name: "Shopify", slug: "shopify" },
 ];
 
+const STORY_TEXT = `Founded in 2018 as Honeypot, Cult.Repo is an independent media platform telling the human stories behind technology — with a particular focus on the people who build and maintain open source.
+
+What started as a single YouTube channel has grown into a small studio of filmmakers chasing the stories that don't fit into a blog post or a release note.`;
+
 export default function AboutPage() {
   return (
     <div className="page-container about-editorial">
       <section className="about-hero">
-        <h1 className="about-title">
-          Films about the humans<br />
-          behind the systems<br />
-          we use every day.
-        </h1>
-        <p className="about-subtitle">
-          Independent. Long-form. Made with the people who built the things,
-          not about them.
-        </p>
+        <Reveal>
+          <h1 className="about-title">
+            Films about the humans<br />
+            behind the systems<br />
+            we use every day.
+          </h1>
+        </Reveal>
+        <Reveal delay={150}>
+          <p className="about-subtitle">
+            Independent. Long-form. Made with the people who built the things,
+            not about them.
+          </p>
+        </Reveal>
       </section>
 
       <section className="about-image-break">
-        <img src="/about/backstage-1.jpg" alt="" />
+        <Reveal>
+          <img src="/about/backstage-1.jpg" alt="" />
+        </Reveal>
       </section>
 
       <section className="about-story">
-        <p>
-          Founded in 2018 as Honeypot, Cult.Repo is an independent media
-          platform telling the human stories behind technology — with a
-          particular focus on the people who build and maintain open source.
-        </p>
-        <p>
-          What started as a single YouTube channel has grown into a small
-          studio of filmmakers chasing the stories that don&apos;t fit into a
-          blog post or a release note.
-        </p>
+        <div className="about-story-layout">
+          <Reveal className="about-story-ghost">
+            <img src="/ghost.svg" alt="" />
+          </Reveal>
+          <div className="about-story-text">
+            <Typewriter text={STORY_TEXT} speed={12} />
+          </div>
+        </div>
       </section>
 
       <section className="about-numbers">
-        {community.map((c) => (
-          <div key={c.label} className="about-number">
-            <span className="about-number-value">{c.value}</span>
-            <div className="about-number-meta">
-              <span className="about-number-icon">{c.icon}</span>
-              <span className="about-number-label">{c.label}</span>
+        {community.map((c, i) => (
+          <Reveal key={c.label} delay={i * 120}>
+            <div className="about-number">
+              <span className="about-number-value">
+                <CountUp to={c.to} suffix={c.suffix} decimals={c.decimals} />
+              </span>
+              <div className="about-number-meta">
+                <span className="about-number-icon">{c.icon}</span>
+                <span className="about-number-label">{c.label}</span>
+              </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </section>
 
       <section className="about-team-section">
         <div className="team-grid">
-          {team.map((m) => (
-            <TeamMember key={m.name} {...m} />
+          {team.map((m, i) => (
+            <Reveal key={m.name} delay={i * 100}>
+              <TeamMember {...m} />
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section className="about-partners">
-        <p className="about-partners-intro">
-          We&apos;ve worked with organizations that believe in documenting the
-          people behind technology.
-        </p>
-        <div className="about-partners-logos">
-          {sponsors.map((p) => (
-            <img
-              key={p.slug}
-              src={`/partners/${p.slug}.png`}
-              alt={p.name}
-              className="about-partner-logo"
-            />
-          ))}
-        </div>
+        <Reveal>
+          <p className="about-partners-intro">
+            We&apos;ve worked with organizations that believe in documenting the
+            people behind technology.
+          </p>
+        </Reveal>
+        <Reveal delay={120}>
+          <div className="about-partners-logos">
+            {sponsors.map((p) => (
+              <img
+                key={p.slug}
+                src={`/partners/${p.slug}.png`}
+                alt={p.name}
+                className="about-partner-logo"
+              />
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       <section className="about-final-cta">
-        <h2 className="about-final-cta-title">
-          Sponsor a film.
-        </h2>
-        <p className="about-final-cta-sub">
-          Reach builders, engineers, and technical leaders.
-        </p>
-        <TransitionLink href="/sponsorship" className="about-cta-button">
-          Sponsorship
-        </TransitionLink>
+        <Reveal>
+          <h2 className="about-final-cta-title">Sponsor a film.</h2>
+          <p className="about-final-cta-sub">
+            Reach builders, engineers, and technical leaders.
+          </p>
+          <TransitionLink href="/sponsorship" className="about-cta-button">
+            Sponsorship
+          </TransitionLink>
+        </Reveal>
       </section>
     </div>
   );
