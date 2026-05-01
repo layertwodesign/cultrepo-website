@@ -51,81 +51,94 @@ const community = [
   { value: "12.5K", label: "X Followers", icon: <XIcon size={12} /> },
 ];
 
-const sponsors = ["IBM", "Red Hat", "Google", "JetBrains", "Shopify"];
+const sponsors = [
+  { name: "IBM", slug: "ibm" },
+  { name: "Red Hat", slug: "redhat" },
+  { name: "Google", slug: "google" },
+  { name: "JetBrains", slug: "jetbrains" },
+  { name: "Shopify", slug: "shopify" },
+];
 
 export default function AboutPage() {
   return (
-    <div className="page-container">
-      <div className="about-content">
-        <section className="about-hero">
-          <h1 className="about-title">
-            Films about the humans<br />
-            behind the systems<br />
-            we use every day.
-          </h1>
-          <p className="about-subtitle">
-            Independent. Long-form. Made with the people who built the things,
-            not about them.
-          </p>
-        </section>
+    <div className="page-container about-editorial">
+      <section className="about-hero">
+        <h1 className="about-title">
+          Films about the humans<br />
+          behind the systems<br />
+          we use every day.
+        </h1>
+        <p className="about-subtitle">
+          Independent. Long-form. Made with the people who built the things,
+          not about them.
+        </p>
+      </section>
 
-        <section className="about-section">
-          <h2 className="about-section-label">The Story</h2>
-          <p className="about-section-text">
-            Founded in 2018 as Honeypot, Cult.Repo is an independent media
-            platform telling the human stories behind technology — with a
-            particular focus on the people who build and maintain open source.
-            What started as a single YouTube channel has grown into a small
-            studio of filmmakers chasing the stories that don&apos;t fit into a
-            blog post or a release note.
-          </p>
-        </section>
+      <section className="about-image-break">
+        <img src="/stills/general/ryan-1.jpg" alt="" />
+      </section>
 
-        <section className="about-section">
-          <h2 className="about-section-label">Community</h2>
-          <div className="community-grid">
-            {community.map((c) => (
-              <div key={c.label} className="community-stat">
-                <span className="community-stat-value">{c.value}</span>
-                <div className="community-stat-meta">
-                  <span className="community-stat-icon">{c.icon}</span>
-                  <span className="community-stat-label">{c.label}</span>
-                </div>
-              </div>
-            ))}
+      <section className="about-story">
+        <p>
+          Founded in 2018 as Honeypot, Cult.Repo is an independent media
+          platform telling the human stories behind technology — with a
+          particular focus on the people who build and maintain open source.
+        </p>
+        <p>
+          What started as a single YouTube channel has grown into a small
+          studio of filmmakers chasing the stories that don&apos;t fit into a
+          blog post or a release note.
+        </p>
+      </section>
+
+      <section className="about-numbers">
+        {community.map((c) => (
+          <div key={c.label} className="about-number">
+            <span className="about-number-value">{c.value}</span>
+            <div className="about-number-meta">
+              <span className="about-number-icon">{c.icon}</span>
+              <span className="about-number-label">{c.label}</span>
+            </div>
           </div>
-        </section>
+        ))}
+      </section>
 
-        <section className="about-section">
-          <h2 className="about-section-label">The Team</h2>
-          <div className="team-grid">
-            {team.map((m) => (
-              <TeamMember key={m.name} {...m} />
-            ))}
-          </div>
-        </section>
+      <section className="about-team-section">
+        <div className="team-grid">
+          {team.map((m) => (
+            <TeamMember key={m.name} {...m} />
+          ))}
+        </div>
+      </section>
 
-        <section className="about-section">
-          <h2 className="about-section-label">Past Partners</h2>
-          <div className="about-sponsors">
-            {sponsors.map((name) => (
-              <div key={name} className="about-sponsor">
-                {name}
-              </div>
-            ))}
-          </div>
-        </section>
+      <section className="about-partners">
+        <p className="about-partners-intro">
+          We&apos;ve worked with organizations that believe in documenting the
+          people behind technology.
+        </p>
+        <div className="about-partners-logos">
+          {sponsors.map((p) => (
+            <img
+              key={p.slug}
+              src={`/partners/${p.slug}.png`}
+              alt={p.name}
+              className="about-partner-logo"
+            />
+          ))}
+        </div>
+      </section>
 
-        <section className="about-section about-cta">
-          <h2 className="about-cta-title">Sponsor a film</h2>
-          <p className="about-section-text">
-            Reach an audience of builders, engineers, and technical leaders.
-          </p>
-          <TransitionLink href="/sponsorship" className="about-cta-button">
-            Sponsorship
-          </TransitionLink>
-        </section>
-      </div>
+      <section className="about-final-cta">
+        <h2 className="about-final-cta-title">
+          Sponsor a film.
+        </h2>
+        <p className="about-final-cta-sub">
+          Reach builders, engineers, and technical leaders.
+        </p>
+        <TransitionLink href="/sponsorship" className="about-cta-button">
+          Sponsorship
+        </TransitionLink>
+      </section>
     </div>
   );
 }
