@@ -868,6 +868,8 @@ button, input, textarea, select {
   letter-spacing: -0.04em;
   color: #FAFFFF;
   margin-bottom: 32px;
+  max-width: 16ch;
+  text-wrap: balance;
 }
 .about-subtitle {
   font-family: var(--font-interphases), sans-serif;

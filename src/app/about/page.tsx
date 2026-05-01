@@ -96,9 +96,7 @@ export default function AboutPage() {
       <section className="about-hero">
         <Reveal>
           <h1 className="about-title">
-            Films about the humans<br />
-            behind the systems<br />
-            we use every day.
+            Films about the humans behind the systems we use every day.
           </h1>
         </Reveal>
         <Reveal delay={150}>
