@@ -45,10 +45,10 @@ const team = [
 ];
 
 const community = [
-  { value: "250K", label: "YouTube Subscribers", icon: <YouTubeIcon size={28} /> },
-  { value: "15M", label: "YouTube Views", icon: <YouTubeIcon size={28} /> },
-  { value: "5K", label: "Instagram Followers", icon: <InstagramIcon size={26} /> },
-  { value: "12.5K", label: "X Followers", icon: <XIcon size={24} /> },
+  { value: "250K", label: "YouTube Subscribers", icon: <YouTubeIcon size={14} /> },
+  { value: "15M", label: "YouTube Views", icon: <YouTubeIcon size={14} /> },
+  { value: "5K", label: "Instagram Followers", icon: <InstagramIcon size={14} /> },
+  { value: "12.5K", label: "X Followers", icon: <XIcon size={12} /> },
 ];
 
 const sponsors = ["IBM", "Red Hat", "Google", "JetBrains", "Shopify"];
@@ -86,9 +86,9 @@ export default function AboutPage() {
           <div className="community-grid">
             {community.map((c) => (
               <div key={c.label} className="community-stat">
-                <div className="community-stat-icon">{c.icon}</div>
-                <div className="community-stat-text">
-                  <span className="community-stat-value">{c.value}</span>
+                <span className="community-stat-value">{c.value}</span>
+                <div className="community-stat-meta">
+                  <span className="community-stat-icon">{c.icon}</span>
                   <span className="community-stat-label">{c.label}</span>
                 </div>
               </div>
