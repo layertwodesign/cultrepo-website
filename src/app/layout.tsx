@@ -12,6 +12,7 @@ const interphases = localFont({
     { path: "./fonts/TTInterphasesPro-Lt.ttf", weight: "300" },
     { path: "./fonts/TTInterphasesPro-Rg.ttf", weight: "400" },
     { path: "./fonts/TTInterphasesPro-Md.ttf", weight: "500" },
+    { path: "./fonts/TTInterphasesPro-DmBd.ttf", weight: "600" },
     { path: "./fonts/TTInterphasesPro-Bd.ttf", weight: "700" },
   ],
   variable: "--font-interphases",
