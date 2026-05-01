@@ -77,7 +77,7 @@ function Slider({ label, value, min, max, step, onChange }: {
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
         style={{ flex: 1, accentColor: "#FAFFFF" }} />
-      <span style={{ width: 50, textAlign: "right", fontFamily: "monospace" }}>{value.toFixed(1)}</span>
+      <span style={{ width: 50, textAlign: "right", fontFamily: "var(--font-interphases-mono), monospace" }}>{value.toFixed(1)}</span>
     </label>
   );
 }

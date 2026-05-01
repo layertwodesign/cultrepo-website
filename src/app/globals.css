@@ -27,6 +27,13 @@ html, body {
 
 a { color: inherit; text-decoration: none; }
 
+/* Form elements opt back into the inherited typography */
+button, input, textarea, select {
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
 ::selection { background-color: #FAFFFF; color: #0D110F; }
 
 /* ============ INTRO OVERLAY ============ */
