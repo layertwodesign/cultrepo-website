@@ -51,7 +51,7 @@ export default function Typewriter({ text, speed = 14, className = "", startDela
   return (
     <div ref={ref} className={className} style={{ whiteSpace: "pre-line" }}>
       <span>{visible}</span>
-      {started && !complete && <span className="typewriter-cursor blink" />}
+      {started && !complete && <span className="typewriter-cursor" />}
       <span style={{ color: "transparent" }}>{hidden}</span>
     </div>
   );
