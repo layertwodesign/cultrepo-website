@@ -840,8 +840,8 @@ body.invert .corner-square {
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto auto;
   align-content: center;
-  padding: 128px 40px 48px;
-  gap: 56px;
+  padding: 10vh 40px 9vh;
+  gap: 10vh;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
