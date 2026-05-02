@@ -142,6 +142,14 @@ export default function Home() {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const cursorLabelRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef({
+    targetX: 0,
+    targetY: 0,
+    x: 0,
+    y: 0,
+    visible: false,
+    hideRaf: 0,
+  });
   const stateRef = useRef({
     target: 0,
     current: 0,
@@ -362,6 +370,27 @@ export default function Home() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Cursor-label lerp loop — eases the "VIEW FILM" label toward the mouse
+  // each frame and writes its visibility based on cursorRef.visible (set by
+  // the per-item enter/leave handlers).
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      const c = cursorRef.current;
+      const node = cursorLabelRef.current;
+      if (node) {
+        c.x += (c.targetX - c.x) * 0.18;
+        c.y += (c.targetY - c.y) * 0.18;
+        const w = node.offsetWidth;
+        node.style.transform = `translate(${c.x - w / 2}px, ${c.y + 24}px)`;
+        node.style.opacity = c.visible ? "1" : "0";
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   useEffect(() => {
@@ -845,22 +874,37 @@ export default function Home() {
                 key={item.title + idx}
                 className="carousel-item"
                 ref={(el) => { itemRefs.current[idx] = el; }}
-                onMouseEnter={() => {
-                  if (cursorLabelRef.current && !stateRef.current.isDragging && stateRef.current.initialized) {
-                    cursorLabelRef.current.style.opacity = "1";
+                onMouseEnter={(e) => {
+                  if (stateRef.current.isDragging || !stateRef.current.initialized) return;
+                  const c = cursorRef.current;
+                  // Snap on first show to avoid easing in from (0, 0)
+                  if (!c.visible) {
+                    c.x = e.clientX;
+                    c.y = e.clientY;
+                  }
+                  c.targetX = e.clientX;
+                  c.targetY = e.clientY;
+                  c.visible = true;
+                  if (c.hideRaf) {
+                    cancelAnimationFrame(c.hideRaf);
+                    c.hideRaf = 0;
                   }
                 }}
                 onMouseMove={(e) => {
-                  if (cursorLabelRef.current) {
-                    const w = cursorLabelRef.current.offsetWidth;
-                    cursorLabelRef.current.style.transform = `translate(${e.clientX - w / 2}px, ${e.clientY + 20}px)`;
-                    cursorLabelRef.current.style.opacity = (stateRef.current.hasDragged || !stateRef.current.initialized) ? "0" : "1";
-                  }
+                  const c = cursorRef.current;
+                  c.targetX = e.clientX;
+                  c.targetY = e.clientY;
+                  c.visible = !stateRef.current.hasDragged && stateRef.current.initialized;
                 }}
                 onMouseLeave={() => {
-                  if (cursorLabelRef.current) {
-                    cursorLabelRef.current.style.opacity = "0";
-                  }
+                  // Defer hide one frame so a sibling item's mouseenter can
+                  // override and prevent flicker between adjacent tiles.
+                  const c = cursorRef.current;
+                  if (c.hideRaf) cancelAnimationFrame(c.hideRaf);
+                  c.hideRaf = requestAnimationFrame(() => {
+                    c.visible = false;
+                    c.hideRaf = 0;
+                  });
                 }}
               >
                 <div
@@ -918,9 +962,9 @@ export default function Home() {
                     muted loop playsInline autoPlay preload="auto"
                     className="carousel-video"
                   />
-                </div>
-                <div className="carousel-overlay">
-                  <span className="carousel-overlay-title">{item.title}</span>
+                  <div className="carousel-overlay">
+                    <span className="carousel-overlay-title">{item.title}</span>
+                  </div>
                 </div>
                 <CornerSquares />
               </div>
