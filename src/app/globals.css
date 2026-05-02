@@ -1165,14 +1165,19 @@ body.invert .corner-square {
 }
 
 .about-final-block {
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
 }
+.about-final-block .site-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 .about-final-cta {
-  flex: 1;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
