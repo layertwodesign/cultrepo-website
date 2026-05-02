@@ -916,7 +916,7 @@ body.invert .corner-square {
 }
 .menu-marquee-item:hover {
   color: #FAFFFF;
-  background: rgba(135, 255, 56, 0.14);
+  background: #1A1E19;
 }
 @keyframes menu-marquee {
   from { transform: translateX(0); }
@@ -1019,7 +1019,7 @@ body.invert .corner-square {
   text-transform: uppercase;
 }
 .menu-email-submit {
-  background: rgba(135, 255, 56, 0.10);
+  background: #1A1E19;
   border: 0;
   color: #87FF38;
   height: 100%;
@@ -1051,7 +1051,7 @@ body.invert .corner-square {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  background: rgba(135, 255, 56, 0.04);
+  background: #1A1E19;
   border: 1px solid rgba(250, 255, 255, 0.12);
   height: 56px;
   padding: 0 32px;
@@ -1069,10 +1069,9 @@ body.invert .corner-square {
 }
 .menu-cta-secondary {
   color: #FAFFFF;
-  background: rgba(250, 255, 255, 0.04);
 }
 .menu-cta-secondary:hover {
-  background: rgba(250, 255, 255, 0.10);
+  background: #282C26;
   border-color: rgba(250, 255, 255, 0.28);
 }
 

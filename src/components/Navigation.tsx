@@ -18,6 +18,8 @@ const NAV = [
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isFilm = pathname.startsWith("/films/") && pathname !== "/films";
@@ -100,16 +102,47 @@ export default function Navigation() {
         </nav>
 
         <div className="menu-actions">
-          <form className="menu-email" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="menu-email"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (status === "loading") return;
+              setStatus("loading");
+              try {
+                const res = await fetch("/api/newsletter", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email }),
+                });
+                if (!res.ok) throw new Error("failed");
+                setStatus("ok");
+                setEmail("");
+              } catch {
+                setStatus("error");
+              }
+            }}
+          >
             <input
               type="email"
               required
-              placeholder="ENTER EMAIL"
+              placeholder={
+                status === "ok"
+                  ? "Thanks — check your inbox"
+                  : status === "error"
+                    ? "Something went wrong, try again"
+                    : "Enter email"
+              }
               className="menu-email-input"
               aria-label="Email address"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status !== "idle" && status !== "loading") setStatus("idle");
+              }}
+              disabled={status === "loading"}
             />
-            <button type="submit" className="menu-email-submit">
-              Join our email list
+            <button type="submit" className="menu-email-submit" disabled={status === "loading"}>
+              {status === "loading" ? "Joining…" : "Join our email list"}
             </button>
           </form>
           <div className="menu-cta-row">
