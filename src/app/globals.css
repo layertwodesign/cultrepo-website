@@ -851,6 +851,38 @@ body.invert .corner-square {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Staggered entry — children fade + lift in once .open is set */
+.menu-overlay > .menu-marquee,
+.menu-overlay > .menu-actions,
+.menu-overlay > .menu-footer,
+.menu-overlay > .menu-close,
+.menu-overlay .menu-card {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.menu-overlay.open > .menu-marquee,
+.menu-overlay.open > .menu-actions,
+.menu-overlay.open > .menu-footer,
+.menu-overlay.open > .menu-close,
+.menu-overlay.open .menu-card {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.4s ease,
+    border-color 0.4s ease,
+    background 0.4s ease;
+}
+.menu-overlay.open > .menu-close { transition-delay: 0.05s; }
+.menu-overlay.open > .menu-marquee { transition-delay: 0.15s; }
+.menu-overlay.open .menu-card:nth-child(1) { transition-delay: 0.30s; }
+.menu-overlay.open .menu-card:nth-child(2) { transition-delay: 0.38s; }
+.menu-overlay.open .menu-card:nth-child(3) { transition-delay: 0.46s; }
+.menu-overlay.open > .menu-actions { transition-delay: 0.55s; }
+.menu-overlay.open > .menu-footer { transition-delay: 0.65s; }
 .menu-unicorn {
   position: absolute;
   inset: 0;
@@ -920,7 +952,7 @@ body.invert .corner-square {
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   width: 100%;
-  height: clamp(260px, 42vh, 460px);
+  height: clamp(360px, 58vh, 720px);
   min-height: 0;
   align-self: center;
 }
@@ -958,27 +990,47 @@ body.invert .corner-square {
 .menu-card-title {
   position: relative;
   z-index: 1;
+  display: inline-block;
+  height: 1em;
+  line-height: 1;
+  overflow: hidden;
   font-family: var(--font-interphases-mono), monospace;
   font-weight: 400;
-  font-size: clamp(40px, 6vw, 88px);
+  font-size: clamp(48px, 7vw, 112px);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+.menu-card-title-track {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+  transition: transform 0.65s cubic-bezier(0.65, 0, 0.05, 1);
+}
+.menu-card-title-line {
+  display: block;
+  line-height: 1;
+}
+.menu-card:hover .menu-card-title-track {
+  transform: translateY(-50%);
 }
 
 /* Action row — email + cta buttons */
 .menu-actions {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(24px, 4vw, 80px);
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 80px);
   width: 100%;
 }
 .menu-email {
+  flex: 0 1 880px;
+  max-width: 880px;
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(250, 255, 255, 0.18);
+  border: 1px solid #454940;
   border-radius: 14px;
   height: 64px;
   padding: 6px;
@@ -1005,7 +1057,8 @@ body.invert .corner-square {
   border: 0;
   color: #87FF38;
   height: 100%;
-  padding: 0 32px;
+  padding: 0 64px;
+  min-width: 260px;
   border-radius: 9px;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 12px;
@@ -1027,16 +1080,18 @@ body.invert .corner-square {
 .menu-cta {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   background: #1A1E19;
-  border: 1px solid rgba(250, 255, 255, 0.12);
-  height: 56px;
-  padding: 0 32px;
+  border: 1px solid #454940;
+  height: 64px;
+  padding: 0 56px;
+  min-width: 260px;
   border-radius: 12px;
   text-decoration: none;
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;

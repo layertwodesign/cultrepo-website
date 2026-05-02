@@ -94,7 +94,12 @@ export default function Navigation() {
                 className={`menu-card ${active ? "active" : ""}`}
               >
                 <CornerSquares />
-                <span className="menu-card-title">{item.label}</span>
+                <span className="menu-card-title">
+                  <span className="menu-card-title-track">
+                    <span className="menu-card-title-line">{item.label}</span>
+                    <span className="menu-card-title-line" aria-hidden>{item.label}</span>
+                  </span>
+                </span>
               </TransitionLink>
             );
           })}
@@ -156,7 +161,7 @@ export default function Navigation() {
         </div>
 
         <div className="menu-footer">
-          <span className="menu-footer-credit">Copyright 2026</span>
+          <span className="menu-footer-credit">&copy; 2026</span>
 
           <div className="menu-socials">
             <a href="https://bsky.app/profile/cultrepo.bsky.social" target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Bluesky"><BlueskyIcon /></a>
