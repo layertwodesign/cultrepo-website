@@ -229,8 +229,8 @@ button, input, textarea, select {
   background: var(--corner-color, #FAFFFF);
   pointer-events: none;
   z-index: 4;
-  transform: scale(0) rotate(0deg);
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(0) rotate(25deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: center;
 }
 .corner-square-tl { top: var(--corner-offset, -8px); left: var(--corner-offset, -8px); }
@@ -243,7 +243,7 @@ button, input, textarea, select {
 .reveal.reveal-in .corner-square,
 .carousel-item:hover .corner-square,
 .corners-in .corner-square {
-  transform: scale(1) rotate(12deg);
+  transform: scale(1) rotate(0deg);
 }
 body.invert .corner-square {
   --corner-color: #0D110F;
@@ -650,6 +650,10 @@ body.invert .corner-square {
   opacity: var(--carousel-dim, 0);
   pointer-events: none;
   z-index: 1;
+  transition: opacity 0.4s ease;
+}
+.carousel-item:hover .carousel-item-link::before {
+  opacity: 0;
 }
 /* Bottom-left vignette that lifts the title off light footage on hover */
 .carousel-item-link::after {
