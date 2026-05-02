@@ -33,7 +33,13 @@ export default function Navigation() {
 
   // Marquee strip — film titles, repeated for seamless scroll
   const marqueeItems = [...films, ...films].map((f, i) => (
-    <span key={`${f.slug}-${i}`} className="menu-marquee-item">{f.title}</span>
+    <TransitionLink
+      key={`${f.slug}-${i}`}
+      href={`/films/${f.slug}`}
+      className="menu-marquee-item"
+    >
+      {f.title}
+    </TransitionLink>
   ));
 
   return (
@@ -73,7 +79,7 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <div className="menu-marquee" aria-hidden>
+        <div className="menu-marquee">
           <div className="menu-marquee-track">{marqueeItems}</div>
         </div>
 

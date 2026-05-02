@@ -885,23 +885,38 @@ body.invert .corner-square {
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-  pointer-events: none;
 }
 .menu-marquee-track {
   display: inline-flex;
   align-items: center;
-  gap: clamp(48px, 7vw, 120px);
+  gap: clamp(24px, 4vw, 48px);
   white-space: nowrap;
   animation: menu-marquee 60s linear infinite;
+  animation-play-state: running;
+  transition: animation-duration 0.5s ease;
   will-change: transform;
 }
+.menu-marquee:hover .menu-marquee-track {
+  animation-duration: 240s;
+}
 .menu-marquee-item {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(250, 255, 255, 0.35);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: transparent;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+.menu-marquee-item:hover {
+  color: #FAFFFF;
+  background: rgba(135, 255, 56, 0.14);
 }
 @keyframes menu-marquee {
   from { transform: translateX(0); }
