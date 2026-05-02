@@ -4,9 +4,17 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import TransitionLink from "./TransitionLink";
+import CornerSquares from "./CornerSquares";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
+import { films } from "@/lib/films";
 
 const UnicornScene = dynamic(() => import("unicornstudio-react/next"), { ssr: false });
+
+const NAV = [
+  { href: "/", label: "Home", match: (p: string) => p === "/" },
+  { href: "/films", label: "Films", match: (p: string) => p.startsWith("/films") },
+  { href: "/about", label: "About", match: (p: string) => p === "/about" },
+];
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
@@ -23,16 +31,19 @@ export default function Navigation() {
 
   const wordmarkVisible = open || (!isHome && !isFilm);
 
+  // Marquee strip — film titles, repeated for seamless scroll
+  const marqueeItems = [...films, ...films].map((f, i) => (
+    <span key={`${f.slug}-${i}`} className="menu-marquee-item">{f.title}</span>
+  ));
+
   return (
     <>
-      {/* Wordmark — hidden on homepage and film pages, but visible while menu is open */}
       <TransitionLink
         href="/"
         className={`top-wordmark ${wordmarkVisible ? "visible" : ""} ${open ? "menu-active" : ""}`}
         style={{ zIndex: 210 }}
       />
 
-      {/* Hamburger — always visible */}
       <button
         className={`hamburger visible ${open ? "open" : ""}`}
         style={{ zIndex: 10000 }}
@@ -43,7 +54,6 @@ export default function Navigation() {
         <span />
       </button>
 
-      {/* Full-screen menu overlay */}
       <div className={`menu-overlay ${open ? "open" : ""}`}>
         {open ? (
           <div className="menu-unicorn" aria-hidden>
@@ -63,24 +73,52 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <nav className="menu-nav">
-          <TransitionLink href="/" className={`menu-link ${pathname === "/" ? "active" : ""}`}>Home</TransitionLink>
-          <TransitionLink href="/films" className={`menu-link ${pathname.startsWith("/films") ? "active" : ""}`}>Films</TransitionLink>
-          <TransitionLink href="/about" className={`menu-link ${pathname === "/about" ? "active" : ""}`}>About</TransitionLink>
+        <div className="menu-marquee" aria-hidden>
+          <div className="menu-marquee-track">{marqueeItems}</div>
+        </div>
+
+        <nav className="menu-cards">
+          {NAV.map((item) => {
+            const active = item.match(pathname);
+            return (
+              <TransitionLink
+                key={item.href}
+                href={item.href}
+                className={`menu-card ${active ? "active" : ""}`}
+              >
+                <CornerSquares />
+                <span className="menu-card-title">{item.label}</span>
+              </TransitionLink>
+            );
+          })}
         </nav>
 
-        <div className="menu-cta-row">
-          <TransitionLink href="/sponsorship" className="menu-cta menu-cta-primary">
-            Sponsorship
-          </TransitionLink>
-          <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="menu-cta menu-cta-secondary">
-            <span>Subscribe</span>
-            <YouTubeIcon size={14} />
-          </a>
+        <div className="menu-actions">
+          <form className="menu-email" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              required
+              placeholder="ENTER EMAIL"
+              className="menu-email-input"
+              aria-label="Email address"
+            />
+            <button type="submit" className="menu-email-submit">
+              Join our email list
+            </button>
+          </form>
+          <div className="menu-cta-row">
+            <TransitionLink href="/sponsorship" className="menu-cta menu-cta-primary">
+              Sponsorship
+            </TransitionLink>
+            <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="menu-cta menu-cta-secondary">
+              <span>Subscribe</span>
+              <YouTubeIcon size={14} />
+            </a>
+          </div>
         </div>
 
         <div className="menu-footer">
-          <span className="menu-footer-credit">&copy; 2026</span>
+          <span className="menu-footer-credit">Copyright 2026</span>
 
           <div className="menu-socials">
             <a href="https://bsky.app/profile/cultrepo.bsky.social" target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Bluesky"><BlueskyIcon /></a>
