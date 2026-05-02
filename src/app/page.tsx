@@ -161,6 +161,7 @@ export default function Home() {
     loopCount: 0,
     carouselDone: false,
     gridNotified: false,
+    rulerY: 0,
   });
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -598,6 +599,13 @@ export default function Home() {
         }
       }
       render();
+      // Keep the side-rulers parallax in sync while the carousel is hijacking
+      // wheel/touch input (window.scrollY stays at 0 in that mode). After
+      // carouselDone, normal scroll takes over and contributes via scrollY.
+      document.documentElement.style.setProperty(
+        "--ruler-y",
+        `${state.rulerY + window.scrollY}px`,
+      );
       rafId = requestAnimationFrame(loop);
     }
     rafId = requestAnimationFrame(loop);
@@ -607,6 +615,7 @@ export default function Home() {
       e.preventDefault();
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       state.target += delta * 0.8;
+      state.rulerY += delta * 0.8;
       state.lastInputTime = Date.now();
       state.snapping = false;
     };
@@ -625,6 +634,8 @@ export default function Home() {
       const delta = state.startY - e.pageY;
       if (Math.abs(delta) > 5) { state.hasDragged = true; e.preventDefault(); }
       state.target = state.dragStart + delta;
+      // movementY is per-event so it survives totalH wraps cleanly
+      state.rulerY += -e.movementY;
     };
     const onMouseUp = () => {
       state.isDragging = false;
@@ -642,7 +653,9 @@ export default function Home() {
       if (state.carouselBlocked || state.carouselDone) return;
       e.preventDefault();
       const y = e.touches[0].clientY;
-      state.target += (touchPrevY - y) * 1.2;
+      const inc = (touchPrevY - y) * 1.2;
+      state.target += inc;
+      state.rulerY += inc;
       touchPrevY = y;
       state.lastInputTime = Date.now();
       state.snapping = false;
