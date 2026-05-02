@@ -24,9 +24,10 @@ const ICON_FOR_CHANNEL = {
 } as const;
 
 export const metadata: Metadata = {
-  title: "About | CultRepo",
+  title: "About",
   description:
     "Independent documentaries about the humans behind open source and the systems shaping modern technology.",
+  alternates: { canonical: "/about" },
 };
 
 

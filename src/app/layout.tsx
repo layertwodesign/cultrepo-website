@@ -31,10 +31,36 @@ const interphasesMono = localFont({
   display: "swap",
 });
 
+const SITE_TITLE =
+  "CultRepo | Cinematic Documentaries About the Humans Shaping Technology";
+const SITE_DESCRIPTION =
+  "CultRepo creates cinematic documentaries about the humans shaping technology. Long-form films about the people behind open source, infrastructure, and emerging systems.";
+const SITE_URL = "https://www.cultrepo.com";
+
 export const metadata: Metadata = {
-  title: "CultRepo | Cinematic Documentaries About the Humans Shaping Technology",
-  description:
-    "CultRepo creates cinematic documentaries about the humans shaping technology. Long-form films about the people behind open source, infrastructure, and emerging systems.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: "%s | CultRepo",
+  },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "CultRepo",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@cultrepo",
+    creator: "@cultrepo",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  icons: { icon: "/favicon.ico" },
 };
 
 export default async function RootLayout({

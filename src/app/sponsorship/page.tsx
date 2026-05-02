@@ -3,9 +3,10 @@ import SplitReveal from "@/components/SplitReveal";
 import SponsorshipForm from "./SponsorshipForm";
 
 export const metadata: Metadata = {
-  title: "Sponsorship | CultRepo",
+  title: "Sponsorship",
   description:
     "Partner with CultRepo to reach an audience of builders, engineers, and technical leaders through cinematic storytelling.",
+  alternates: { canonical: "/sponsorship" },
 };
 
 export default function SponsorshipPage() {
