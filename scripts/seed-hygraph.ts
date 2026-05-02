@@ -20,15 +20,18 @@
  * - Sponsors are upserted by name and referenced from films.
  */
 
+import { config } from "dotenv";
 import { films as localFilms } from "../src/lib/films-data";
 
-const API_URL = process.env.HYGRAPH_API_URL;
+config({ path: ".env.local" });
+
+// CDN URL is read-only; use the regular content API URL for mutations.
+const API_URL =
+  "https://api-us-west-2.hygraph.com/v2/cmoddosz9007507w3c40l0pxm/master";
 const TOKEN = process.env.HYGRAPH_MIGRATION_TOKEN;
 
-if (!API_URL || !TOKEN) {
-  console.error(
-    "Missing HYGRAPH_API_URL or HYGRAPH_MIGRATION_TOKEN. Add them to .env.local."
-  );
+if (!TOKEN) {
+  console.error("Missing HYGRAPH_MIGRATION_TOKEN. Add it to .env.local.");
   process.exit(1);
 }
 
@@ -74,20 +77,33 @@ const STATUS_TO_ENUM: Record<string, string> = {
 };
 
 async function gql<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
-  const res = await fetch(API_URL!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${TOKEN}`,
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = (await res.json()) as { data?: T; errors?: { message: string }[] };
-  if (json.errors?.length) {
-    throw new Error(json.errors.map((e) => e.message).join("\n"));
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const res = await fetch(API_URL!, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+    const json = (await res.json()) as { data?: T; errors?: { message: string }[] };
+    if (json.errors?.length) {
+      const msg = json.errors.map((e) => e.message).join("\n");
+      // Back off on rate limit
+      if (/Too Many Requests/i.test(msg)) {
+        const wait = (attempt + 1) * 1500;
+        console.log(`  … rate-limited, waiting ${wait}ms`);
+        await new Promise((r) => setTimeout(r, wait));
+        continue;
+      }
+      throw new Error(msg);
+    }
+    if (!json.data) throw new Error("No data returned");
+    // Tiny throttle to stay under per-second cap
+    await new Promise((r) => setTimeout(r, 120));
+    return json.data;
   }
-  if (!json.data) throw new Error("No data returned");
-  return json.data;
+  throw new Error("Too many retries");
 }
 
 async function upsertSponsor(name: string): Promise<{ id: string }> {
@@ -104,22 +120,28 @@ async function upsertSponsor(name: string): Promise<{ id: string }> {
     }`,
     { slug, name }
   );
+  await gql(
+    `mutation Pub($slug: String!) {
+      publishSponsor(where: { slug: $slug }, to: PUBLISHED) { id }
+    }`,
+    { slug }
+  );
   return data.upsertSponsor;
 }
 
 async function upsertFilm(film: typeof localFilms[number], order: number, sponsorIds: string[]) {
-  const status = STATUS_TO_ENUM[film.status] ?? "Released";
-  const baseFields = {
+  const productionStatus = STATUS_TO_ENUM[film.status] ?? "Released";
+  const data = {
     title: film.title,
     slug: film.slug,
-    status,
+    productionStatus,
     description: film.description,
     synopsis: film.synopsis,
     year: film.year,
     duration: film.duration,
     director: film.director,
     youtubeId: film.youtubeId,
-    technologies: { set: film.technologies },
+    technologies: film.technologies,
     cast: { create: film.cast.map((c) => ({ name: c.name, role: c.role })) },
     crew: { create: film.crew.map((c) => ({ name: c.name, role: c.role })) },
     extras: { create: film.extras.map((e) => ({ title: e.title, youtubeId: e.youtubeId })) },
@@ -130,25 +152,25 @@ async function upsertFilm(film: typeof localFilms[number], order: number, sponso
     sponsors: { connect: sponsorIds.map((id) => ({ id })) },
   };
 
-  await gql(
-    `mutation Upsert($slug: String!, $create: FilmCreateInput!, $update: FilmUpdateInput!) {
-      upsertFilm(where: { slug: $slug }, upsert: { create: $create, update: $update }) {
-        id
-      }
+  // Check if the film already exists by slug
+  const existing = await gql<{ film: { id: string } | null }>(
+    `query CheckFilm($slug: String!) {
+      film(where: { slug: $slug }) { id }
     }`,
-    {
-      slug: film.slug,
-      create: baseFields,
-      // For update we can't recreate components — clear and recreate is simplest:
-      update: {
-        ...baseFields,
-        cast: { deleteAll: true, create: film.cast.map((c) => ({ name: c.name, role: c.role })) },
-        crew: { deleteAll: true, create: film.crew.map((c) => ({ name: c.name, role: c.role })) },
-        extras: { deleteAll: true, create: film.extras.map((e) => ({ title: e.title, youtubeId: e.youtubeId })) },
-        timeline: { deleteAll: true, create: film.timeline.map((t) => ({ label: t.label, done: t.done })) },
-        sponsors: { set: sponsorIds.map((id) => ({ id })) },
-      },
-    }
+    { slug: film.slug }
+  );
+
+  if (existing.film) {
+    // Skip update — re-running the seed is rare; users edit in the dashboard.
+    console.log(`  • ${film.title} (already exists, skipping)`);
+    return;
+  }
+
+  await gql(
+    `mutation Create($data: FilmCreateInput!) {
+      createFilm(data: $data) { id }
+    }`,
+    { data }
   );
 
   await gql(
@@ -160,15 +182,21 @@ async function upsertFilm(film: typeof localFilms[number], order: number, sponso
 }
 
 async function upsertTeamMember(m: typeof localTeam[number]) {
-  await gql(
-    `mutation Upsert($email: String!, $create: TeamMemberCreateInput!, $update: TeamMemberUpdateInput!) {
-      upsertTeamMember(where: { email: $email }, upsert: { create: $create, update: $update }) { id }
+  const existing = await gql<{ teamMember: { id: string } | null }>(
+    `query CheckTm($email: String!) {
+      teamMember(where: { email: $email }) { id }
     }`,
-    {
-      email: m.email,
-      create: { ...m },
-      update: { name: m.name, role: m.role, bio: m.bio, order: m.order },
-    }
+    { email: m.email }
+  );
+  if (existing.teamMember) {
+    console.log(`  • ${m.name} (already exists, skipping)`);
+    return;
+  }
+  await gql(
+    `mutation Create($data: TeamMemberCreateInput!) {
+      createTeamMember(data: $data) { id }
+    }`,
+    { data: { ...m } }
   );
   await gql(
     `mutation Pub($email: String!) {

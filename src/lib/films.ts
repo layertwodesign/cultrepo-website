@@ -24,7 +24,7 @@ type HygraphAsset = { url: string; width?: number; height?: number };
 type HygraphFilm = {
   title: string;
   slug: string;
-  status: string;
+  productionStatus: string;
   description: string;
   synopsis: string;
   year: string | null;
@@ -58,7 +58,7 @@ function fromHygraph(f: HygraphFilm): Film {
   return {
     title: f.title,
     slug: f.slug,
-    status: STATUS_MAP[f.status] ?? "Released",
+    status: STATUS_MAP[f.productionStatus] ?? "Released",
     description: f.description,
     synopsis: f.synopsis,
     year: f.year ?? "",

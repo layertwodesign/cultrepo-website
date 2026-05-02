@@ -8,7 +8,7 @@ const FILM_FRAGMENT = /* GraphQL */ `
   fragment FilmFields on Film {
     title
     slug
-    status
+    productionStatus
     description
     synopsis
     year

@@ -211,7 +211,7 @@ relationalField("TeamMember", "photo", "Photo", "ASSET", false, {
 changes.push({ createModel: { apiId: "Film", apiIdPlural: "Films", displayName: "Film" } });
 simpleField({ modelApiId: "Film" }, "title", "Title", "STRING", { isRequired: true, isTitle: true });
 simpleField({ modelApiId: "Film" }, "slug", "Slug", "STRING", { isRequired: true, isUnique: true });
-enumField({ modelApiId: "Film" }, "status", "Status", "FilmStatus", { isRequired: true });
+enumField({ modelApiId: "Film" }, "productionStatus", "Status", "FilmStatus", { isRequired: true });
 simpleField({ modelApiId: "Film" }, "description", "Description", "STRING", { isRequired: true });
 simpleField({ modelApiId: "Film" }, "synopsis", "Synopsis", "STRING", { isRequired: true });
 simpleField({ modelApiId: "Film" }, "year", "Year", "STRING");
@@ -326,7 +326,7 @@ async function main() {
     {
       input: {
         environmentId: ENVIRONMENT_ID,
-        name: "cultrepo-schema-setup",
+        name: `cultrepo-schema-setup-${Date.now()}`,
         changes,
       },
     }
