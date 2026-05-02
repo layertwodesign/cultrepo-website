@@ -88,7 +88,7 @@ export const TEAM_MEMBERS_QUERY = /* GraphQL */ `
 
 export const ABOUT_PAGE_QUERY = /* GraphQL */ `
   query AboutPage {
-    aboutPage(where: { id: "singleton" }) {
+    aboutPages(first: 1) {
       heroTitle
       heroSubtitle
       story
@@ -117,7 +117,7 @@ export const ABOUT_PAGE_QUERY = /* GraphQL */ `
 
 export const SITE_SETTINGS_QUERY = /* GraphQL */ `
   query SiteSettings {
-    siteSettings(where: { id: "singleton" }) {
+    siteSettingsItems(first: 1) {
       tagline
       youtubeUrl
       blueskyUrl
