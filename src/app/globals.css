@@ -841,7 +841,7 @@ body.invert .corner-square {
   grid-template-rows: auto auto auto;
   align-content: center;
   padding: 128px 40px 48px;
-  gap: 32px;
+  gap: 56px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
