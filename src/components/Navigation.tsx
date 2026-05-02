@@ -2,14 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import dynamic from "next/dynamic";
 import TransitionLink from "./TransitionLink";
 import CornerSquares from "./CornerSquares";
 import MenuMarquee from "./MenuMarquee";
+import UnicornBackground from "./UnicornBackground";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
 import { films } from "@/lib/films";
-
-const UnicornScene = dynamic(() => import("unicornstudio-react/next"), { ssr: false });
 
 const NAV = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
@@ -64,17 +62,7 @@ export default function Navigation() {
       </button>
 
       <div className={`menu-overlay ${open ? "open" : ""}`}>
-        {open ? (
-          <div className="menu-unicorn" aria-hidden>
-            <UnicornScene
-              projectId="5jTAQ6ZayBHOM08TLJnb"
-              sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.11/dist/unicornStudio.umd.js"
-              width="100%"
-              height="100%"
-              production
-            />
-          </div>
-        ) : null}
+        {open ? <UnicornBackground className="menu-unicorn" /> : null}
 
         <button className="menu-close" aria-label="Close menu" onClick={() => setOpen(false)}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
