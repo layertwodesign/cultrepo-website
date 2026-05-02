@@ -13,6 +13,7 @@ import CountUp from "@/components/CountUp";
 import InvertOnView from "@/components/InvertOnView";
 import SiteFooter from "@/components/SiteFooter";
 import TeamMember from "./TeamMember";
+import { getTeam } from "@/lib/team";
 
 export const metadata: Metadata = {
   title: "About | CultRepo",
@@ -20,36 +21,6 @@ export const metadata: Metadata = {
     "Independent documentaries about the humans behind open source and the systems shaping modern technology.",
 };
 
-const team = [
-  {
-    name: "Emma Tracey",
-    role: "CEO",
-    photo: "/team/emma.webp",
-    bio: "Serial founder who started her career as a journalist and never stopped chasing stories. A long-time open source advocate, Emma cares about getting recognition into the hands of the people quietly maintaining the systems everyone else depends on.",
-    email: "emma@cultrepo.com",
-  },
-  {
-    name: "Josiah McGarvie",
-    role: "Filmmaker",
-    photo: "/team/josiah.webp",
-    bio: "Australian filmmaker, eight years deep in tech documentaries. Co-founded the original YouTube channel with Emma and assembled the team behind films on Kubernetes, Vue.js, GraphQL, Elixir, Vite, Argo, eBPF, PyTorch, Envoy, Prometheus, and Ember.js.",
-    email: "josiah@cultrepo.com",
-  },
-  {
-    name: "Ida Bechtle",
-    role: "Filmmaker",
-    photo: "/team/ida.webp",
-    bio: "Joined when the YouTube channel was barely a channel. She has been a quiet engine behind its growth, with a knack for finding the human moment inside a technical story. Off-set: cats, puzzles, and a strong opinion about coffee.",
-    email: "ida@cultrepo.com",
-  },
-  {
-    name: "Guillermo Lopez",
-    role: "Filmmaker",
-    photo: "/team/guillermo.webp",
-    bio: "Filmmaker and producer who came up in advertising before turning fully to tech documentaries. Brings a sharper narrative spine to production. Credits include Kubernetes, Prometheus, Angular, Vite, TypeScript, the Investors Masterclass, and various minidocs.",
-    email: "guillermo@cultrepo.com",
-  },
-];
 
 const community = [
   {
@@ -94,7 +65,8 @@ const STORY_TEXT = `Founded in 2018 as Honeypot, Cult.Repo is an independent med
 
 What started as a single YouTube channel has grown into a small studio of filmmakers chasing the stories that don't fit into a blog post or a release note.`;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const team = await getTeam();
   return (
     <div className="page-container about-editorial">
       <section className="about-hero">

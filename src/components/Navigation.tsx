@@ -7,7 +7,7 @@ import CornerSquares from "./CornerSquares";
 import MenuMarquee from "./MenuMarquee";
 import UnicornBackground from "./UnicornBackground";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
-import { films } from "@/lib/films";
+import type { Film } from "@/lib/films";
 
 const NAV = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
@@ -15,7 +15,11 @@ const NAV = [
   { href: "/about", label: "About", match: (p: string) => p === "/about" },
 ];
 
-export default function Navigation() {
+type Props = {
+  films: Pick<Film, "title" | "slug">[];
+};
+
+export default function Navigation({ films }: Props) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");

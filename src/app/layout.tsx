@@ -8,6 +8,7 @@ import { NavVisibilityProvider } from "@/components/NavVisibility";
 import SmoothScroll from "@/components/SmoothScroll";
 import RulerParallax from "@/components/RulerParallax";
 import UnicornBackground from "@/components/UnicornBackground";
+import { getFilms } from "@/lib/films";
 
 const interphases = localFont({
   src: [
@@ -36,11 +37,13 @@ export const metadata: Metadata = {
     "CultRepo creates cinematic documentaries about the humans shaping technology. Long-form films about the people behind open source, infrastructure, and emerging systems.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const films = await getFilms();
+  const navFilms = films.map((f) => ({ title: f.title, slug: f.slug }));
   return (
     <html lang="en" className={`${interphases.variable} ${interphasesMono.variable}`}>
       <head>
@@ -54,7 +57,7 @@ export default function RootLayout({
             <SmoothScroll />
             <RulerParallax />
             <UnicornBackground />
-            <Navigation />
+            <Navigation films={navFilms} />
             <div className="camera-ruler camera-ruler-left" />
             <div className="camera-ruler camera-ruler-right" />
             {children}

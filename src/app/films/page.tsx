@@ -1,13 +1,12 @@
-"use client";
-
-import { films } from "@/lib/films";
+import { getFilms } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
 import Reveal from "@/components/Reveal";
 
 const STAGGER_MS = 80;
 const GRID_COLS = 3;
 
-export default function FilmsPage() {
+export default async function FilmsPage() {
+  const films = await getFilms();
   return (
     <div className="page-container">
       <div className="films-content">
