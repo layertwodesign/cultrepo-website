@@ -7,6 +7,7 @@ import { PageTransitionProvider } from "@/components/PageTransition";
 import { NavVisibilityProvider } from "@/components/NavVisibility";
 import SmoothScroll from "@/components/SmoothScroll";
 import RulerParallax from "@/components/RulerParallax";
+import UnicornBackground from "@/components/UnicornBackground";
 
 const interphases = localFont({
   src: [
@@ -52,6 +53,7 @@ export default function RootLayout({
           <PageTransitionProvider>
             <SmoothScroll />
             <RulerParallax />
+            <UnicornBackground />
             <Navigation />
             <div className="camera-ruler camera-ruler-left" />
             <div className="camera-ruler camera-ruler-right" />

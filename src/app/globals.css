@@ -28,6 +28,15 @@ body {
   transition: background-color 0.6s ease, color 0.6s ease;
 }
 
+.unicorn-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  overflow: hidden;
+}
+
 /* ============ INVERTED MODE — for CTA shock-flip ============ */
 body.invert {
   background: #FAFFFF;
