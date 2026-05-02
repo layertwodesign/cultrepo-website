@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import TransitionLink from "@/components/TransitionLink";
 import {
   YouTubeIcon,
@@ -49,11 +50,14 @@ export default async function AboutPage() {
           <Reveal delay={420}>
             <div className="about-partners-logos">
               {about.trustedBySponsors.map((p) => (
-                <img
+                <Image
                   key={p.slug}
                   src={p.logo ?? `/partners/${p.slug}.png`}
                   alt={p.name}
+                  width={160}
+                  height={32}
                   className="about-partner-logo"
+                  unoptimized={(p.logo ?? "").endsWith(".svg")}
                 />
               ))}
             </div>
@@ -64,7 +68,14 @@ export default async function AboutPage() {
       <section className="about-image-break">
         <Reveal>
           <CornerSquares />
-          <img src={about.backstageImage ?? "/about/backstage-1.jpg"} alt="" />
+          <Image
+            src={about.backstageImage ?? "/about/backstage-1.jpg"}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 1200px"
+            style={{ objectFit: "cover" }}
+            priority
+          />
         </Reveal>
       </section>
 

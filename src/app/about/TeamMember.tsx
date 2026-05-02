@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SplitReveal from "@/components/SplitReveal";
 
 type Props = {
@@ -13,7 +14,13 @@ export default function TeamMember({ name, role, photo, bio, email, bioStartDela
   return (
     <div className="team-member">
       <div className="team-member-portrait">
-        <img src={photo} alt={name} />
+        <Image
+          src={photo}
+          alt={name}
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          style={{ objectFit: "cover" }}
+        />
       </div>
       <div className="team-member-info">
         <span className="team-member-name">{name}</span>

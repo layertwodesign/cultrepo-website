@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import Image from "next/image";
 import type { Film } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
@@ -254,7 +255,13 @@ export default function FilmPageClient({ film, allFilms }: Props) {
                   <div className="fp-featuring-card">
                     <div className="fp-featuring-photo">
                       {person.photo ? (
-                        <img src={person.photo} alt={person.name} className="fp-featuring-photo-img" />
+                        <Image
+                          src={person.photo}
+                          alt={person.name}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 200px"
+                          style={{ objectFit: "cover" }}
+                        />
                       ) : (
                         <span className="fp-featuring-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
                       )}
