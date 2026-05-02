@@ -6,6 +6,7 @@ import {
   XIcon,
 } from "@/components/SocialIcons";
 import Reveal from "@/components/Reveal";
+import SplitReveal from "@/components/SplitReveal";
 import Typewriter from "@/components/Typewriter";
 import CountUp from "@/components/CountUp";
 import InvertOnView from "@/components/InvertOnView";
@@ -96,17 +97,19 @@ export default function AboutPage() {
   return (
     <div className="page-container about-editorial">
       <section className="about-hero">
-        <Reveal>
-          <h1 className="about-title">
-            Films about the humans behind the systems we use every day.
-          </h1>
-        </Reveal>
-        <Reveal delay={150}>
-          <p className="about-subtitle">
-            Independent. Long-form. Made with the people who built the things,
-            not about them.
-          </p>
-        </Reveal>
+        <h1 className="about-title">
+          <SplitReveal
+            text="Films about the humans behind the systems we use every day."
+            stagger={45}
+          />
+        </h1>
+        <p className="about-subtitle">
+          <SplitReveal
+            text="Independent. Long-form. Made with the people who built the things, not about them."
+            stagger={25}
+            startDelay={500}
+          />
+        </p>
         <div className="about-hero-trusted">
           <Reveal delay={300}>
             <span className="about-partners-label">Trusted by</span>

@@ -1,4 +1,4 @@
-import Typewriter from "@/components/Typewriter";
+import SplitReveal from "@/components/SplitReveal";
 
 type Props = {
   name: string;
@@ -20,12 +20,9 @@ export default function TeamMember({ name, role, photo, bio, email, bioStartDela
         <span className="team-member-role">{role}</span>
       </div>
       <div className="team-member-bio">
-        <Typewriter
-          text={bio}
-          speed={10}
-          startDelay={bioStartDelay}
-          className="team-member-bio-text"
-        />
+        <p className="team-member-bio-text">
+          <SplitReveal text={bio} stagger={18} startDelay={bioStartDelay} />
+        </p>
         {email && (
           <a href={`mailto:${email}`} className="team-member-email">
             {email}
