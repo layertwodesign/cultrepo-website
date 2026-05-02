@@ -913,10 +913,7 @@ export default function Home() {
                   />
                 </div>
                 <div className="carousel-overlay">
-                  <div className="carousel-overlay-left">
-                    <span className="carousel-overlay-title">{item.title}</span>
-                    <span className="carousel-overlay-status">{item.status}</span>
-                  </div>
+                  <span className="carousel-overlay-title">{item.title}</span>
                 </div>
               </div>
             ))}

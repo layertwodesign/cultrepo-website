@@ -626,6 +626,24 @@ body.invert .corner-frame::before {
   overflow: hidden;
   user-select: none;
 }
+/* Bottom-left vignette that lifts the title off light footage on hover */
+.carousel-item-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at bottom left,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.carousel-item:hover .carousel-item-link::after {
+  opacity: 1;
+}
 .carousel-video {
   pointer-events: none;
   user-select: none;
@@ -659,11 +677,6 @@ body.invert .corner-frame::before {
 .carousel-item:hover .carousel-overlay {
   opacity: 1;
 }
-.carousel-overlay-left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
 .carousel-overlay-title {
   font-family: var(--font-interphases), sans-serif;
   font-weight: 600;
@@ -671,19 +684,6 @@ body.invert .corner-frame::before {
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: #FAFFFF;
-}
-.carousel-overlay-status {
-  display: inline-block;
-  width: fit-content;
-  font-family: var(--font-interphases-mono), monospace;
-  font-size: 12px;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #87FF38;
-  background: rgba(10, 10, 10, 0.85);
-  padding: 5px 10px;
-  border-radius: 0;
 }
 
 /* ============ YOUTUBE PRELOAD (hidden) ============ */
