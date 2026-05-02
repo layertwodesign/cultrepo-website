@@ -645,7 +645,6 @@ body.invert .corner-frame::before {
   overflow: hidden;
   border-radius: 12px;
   background: #282C26;
-  border: 1px solid rgba(69, 73, 64, 0.35);
   user-select: none;
 }
 /* Distance-from-center dim — driven by --carousel-dim set per-frame
@@ -685,6 +684,9 @@ body.invert .corner-frame::before {
   height: 100%;
   object-fit: cover;
   background: #282C26;
+  border-radius: 12px;
+  border: 1px solid rgba(69, 73, 64, 0.35);
+  box-sizing: border-box;
   transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
   transform-origin: center;
 }
