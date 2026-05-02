@@ -629,13 +629,12 @@ body.invert .corner-frame::before {
     linear-gradient(#FAFFFF, #FAFFFF),
     linear-gradient(#FAFFFF, #FAFFFF);
   background-repeat: no-repeat;
-  background-size: 8px 8px;
+  background-size: 0 0;
   background-position: top left, top right, bottom left, bottom right;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: background-size 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .carousel-item:hover::before {
-  opacity: 1;
+  background-size: 8px 8px;
 }
 .carousel-item-link {
   display: block;
