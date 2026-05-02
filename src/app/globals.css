@@ -217,34 +217,41 @@ button, input, textarea, select {
   font-size: clamp(36px, 4.5vw, 75px);
 }
 
-/* Corner-tick frame: 4 small squares positioned at the outer corners of an
-   element. Used to subtly mark a "container" — either a rounded image or a
-   logical content frame — without drawing a full border. */
-.corner-frame {
-  position: relative;
-}
-.corner-frame::before {
-  content: "";
+/* Corner-tick frame: small squares pinned at the corners of a positioned
+   element. Rendered via the <CornerSquares /> component so each square is its
+   own element and can rotate around its own center. Default state is scale(0)
+   — they grow in when a parent context flips them on (.reveal-in, hover, etc.). */
+.corner-frame { position: relative; }
+.corner-square {
   position: absolute;
-  inset: -8px;
+  width: var(--corner-size, 8px);
+  height: var(--corner-size, 8px);
+  background: var(--corner-color, #FAFFFF);
   pointer-events: none;
-  z-index: 2;
-  background-color: transparent;
-  background-image:
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF);
-  background-repeat: no-repeat;
-  background-size: 8px 8px;
-  background-position: top left, top right, bottom left, bottom right;
+  z-index: 4;
+  transform: scale(0) rotate(0deg);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
 }
-body.invert .corner-frame::before {
-  background-image:
-    linear-gradient(#0D110F, #0D110F),
-    linear-gradient(#0D110F, #0D110F),
-    linear-gradient(#0D110F, #0D110F),
-    linear-gradient(#0D110F, #0D110F);
+.corner-square-tl { top: var(--corner-offset, -8px); left: var(--corner-offset, -8px); }
+.corner-square-tr { top: var(--corner-offset, -8px); right: var(--corner-offset, -8px); }
+.corner-square-bl { bottom: var(--corner-offset, -8px); left: var(--corner-offset, -8px); }
+.corner-square-br { bottom: var(--corner-offset, -8px); right: var(--corner-offset, -8px); }
+
+/* Entry trigger: any of the supported "now showing" parent contexts grow +
+   gently rotate the corner squares into place. */
+.reveal.reveal-in .corner-square,
+.carousel-item:hover .corner-square,
+.corners-in .corner-square {
+  transform: scale(1) rotate(12deg);
+}
+body.invert .corner-square {
+  --corner-color: #0D110F;
+}
+@media (prefers-reduced-motion: reduce) {
+  .corner-square {
+    transition: none;
+  }
 }
 
 /* Word-by-word slide-up reveal — each word rises from a clip mask
@@ -276,6 +283,7 @@ body.invert .corner-frame::before {
 
 /* Scroll-triggered reveal animation */
 .reveal {
+  position: relative;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
@@ -615,26 +623,11 @@ body.invert .corner-frame::before {
   aspect-ratio: 16 / 9;
   cursor: pointer;
 }
-/* Corner squares pinned to the OUTER corners of the item — these reveal
-   on hover so it reads as the video shrinking inside a fixed frame. */
-.carousel-item::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  pointer-events: none;
-  z-index: 4;
-  background-image:
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF);
-  background-repeat: no-repeat;
-  background-size: 0 0;
-  background-position: top left, top right, bottom left, bottom right;
-  transition: background-size 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.carousel-item:hover::before {
-  background-size: 8px 8px;
+/* Carousel corner squares: rendered as <CornerSquares /> children inside
+   .carousel-item; sit -2px outside the rounded video. The shared .corner-square
+   rule handles the grow + rotate on .carousel-item:hover. */
+.carousel-item .corner-square {
+  --corner-offset: -2px;
 }
 .carousel-item-link {
   display: block;
@@ -1078,30 +1071,11 @@ body.invert .corner-frame::before {
   gap: 16px;
   padding: 28px 0;
 }
-/* Corner squares per number box. Each box renders only its right-side
-   corners; the leftmost box additionally renders its left-side corners.
-   This way adjacent boxes share a single column of squares at their
-   boundary instead of doubling up. */
-.about-number::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  pointer-events: none;
-  z-index: 2;
-  background-image:
-    linear-gradient(#454940, #454940),
-    linear-gradient(#454940, #454940);
-  background-repeat: no-repeat;
-  background-size: 8px 8px;
-  background-position: top right, bottom right;
-}
-.about-numbers > :first-child .about-number::before {
-  background-image:
-    linear-gradient(#454940, #454940),
-    linear-gradient(#454940, #454940),
-    linear-gradient(#454940, #454940),
-    linear-gradient(#454940, #454940);
-  background-position: top left, top right, bottom left, bottom right;
+/* Each .about-number renders <CornerSquares /> internally; first box
+   includes all four, subsequent boxes only TR + BR so adjacent boxes
+   share a single column of squares at their boundary. */
+.about-number .corner-square {
+  --corner-color: #454940;
 }
 .about-number-value {
   font-family: var(--font-interphases), sans-serif;

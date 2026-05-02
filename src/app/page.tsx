@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 import { films } from "@/lib/films";
+import CornerSquares from "@/components/CornerSquares";
 
 const allItems = films.map((f) => ({
   title: f.title,
@@ -921,6 +922,7 @@ export default function Home() {
                 <div className="carousel-overlay">
                   <span className="carousel-overlay-title">{item.title}</span>
                 </div>
+                <CornerSquares />
               </div>
             ))}
           </div>

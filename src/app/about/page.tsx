@@ -8,6 +8,7 @@ import {
 import Reveal from "@/components/Reveal";
 import SplitReveal from "@/components/SplitReveal";
 import Typewriter from "@/components/Typewriter";
+import CornerSquares from "@/components/CornerSquares";
 import CountUp from "@/components/CountUp";
 import InvertOnView from "@/components/InvertOnView";
 import SiteFooter from "@/components/SiteFooter";
@@ -129,8 +130,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="about-image-break corner-frame">
+      <section className="about-image-break">
         <Reveal>
+          <CornerSquares />
           <img src="/about/backstage-1.jpg" alt="" />
         </Reveal>
       </section>
@@ -151,6 +153,7 @@ export default function AboutPage() {
           {community.map((c, i) => (
             <Reveal key={c.label} delay={i * 120}>
               <div className="about-number">
+                <CornerSquares corners={i === 0 ? ["tl", "tr", "bl", "br"] : ["tr", "br"]} />
                 <span className="about-number-value">
                   <CountUp to={c.to} suffix={c.suffix} decimals={c.decimals} />
                 </span>
