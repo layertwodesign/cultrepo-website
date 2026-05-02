@@ -23,7 +23,12 @@ export async function POST(req: Request) {
     );
   }
 
-  const provided = req.headers.get("x-hygraph-secret");
+  // Hygraph header keys must be PascalCase alphanumeric, so the webhook sends
+  // either `Authorization: Bearer <secret>` or `HygraphSecret: <secret>`.
+  const auth = req.headers.get("authorization");
+  const direct = req.headers.get("hygraphsecret") ?? req.headers.get("x-hygraph-secret");
+  const fromAuth = auth?.match(/^Bearer\s+(.+)$/)?.[1] ?? null;
+  const provided = direct ?? fromAuth;
   if (provided !== SECRET) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
