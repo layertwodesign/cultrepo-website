@@ -226,7 +226,7 @@ button, input, textarea, select {
 .corner-frame::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -8px;
   pointer-events: none;
   z-index: 2;
   background-color: transparent;
@@ -1091,7 +1091,8 @@ body.invert .corner-frame::before {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 16px;
+  border-radius: 24px;
+  border: 1px solid #282C26;
 }
 
 .about-final-block {
