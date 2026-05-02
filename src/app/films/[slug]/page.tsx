@@ -5,6 +5,11 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { films, getFilmBySlug } from "@/lib/films";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
+import Reveal from "@/components/Reveal";
+import SplitReveal from "@/components/SplitReveal";
+
+const STAGGER_MS = 80;
+const GRID_COLS = 3;
 
 export default function FilmPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -193,43 +198,55 @@ export default function FilmPage() {
           {/* Status — only when film not yet released */}
           {film.status !== "Released" && (
             <section className="fp-section fp-status-section">
-              <span className="fp-label">{isFundraising ? "Fundraising" : "Coming Soon"}</span>
-              <p className="fp-status-headline">
-                {isFundraising
-                  ? `In production — targeting ${film.year}`
-                  : `${film.status} — targeting ${film.year}`}
-              </p>
+              <Reveal>
+                <span className="fp-label">{isFundraising ? "Fundraising" : "Coming Soon"}</span>
+              </Reveal>
+              <Reveal delay={120}>
+                <p className="fp-status-headline">
+                  {isFundraising
+                    ? `In production — targeting ${film.year}`
+                    : `${film.status} — targeting ${film.year}`}
+                </p>
+              </Reveal>
               {film.timeline.length > 0 && (
                 <div className="fp-status-timeline">
-                  {film.timeline.map((step) => (
-                    <div key={step.label} className={`fp-status-step ${step.done ? "done" : ""}`}>
-                      <span className="fp-status-dot" />
-                      <span>{step.label}</span>
-                    </div>
+                  {film.timeline.map((step, i) => (
+                    <Reveal key={step.label} delay={240 + i * 60}>
+                      <div className={`fp-status-step ${step.done ? "done" : ""}`}>
+                        <span className="fp-status-dot" />
+                        <span>{step.label}</span>
+                      </div>
+                    </Reveal>
                   ))}
                 </div>
               )}
               {film.fundraising && (
-                <div className="fp-fundraising">
-                  <div className="fp-fundraising-bar">
-                    <div
-                      className="fp-fundraising-fill"
-                      style={{ width: `${Math.min(100, (film.fundraising.raised / film.fundraising.goal) * 100)}%` }}
-                    />
+                <Reveal delay={300}>
+                  <div className="fp-fundraising">
+                    <div className="fp-fundraising-bar">
+                      <div
+                        className="fp-fundraising-fill"
+                        style={{ width: `${Math.min(100, (film.fundraising.raised / film.fundraising.goal) * 100)}%` }}
+                      />
+                    </div>
+                    <div className="fp-fundraising-meta">
+                      <span>${film.fundraising.raised.toLocaleString()} raised</span>
+                      <span>${film.fundraising.goal.toLocaleString()} goal</span>
+                    </div>
                   </div>
-                  <div className="fp-fundraising-meta">
-                    <span>${film.fundraising.raised.toLocaleString()} raised</span>
-                    <span>${film.fundraising.goal.toLocaleString()} goal</span>
-                  </div>
-                </div>
+                </Reveal>
               )}
             </section>
           )}
 
           {/* About */}
           <section className="fp-section" id="section-about">
-            <span className="fp-label">About</span>
-            <p className="fp-about-text">{film.synopsis}</p>
+            <Reveal>
+              <span className="fp-label">About</span>
+            </Reveal>
+            <p className="fp-about-text">
+              <SplitReveal text={film.synopsis} stagger={18} startDelay={150} />
+            </p>
           </section>
 
           {/* Parallax images */}
@@ -246,37 +263,47 @@ export default function FilmPage() {
 
           {/* The Humans */}
           <section className="fp-section" id="section-humans">
-            <span className="fp-label">The Humans</span>
+            <Reveal>
+              <span className="fp-label">The Humans</span>
+            </Reveal>
 
             {/* Featuring — large portrait cards */}
-            <h3 className="fp-humans-heading">Featuring</h3>
+            <Reveal delay={120}>
+              <h3 className="fp-humans-heading">Featuring</h3>
+            </Reveal>
             <div className="fp-featuring">
-              {film.cast.map((person) => (
-                <div key={person.name} className="fp-featuring-card">
-                  <div className="fp-featuring-photo">
-                    <span className="fp-featuring-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+              {film.cast.map((person, i) => (
+                <Reveal key={person.name} delay={200 + i * 90}>
+                  <div className="fp-featuring-card">
+                    <div className="fp-featuring-photo">
+                      <span className="fp-featuring-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+                    </div>
+                    <div className="fp-featuring-info">
+                      <span className="fp-featuring-name">{person.name}</span>
+                      <span className="fp-featuring-role">{person.role}</span>
+                    </div>
                   </div>
-                  <div className="fp-featuring-info">
-                    <span className="fp-featuring-name">{person.name}</span>
-                    <span className="fp-featuring-role">{person.role}</span>
-                  </div>
-                </div>
+                </Reveal>
               ))}
             </div>
 
             {/* Crew — smaller inline */}
-            <h3 className="fp-humans-heading fp-crew-heading">Crew</h3>
+            <Reveal>
+              <h3 className="fp-humans-heading fp-crew-heading">Crew</h3>
+            </Reveal>
             <div className="fp-crew">
-              {film.crew.map((person) => (
-                <div key={person.name + person.role} className="fp-crew-member">
-                  <div className="fp-crew-photo">
-                    <span className="fp-crew-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+              {film.crew.map((person, i) => (
+                <Reveal key={person.name + person.role} delay={120 + i * 60}>
+                  <div className="fp-crew-member">
+                    <div className="fp-crew-photo">
+                      <span className="fp-crew-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+                    </div>
+                    <div className="fp-crew-info">
+                      <span className="fp-crew-role">{person.role}</span>
+                      <span className="fp-crew-name">{person.name}</span>
+                    </div>
                   </div>
-                  <div className="fp-crew-info">
-                    <span className="fp-crew-role">{person.role}</span>
-                    <span className="fp-crew-name">{person.name}</span>
-                  </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </section>
@@ -302,23 +329,35 @@ export default function FilmPage() {
           {/* Sponsors */}
           {film.sponsors.length > 0 && (
             <section className="fp-section" id="section-sponsors">
-              <span className="fp-label">Sponsors</span>
+              <Reveal>
+                <span className="fp-label">Sponsors</span>
+              </Reveal>
               <div className="fp-sponsors">
-                {film.sponsors.map((s) => (
-                  <div key={s.name} className="fp-sponsor">{s.name}</div>
+                {film.sponsors.map((s, i) => (
+                  <Reveal key={s.name} delay={120 + i * 60}>
+                    <div className="fp-sponsor">{s.name}</div>
+                  </Reveal>
                 ))}
               </div>
-              <p className="fp-sponsor-note">Want to sponsor the next film?</p>
-              <TransitionLink href="/about" className="fp-sponsor-link">Partner with CultRepo &rarr;</TransitionLink>
+              <Reveal delay={300}>
+                <p className="fp-sponsor-note">Want to sponsor the next film?</p>
+              </Reveal>
+              <Reveal delay={360}>
+                <TransitionLink href="/about" className="fp-sponsor-link">Partner with CultRepo &rarr;</TransitionLink>
+              </Reveal>
             </section>
           )}
 
           {/* Tech tags */}
           <section className="fp-section">
-            <span className="fp-label">Technologies</span>
+            <Reveal>
+              <span className="fp-label">Technologies</span>
+            </Reveal>
             <div className="fp-techs">
-              {film.technologies.map((t) => (
-                <span key={t} className="fp-tech">{t}</span>
+              {film.technologies.map((t, i) => (
+                <Reveal key={t} delay={120 + i * 40}>
+                  <span className="fp-tech">{t}</span>
+                </Reveal>
               ))}
             </div>
           </section>
@@ -402,20 +441,29 @@ export default function FilmPage() {
 
       {/* More Films — full-width grid below the layout */}
       <section className="fp-more-films">
-        <span className="fp-label fp-more-films-label">More Films</span>
+        <Reveal>
+          <span className="fp-label fp-more-films-label">More Films</span>
+        </Reveal>
         <div className="films-grid">
-          {films.filter((f) => f.slug !== slug).map((f) => (
-            <TransitionLink key={f.slug} href={`/films/${f.slug}`} className="film-card">
-              <div className="film-card-video-wrap">
-                <video src={f.video} muted loop playsInline autoPlay preload="metadata" className="film-card-video" />
-                <div className="film-card-overlay" />
-              </div>
-              <div className="film-card-info">
-                <span className="film-card-title">{f.title}</span>
-                <span className="film-card-status">{f.status}</span>
-              </div>
-            </TransitionLink>
-          ))}
+          {films.filter((f) => f.slug !== slug).map((f, i) => {
+            const row = Math.floor(i / GRID_COLS);
+            const col = i % GRID_COLS;
+            const delay = (row + col) * STAGGER_MS;
+            return (
+              <Reveal key={f.slug} delay={delay}>
+                <TransitionLink href={`/films/${f.slug}`} className="film-card">
+                  <div className="film-card-video-wrap">
+                    <video src={f.video} muted loop playsInline autoPlay preload="metadata" className="film-card-video" />
+                    <div className="film-card-overlay" />
+                  </div>
+                  <div className="film-card-info">
+                    <span className="film-card-title">{f.title}</span>
+                    <span className="film-card-status">{f.status}</span>
+                  </div>
+                </TransitionLink>
+              </Reveal>
+            );
+          })}
         </div>
       </section>
 
