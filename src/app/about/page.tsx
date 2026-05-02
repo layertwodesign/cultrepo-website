@@ -147,22 +147,20 @@ export default function AboutPage() {
       </section>
 
       <section className="about-numbers-section">
-        <div className="about-numbers-frame corner-frame">
-          <div className="about-numbers">
-            {community.map((c, i) => (
-              <Reveal key={c.label} delay={i * 120}>
-                <div className="about-number">
-                  <span className="about-number-value">
-                    <CountUp to={c.to} suffix={c.suffix} decimals={c.decimals} />
-                  </span>
-                  <div className="about-number-meta">
-                    <span className="about-number-icon">{c.icon}</span>
-                    <span className="about-number-label">{c.label}</span>
-                  </div>
+        <div className="about-numbers">
+          {community.map((c, i) => (
+            <Reveal key={c.label} delay={i * 120}>
+              <div className="about-number">
+                <span className="about-number-value">
+                  <CountUp to={c.to} suffix={c.suffix} decimals={c.decimals} />
+                </span>
+                <div className="about-number-meta">
+                  <span className="about-number-icon">{c.icon}</span>
+                  <span className="about-number-label">{c.label}</span>
                 </div>
-              </Reveal>
-            ))}
-          </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 

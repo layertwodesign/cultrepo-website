@@ -1030,22 +1030,45 @@ body.invert .corner-frame::before {
 }
 
 /* Numbers — display-size, no card chrome */
-.about-numbers-frame {
-  padding: 64px 48px;
-}
 .about-numbers {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+  padding: 48px 0;
 }
 .about-number {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 16px;
-  border-top: 1px solid #282C26;
-  padding-top: 28px;
+  padding: 28px 0;
+}
+/* Corner squares per number box. Each box renders only its right-side
+   corners; the leftmost box additionally renders its left-side corners.
+   This way adjacent boxes share a single column of squares at their
+   boundary instead of doubling up. */
+.about-number::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF);
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
+  background-position: top right, bottom right;
+}
+.about-numbers > :first-child .about-number::before {
+  background-image:
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF),
+    linear-gradient(#FAFFFF, #FAFFFF);
+  background-position: top left, top right, bottom left, bottom right;
 }
 .about-number-value {
   font-family: var(--font-interphases), sans-serif;
