@@ -840,8 +840,8 @@ body.invert .corner-square {
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto auto;
   align-items: center;
-  padding: 96px 40px 48px;
-  gap: 72px;
+  padding: 128px 40px 48px;
+  gap: 56px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -952,7 +952,7 @@ body.invert .corner-square {
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   width: 100%;
-  height: clamp(360px, 58vh, 720px);
+  height: clamp(240px, 36vh, 420px);
   min-height: 0;
   align-self: center;
 }
@@ -996,7 +996,7 @@ body.invert .corner-square {
   overflow: hidden;
   font-family: var(--font-interphases-mono), monospace;
   font-weight: 400;
-  font-size: clamp(48px, 7vw, 112px);
+  font-size: clamp(36px, 4.5vw, 72px);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -1021,6 +1021,7 @@ body.invert .corner-square {
   justify-content: space-between;
   gap: clamp(24px, 4vw, 80px);
   width: 100%;
+  margin-bottom: 32px;
 }
 .menu-email {
   flex: 0 1 880px;
