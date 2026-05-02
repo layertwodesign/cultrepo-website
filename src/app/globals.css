@@ -772,7 +772,7 @@ body.invert .corner-frame::before {
 /* ============ HOME CTA ============ */
 .home-cta {
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 40px;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 11px;
   font-weight: 400;
