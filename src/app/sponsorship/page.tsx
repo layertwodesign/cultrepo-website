@@ -12,15 +12,11 @@ export default function SponsorshipPage() {
     <div className="sponsorship-page">
       <div className="sponsorship-layout">
         <div className="sponsorship-content">
-          <h1 className="sponsorship-title">Sponsor Our Work</h1>
-          <p className="sponsorship-sub">
-            We&apos;re happy to chat about a partnership.
-          </p>
-          <SponsorshipForm />
+          <h1 className="sponsorship-title">
+            Our team is here to help shape a sponsorship that puts your story in front of builders, engineers, and technical leaders.
+          </h1>
         </div>
-        <div className="sponsorship-ghost">
-          <img src="/ghost.png" alt="" />
-        </div>
+        <SponsorshipForm />
       </div>
     </div>
   );

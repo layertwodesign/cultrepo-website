@@ -1697,8 +1697,8 @@ body.invert .corner-frame::before {
 .sponsorship-page {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  padding: 120px 40px 80px;
+  align-items: flex-start;
+  padding: 160px 40px 80px;
 }
 .sponsorship-layout {
   width: 100%;
@@ -1706,10 +1706,12 @@ body.invert .corner-frame::before {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
+  gap: 96px;
+  align-items: start;
 }
 .sponsorship-content {
+  position: sticky;
+  top: 160px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -1718,87 +1720,98 @@ body.invert .corner-frame::before {
 .sponsorship-title {
   font-family: var(--font-interphases), sans-serif;
   font-weight: 600;
-  font-size: clamp(40px, 5vw, 72px);
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  font-size: clamp(28px, 3.4vw, 48px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   color: #FAFFFF;
+  max-width: 22ch;
+  text-wrap: balance;
 }
-.sponsorship-sub {
-  font-family: var(--font-interphases), sans-serif;
-  font-size: 18px;
-  font-weight: 300;
-  line-height: 1.5;
-  color: rgba(250, 255, 255, 0.5);
-  max-width: 480px;
-  margin-bottom: 8px;
-}
+
 .sponsorship-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  max-width: 560px;
+  gap: 36px;
+  width: 100%;
 }
-.sponsorship-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+.sponsorship-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sponsorship-field-label {
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(250, 255, 255, 0.5);
 }
 .sponsorship-form input,
-.sponsorship-form textarea {
+.sponsorship-form textarea,
+.sponsorship-form select {
   font-family: var(--font-interphases), sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #FAFFFF;
-  background: #1A1E19;
-  border: 1px solid #282C26;
-  border-radius: 8px;
-  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #454940;
+  border-radius: 0;
+  padding: 8px 0;
   outline: none;
   transition: border-color 0.2s ease;
   width: 100%;
 }
 .sponsorship-form input::placeholder,
 .sponsorship-form textarea::placeholder {
-  color: rgba(250, 255, 255, 0.3);
+  color: rgba(250, 255, 255, 0.25);
 }
 .sponsorship-form input:focus,
-.sponsorship-form textarea:focus {
-  border-color: #87FF38;
+.sponsorship-form textarea:focus,
+.sponsorship-form select:focus {
+  border-bottom-color: #87FF38;
+}
+.sponsorship-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236E7366' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  padding-right: 24px;
+}
+.sponsorship-form select option {
+  background: #0D110F;
+  color: #FAFFFF;
 }
 .sponsorship-form textarea {
   resize: vertical;
-  min-height: 140px;
-  font-family: var(--font-interphases), sans-serif;
+  min-height: 80px;
 }
 .sponsorship-submit {
   font-family: var(--font-interphases-mono), monospace;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #87FF38;
   background: #1A1E19;
-  padding: 14px 36px;
+  padding: 22px 32px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
-  align-self: flex-start;
-  margin-top: 8px;
+  width: 100%;
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 .sponsorship-submit:hover {
   background: #87FF38;
   color: #0D110F;
-}
-.sponsorship-ghost {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sponsorship-ghost img {
-  width: 100%;
-  max-width: 480px;
-  height: auto;
 }
 
 /* ============ SITE FOOTER ============ */
@@ -1942,11 +1955,9 @@ body.invert .corner-frame::before {
   .fp-crew { grid-template-columns: repeat(2, 1fr); }
   .fp-more-films { padding: 0 20px 60px; }
   .fp-sb-meta-grid { grid-template-columns: 1fr 1fr; }
-  .sponsorship-page { padding: 100px 20px 60px; }
-  .sponsorship-layout { grid-template-columns: 1fr; gap: 48px; }
-  .sponsorship-ghost { order: -1; }
-  .sponsorship-ghost img { max-width: 240px; }
-  .sponsorship-row { grid-template-columns: 1fr; }
+  .sponsorship-page { padding: 120px 20px 60px; }
+  .sponsorship-layout { grid-template-columns: 1fr; gap: 56px; }
+  .sponsorship-content { position: static; top: auto; }
   .site-footer { padding: 32px 20px; gap: 16px; grid-template-columns: 1fr; justify-items: center; }
   .site-footer > :first-child,
   .site-footer > :last-child { justify-self: center; }
