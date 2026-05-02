@@ -837,6 +837,7 @@ body.invert .corner-square {
   z-index: 200;
   background: #0D110F;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto auto;
   align-items: center;
   padding: 96px 40px 48px;
@@ -845,6 +846,7 @@ body.invert .corner-square {
   pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.menu-overlay > * { min-width: 0; }
 .menu-overlay.open {
   opacity: 1;
   pointer-events: auto;
@@ -891,13 +893,7 @@ body.invert .corner-square {
   align-items: center;
   gap: clamp(24px, 4vw, 48px);
   white-space: nowrap;
-  animation: menu-marquee 60s linear infinite;
-  animation-play-state: running;
-  transition: animation-duration 0.5s ease;
   will-change: transform;
-}
-.menu-marquee:hover .menu-marquee-track {
-  animation-duration: 240s;
 }
 .menu-marquee-item {
   display: inline-flex;
@@ -918,11 +914,6 @@ body.invert .corner-square {
   color: #FAFFFF;
   background: #1A1E19;
 }
-@keyframes menu-marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
 /* Cards */
 .menu-cards {
   display: grid;
@@ -938,40 +929,31 @@ body.invert .corner-square {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(250, 255, 255, 0.18);
+  border: 1px solid #454940;
   border-radius: 24px;
   background: transparent;
   text-decoration: none;
   color: rgba(250, 255, 255, 0.6);
   transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
-  overflow: hidden;
+  overflow: visible;
 }
-.menu-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(135, 255, 56, 0.08) 0%, rgba(135, 255, 56, 0) 60%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-.menu-card.active,
 .menu-card:hover {
   color: #FAFFFF;
   border-color: rgba(250, 255, 255, 0.45);
 }
-.menu-card.active::before,
-.menu-card:hover::before {
-  opacity: 1;
-}
-.menu-card.active .corner-square,
-.menu-card:hover .corner-square {
-  transform: scale(1) rotate(0deg);
+.menu-card.active {
+  background: #1A1E19;
+  color: #FAFFFF;
+  border-color: #454940;
 }
 .menu-card .corner-square {
   --corner-size: 8px;
   --corner-offset: -4px;
   z-index: 2;
+  transform: scale(0) rotate(25deg);
+}
+.menu-card.active .corner-square {
+  transform: scale(1) rotate(0deg);
 }
 .menu-card-title {
   position: relative;

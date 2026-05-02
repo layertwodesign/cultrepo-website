@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import TransitionLink from "./TransitionLink";
 import CornerSquares from "./CornerSquares";
+import MenuMarquee from "./MenuMarquee";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
 import { films } from "@/lib/films";
 
@@ -81,9 +82,7 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <div className="menu-marquee">
-          <div className="menu-marquee-track">{marqueeItems}</div>
-        </div>
+        <MenuMarquee items={marqueeItems} />
 
         <nav className="menu-cards">
           {NAV.map((item) => {
