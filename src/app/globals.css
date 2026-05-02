@@ -838,10 +838,10 @@ body.invert .corner-square {
   background: #0D110F;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto 1fr auto auto;
-  align-items: center;
+  grid-template-rows: auto auto auto;
+  align-content: center;
   padding: 128px 40px 48px;
-  gap: 56px;
+  gap: 32px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -954,7 +954,6 @@ body.invert .corner-square {
   width: 100%;
   height: clamp(240px, 36vh, 420px);
   min-height: 0;
-  align-self: center;
 }
 .menu-card {
   position: relative;
@@ -1021,7 +1020,6 @@ body.invert .corner-square {
   justify-content: space-between;
   gap: clamp(24px, 4vw, 80px);
   width: 100%;
-  margin-bottom: 32px;
 }
 .menu-email {
   flex: 0 1 880px;
@@ -1114,12 +1112,14 @@ body.invert .corner-square {
 }
 
 .menu-footer {
-  position: relative;
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  bottom: 48px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 32px;
-  width: 100%;
 }
 .menu-footer > :first-child { justify-self: start; }
 .menu-footer > :last-child { justify-self: end; }
