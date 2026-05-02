@@ -66,54 +66,30 @@ export default function FilmPage() {
     });
   }, [consumeFilmRect]);
 
-  // Track if user manually paused via YouTube controls
-  const userPausedRef = useRef(false);
   const scrollPausedRef = useRef(false);
 
-  useEffect(() => {
-    const onMessage = (e: MessageEvent) => {
-      if (typeof e.data !== "string") return;
-      try {
-        const data = JSON.parse(e.data);
-        if (data.event === "onStateChange") {
-          // State 2 = paused, State 1 = playing
-          if (data.info === 2 && !scrollPausedRef.current) {
-            // Paused but NOT by our scroll logic — user clicked pause
-            userPausedRef.current = true;
-          } else if (data.info === 1) {
-            // Playing — user clicked play, clear the manual pause flag
-            userPausedRef.current = false;
-          }
-        }
-      } catch { /* ignore */ }
-    };
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  }, []);
-
-  // Scroll-based: border-radius animation + active section tracking + parallax + pause/play
+  // Scroll-based: border-radius animation + active section tracking + parallax + auto-pause
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
 
-      // Pause YouTube when video scrolls out of view, resume when back
+      // Pause YouTube when the video scrolls out of view. We do NOT auto-resume
+      // when the user scrolls back — once the video is paused (whether by us or
+      // by the user), the user controls when it plays again via the YouTube
+      // play button. This avoids the user-paused-then-it-restarted-itself
+      // surprise that detecting state changes through cross-origin postMessage
+      // can't catch reliably.
       const videoEl = document.getElementById("section-film");
       if (videoEl) {
         const rect = videoEl.getBoundingClientRect();
         const outOfView = rect.bottom < 0;
         const iframe = iframeRef.current;
-        if (iframe?.contentWindow) {
-          if (outOfView && !scrollPausedRef.current) {
-            scrollPausedRef.current = true;
-            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', "*");
-          } else if (!outOfView && scrollPausedRef.current) {
-            scrollPausedRef.current = false;
-            // Only resume if user didn't manually pause
-            if (!userPausedRef.current) {
-              iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
-            }
-          }
+        if (iframe?.contentWindow && outOfView && !scrollPausedRef.current) {
+          scrollPausedRef.current = true;
+          iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', "*");
+        } else if (!outOfView && scrollPausedRef.current) {
+          scrollPausedRef.current = false;
         }
       }
 
