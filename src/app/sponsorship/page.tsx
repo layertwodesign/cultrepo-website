@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SplitReveal from "@/components/SplitReveal";
 import SponsorshipForm from "./SponsorshipForm";
 
 export const metadata: Metadata = {
@@ -13,7 +14,11 @@ export default function SponsorshipPage() {
       <div className="sponsorship-layout">
         <div className="sponsorship-content">
           <h1 className="sponsorship-title">
-            Our team is here to help shape a sponsorship that puts your story in front of builders, engineers, and technical leaders.
+            <span className="sponsorship-title-anchor" aria-hidden />
+            <SplitReveal
+              text="Our team is here to help shape a sponsorship that puts your story in front of builders, engineers, and technical leaders."
+              stagger={45}
+            />
           </h1>
         </div>
         <SponsorshipForm />
