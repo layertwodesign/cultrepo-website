@@ -995,10 +995,12 @@ body.invert .corner-square {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+  gap: 6px;
   border: 1px solid rgba(250, 255, 255, 0.18);
-  border-radius: 12px;
-  overflow: hidden;
-  height: 56px;
+  border-radius: 14px;
+  height: 64px;
+  padding: 6px;
+  padding-left: 0;
 }
 .menu-email-input {
   background: transparent;
@@ -1017,12 +1019,12 @@ body.invert .corner-square {
   text-transform: uppercase;
 }
 .menu-email-submit {
-  background: rgba(135, 255, 56, 0.08);
+  background: rgba(135, 255, 56, 0.10);
   border: 0;
-  border-left: 1px solid rgba(250, 255, 255, 0.12);
   color: #87FF38;
   height: 100%;
   padding: 0 32px;
+  border-radius: 9px;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 12px;
   font-weight: 400;
