@@ -26,8 +26,14 @@ export function useForwardPointer(ref: RefObject<HTMLElement | null>) {
       }
     };
 
-    const onMove = (e: MouseEvent) => dispatch(e.clientX, e.clientY);
+    // Ignore our own synthetic events to prevent infinite re-dispatch loops
+    // (synthetic events with bubbles:true bubble back up to the window listener).
+    const onMove = (e: MouseEvent) => {
+      if (!e.isTrusted) return;
+      dispatch(e.clientX, e.clientY);
+    };
     const onTouch = (e: TouchEvent) => {
+      if (!e.isTrusted) return;
       const touch = e.touches[0];
       if (touch) dispatch(touch.clientX, touch.clientY);
     };
