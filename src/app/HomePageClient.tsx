@@ -8,6 +8,7 @@ import CornerSquares from "@/components/CornerSquares";
 
 type Props = {
   films: Film[];
+  featuredSlug?: string | null;
 };
 
 // Right-side ticker data
@@ -90,7 +91,7 @@ type IntroPhase =
   | "carousel"       // Carousel scrolls through, UI elements appear
   | "done";          // Intro complete
 
-export default function HomePageClient({ films }: Props) {
+export default function HomePageClient({ films, featuredSlug }: Props) {
   const allItems = useMemo(
     () => films.map((f) => ({ title: f.title, slug: f.slug, status: f.status, video: f.video })),
     [films]
@@ -128,7 +129,17 @@ export default function HomePageClient({ films }: Props) {
       s.introOffsetY = 0;
     }
   }, []);
-  const [items] = useState(() => shuffle(allItems));
+  const [items] = useState(() => {
+    const shuffled = shuffle(allItems);
+    if (featuredSlug) {
+      const idx = shuffled.findIndex((i) => i.slug === featuredSlug);
+      if (idx > 0) {
+        const [featured] = shuffled.splice(idx, 1);
+        shuffled.unshift(featured);
+      }
+    }
+    return shuffled;
+  });
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
   const [centeredSlug, setCenteredSlug] = useState<string | null>(null);
   const pendingSlugRef = useRef<string | null>(null);

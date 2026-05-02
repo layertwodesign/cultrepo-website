@@ -12,7 +12,7 @@ export type Film = {
   year: string;
   duration: string;
   director: string;
-  cast: { name: string; role: string }[];
+  cast: { name: string; role: string; photo?: string | null }[];
   crew: { name: string; role: string }[];
   technologies: string[];
   sponsors: { name: string }[];

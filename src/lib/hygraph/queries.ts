@@ -29,6 +29,9 @@ const FILM_FRAGMENT = /* GraphQL */ `
     cast {
       name
       role
+      photo {
+        url
+      }
     }
     crew {
       name
@@ -92,6 +95,8 @@ export const ABOUT_PAGE_QUERY = /* GraphQL */ `
       heroTitle
       heroSubtitle
       story
+      ctaTitle
+      ctaSubtitle
       backstageImage {
         url
         width
@@ -115,6 +120,15 @@ export const ABOUT_PAGE_QUERY = /* GraphQL */ `
   }
 `;
 
+export const SPONSORSHIP_PAGE_QUERY = /* GraphQL */ `
+  query SponsorshipPage {
+    sponsorshipPages(first: 1) {
+      heroCopy
+      formRecipientEmail
+    }
+  }
+`;
+
 export const SITE_SETTINGS_QUERY = /* GraphQL */ `
   query SiteSettings {
     siteSettingsItems(first: 1) {
@@ -124,6 +138,9 @@ export const SITE_SETTINGS_QUERY = /* GraphQL */ `
       xUrl
       instagramUrl
       newsletterFormAction
+      featuredFilm {
+        slug
+      }
     }
   }
 `;

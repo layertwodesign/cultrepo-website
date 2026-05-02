@@ -17,6 +17,8 @@ export type AboutPageData = {
   heroTitle: string;
   heroSubtitle: string;
   story: string;
+  ctaTitle: string;
+  ctaSubtitle: string;
   backstageImage: string | null;
   stats: AboutStat[];
   trustedBySponsors: { name: string; slug: string; logo: string | null }[];
@@ -31,6 +33,8 @@ const localAbout: AboutPageData = {
   story: `Founded in 2018 as Honeypot, Cult.Repo is an independent media platform telling the human stories behind technology — with a particular focus on the people who build and maintain open source.
 
 What started as a single YouTube channel has grown into a small studio of filmmakers chasing the stories that don't fit into a blog post or a release note.`,
+  ctaTitle: "Sponsor a film.",
+  ctaSubtitle: "Reach builders, engineers, and technical leaders.",
   backstageImage: "/about/backstage-1.jpg",
   stats: [
     { value: 250, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },
@@ -51,6 +55,8 @@ type HygraphAboutPage = {
   heroTitle: string | null;
   heroSubtitle: string | null;
   story: string | null;
+  ctaTitle: string | null;
+  ctaSubtitle: string | null;
   backstageImage: { url: string } | null;
   stats: AboutStat[];
   trustedBySponsors: {
@@ -75,6 +81,8 @@ export async function getAboutPage(): Promise<AboutPageData> {
     heroTitle: cms.heroTitle ?? localAbout.heroTitle,
     heroSubtitle: cms.heroSubtitle ?? localAbout.heroSubtitle,
     story: cms.story ?? localAbout.story,
+    ctaTitle: cms.ctaTitle ?? localAbout.ctaTitle,
+    ctaSubtitle: cms.ctaSubtitle ?? localAbout.ctaSubtitle,
     backstageImage: cms.backstageImage?.url ?? localAbout.backstageImage,
     stats: cms.stats?.length ? cms.stats : localAbout.stats,
     trustedBySponsors: cms.trustedBySponsors?.length

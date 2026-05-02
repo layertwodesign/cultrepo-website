@@ -253,7 +253,11 @@ export default function FilmPageClient({ film, allFilms }: Props) {
                 <Reveal key={person.name} delay={200 + i * 90}>
                   <div className="fp-featuring-card">
                     <div className="fp-featuring-photo">
-                      <span className="fp-featuring-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+                      {person.photo ? (
+                        <img src={person.photo} alt={person.name} className="fp-featuring-photo-img" />
+                      ) : (
+                        <span className="fp-featuring-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+                      )}
                     </div>
                     <div className="fp-featuring-info">
                       <span className="fp-featuring-name">{person.name}</span>

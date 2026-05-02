@@ -112,11 +112,11 @@ export default async function AboutPage() {
         <div className="about-final-block">
           <section className="about-final-cta">
             <Reveal>
-              <h2 className="about-final-cta-title">Sponsor a film.</h2>
+              <h2 className="about-final-cta-title">{about.ctaTitle}</h2>
             </Reveal>
             <Reveal delay={150}>
               <p className="about-final-cta-sub">
-                Reach builders, engineers, and technical leaders.
+                {about.ctaSubtitle}
               </p>
             </Reveal>
             <Reveal delay={300}>
