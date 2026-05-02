@@ -624,20 +624,22 @@ body.invert .corner-square {
   cursor: pointer;
 }
 /* Carousel corner squares: rendered as <CornerSquares /> children inside
-   .carousel-item; sit -2px outside the rounded video. The shared .corner-square
-   rule handles the grow + rotate on .carousel-item:hover. */
-.carousel-item .corner-square {
-  --corner-offset: -2px;
-}
+   .carousel-item. They use the default --corner-offset of -8px so each
+   8×8 square sits entirely outside the carousel-item's bounding box,
+   touching its corner from the outside. */
 .carousel-item-link {
   display: block;
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 12px;
-  background: #282C26;
+  border-radius: 24px;
   user-select: none;
+  transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+}
+.carousel-item:hover .carousel-item-link {
+  transform: scale(0.94);
 }
 /* Distance-from-center dim — driven by --carousel-dim set per-frame
    from the carousel render loop. 0 at viewport center, ~0.3 near the
@@ -680,14 +682,9 @@ body.invert .corner-square {
   height: 100%;
   object-fit: cover;
   background: #282C26;
-  border-radius: 12px;
+  border-radius: 24px;
   border: 1px solid rgba(69, 73, 64, 0.35);
   box-sizing: border-box;
-  transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
-  transform-origin: center;
-}
-.carousel-item:hover .carousel-video {
-  transform: scale(0.94);
 }
 
 /* Video overlay */
