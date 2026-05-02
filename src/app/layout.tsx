@@ -6,6 +6,7 @@ import SiteFooter from "@/components/SiteFooter";
 import { PageTransitionProvider } from "@/components/PageTransition";
 import { NavVisibilityProvider } from "@/components/NavVisibility";
 import SmoothScroll from "@/components/SmoothScroll";
+import RulerParallax from "@/components/RulerParallax";
 
 const interphases = localFont({
   src: [
@@ -50,6 +51,7 @@ export default function RootLayout({
         <NavVisibilityProvider>
           <PageTransitionProvider>
             <SmoothScroll />
+            <RulerParallax />
             <Navigation />
             <div className="camera-ruler camera-ruler-left" />
             <div className="camera-ruler camera-ruler-right" />

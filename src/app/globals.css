@@ -356,6 +356,7 @@ body.invert .corner-frame::before {
   pointer-events: none;
   background-repeat: repeat-y;
   background-size: 14px 120px;
+  background-position-y: calc(var(--ruler-y, 0px) * 0.5);
 }
 .camera-ruler-left {
   left: 0;
