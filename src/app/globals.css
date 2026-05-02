@@ -1056,18 +1056,18 @@ body.invert .corner-frame::before {
   pointer-events: none;
   z-index: 2;
   background-image:
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF);
+    linear-gradient(#454940, #454940),
+    linear-gradient(#454940, #454940);
   background-repeat: no-repeat;
   background-size: 8px 8px;
   background-position: top right, bottom right;
 }
 .about-numbers > :first-child .about-number::before {
   background-image:
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF),
-    linear-gradient(#FAFFFF, #FAFFFF);
+    linear-gradient(#454940, #454940),
+    linear-gradient(#454940, #454940),
+    linear-gradient(#454940, #454940),
+    linear-gradient(#454940, #454940);
   background-position: top left, top right, bottom left, bottom right;
 }
 .about-number-value {
