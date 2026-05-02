@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import TransitionLink from "./TransitionLink";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
+
+const UnicornScene = dynamic(() => import("unicornstudio-react/next"), { ssr: false });
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
@@ -42,6 +45,17 @@ export default function Navigation() {
 
       {/* Full-screen menu overlay */}
       <div className={`menu-overlay ${open ? "open" : ""}`}>
+        {open ? (
+          <div className="menu-unicorn" aria-hidden>
+            <UnicornScene
+              projectId="5jTAQ6ZayBHOM08TLJnb"
+              sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.11/dist/unicornStudio.umd.js"
+              width="100%"
+              height="100%"
+            />
+          </div>
+        ) : null}
+
         <button className="menu-close" aria-label="Close menu" onClick={() => setOpen(false)}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

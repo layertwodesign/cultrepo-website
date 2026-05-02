@@ -839,6 +839,18 @@ body.invert .corner-square {
   opacity: 1;
   pointer-events: auto;
 }
+.menu-unicorn {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  overflow: hidden;
+}
+.menu-overlay > *:not(.menu-unicorn) {
+  position: relative;
+  z-index: 1;
+}
 .menu-close {
   position: absolute;
   top: 32px;
