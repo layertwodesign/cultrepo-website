@@ -639,7 +639,7 @@ body.invert .corner-square {
   transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
 }
 .carousel-item:hover .carousel-item-link {
-  transform: scale(0.96);
+  transform: scale(0.98);
 }
 /* Distance-from-center dim — driven by --carousel-dim set per-frame
    from the carousel render loop. 0 at viewport center, ~0.3 near the

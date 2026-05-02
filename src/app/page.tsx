@@ -381,8 +381,8 @@ export default function Home() {
       const c = cursorRef.current;
       const node = cursorLabelRef.current;
       if (node) {
-        c.x += (c.targetX - c.x) * 0.18;
-        c.y += (c.targetY - c.y) * 0.18;
+        c.x += (c.targetX - c.x) * 0.08;
+        c.y += (c.targetY - c.y) * 0.08;
         const w = node.offsetWidth;
         node.style.transform = `translate(${c.x - w / 2}px, ${c.y + 24}px)`;
         node.style.opacity = c.visible ? "1" : "0";
