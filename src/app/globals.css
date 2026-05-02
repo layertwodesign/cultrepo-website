@@ -1166,6 +1166,13 @@ body.invert .corner-frame::before {
 .about-final-cta > * {
   margin: 0 auto;
 }
+.about-final-cta .about-cta-button {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  padding: 26px 64px;
+  border-radius: 10px;
+  margin-top: 24px;
+}
 .about-final-cta-title {
   font-family: var(--font-interphases), sans-serif;
   font-weight: 600;
