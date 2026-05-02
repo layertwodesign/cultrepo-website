@@ -493,6 +493,12 @@ export default function Home() {
         el.style.borderRadius = `${p.borderRadius}px`;
         el.style.pointerEvents = scale < 0.3 ? "none" : "auto";
 
+        // Distance-from-center dim — 0 at viewport center, ~0.3 at edges.
+        // Drives the .carousel-item-link::before black overlay opacity.
+        const itemCenterY = yWithOffset + finalH / 2;
+        const distNorm = Math.min(1, Math.abs(itemCenterY - wrapperH / 2) / (wrapperH / 2));
+        el.style.setProperty("--carousel-dim", String(distNorm * 0.3));
+
         // Track centered item for YouTube preloading
         if (norm < 0.1 && state.initialized) {
           el.dataset.centered = "true";
