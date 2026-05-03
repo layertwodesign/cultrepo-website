@@ -25,13 +25,13 @@ const SECTIONS: Section[] = [
     blurb:
       "Every editable surface lives in Hygraph. Publish there and the live site updates within seconds.",
     items: [
-      { label: "Films", href: `${HYGRAPH_BASE}/content/film`, hint: "Add/edit films + assets", external: true },
-      { label: "Team", href: `${HYGRAPH_BASE}/content/teamMember`, hint: "Headshots, bios", external: true },
-      { label: "Sponsors", href: `${HYGRAPH_BASE}/content/sponsor`, hint: "Logos + names", external: true },
-      { label: "About page", href: `${HYGRAPH_BASE}/content/aboutPage`, hint: "Hero, story, stats, CTA", external: true },
-      { label: "Sponsorship page", href: `${HYGRAPH_BASE}/content/sponsorshipPage`, hint: "Hero copy + form recipient", external: true },
-      { label: "Site settings", href: `${HYGRAPH_BASE}/content/siteSettings`, hint: "Featured film, social URLs", external: true },
-      { label: "Asset library", href: `${HYGRAPH_BASE}/assets`, hint: "Upload images, videos", external: true },
+      { label: "Films", href: `${HYGRAPH_BASE}/content/f49b54ba54c64928bd20a4b5f24d94bb`, hint: "Add/edit films + assets", external: true },
+      { label: "Team", href: `${HYGRAPH_BASE}/content/8015e91bca2e49fcaac93fbe886c9b36`, hint: "Headshots, bios", external: true },
+      { label: "Sponsors", href: `${HYGRAPH_BASE}/content/ca529d3f15a34d4a989399cff6b4ca80`, hint: "Logos + names", external: true },
+      { label: "About page", href: `${HYGRAPH_BASE}/content/266e5d1629ea4a1c98ac2cf5f3d7a299`, hint: "Hero, story, stats, CTA", external: true },
+      { label: "Sponsorship page", href: `${HYGRAPH_BASE}/content/6a2865781fbc491f92cbf477ab370804`, hint: "Hero copy + form recipient", external: true },
+      { label: "Site settings", href: `${HYGRAPH_BASE}/content/cea3a89ae6154522a562f4caa728f1c9`, hint: "Featured film, social URLs", external: true },
+      { label: "Asset library", href: `${HYGRAPH_BASE}/assets`, hint: "Upload images and videos", external: true },
     ],
   },
   {
