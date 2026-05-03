@@ -2506,6 +2506,16 @@ body.invert .corner-square {
   flex: 1;
   height: 100%;
 }
+.admin-card-preview-fonts {
+  background: #1A1E19;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 4vw, 56px);
+  font-size: clamp(48px, 8vw, 88px);
+  color: #FAFFFF;
+  letter-spacing: -0.02em;
+}
 .admin-card:hover {
   border-color: rgba(250, 255, 255, 0.45);
   background: #282C26;

@@ -8,13 +8,15 @@ const VERCEL_PROJECT =
 
 type Preview =
   | { kind: "image"; src: string; bg?: string; fit?: "contain" | "cover"; padded?: boolean }
-  | { kind: "palette"; colors: string[] };
+  | { kind: "palette"; colors: string[] }
+  | { kind: "fonts" };
 
 type LinkItem = {
   label: string;
   href: string;
   hint?: string;
   external?: boolean;
+  download?: string | boolean;
   preview?: Preview;
 };
 
@@ -64,34 +66,48 @@ const SECTIONS: Section[] = [
   {
     title: "Brand kit",
     blurb:
-      "Logos, fonts, color tokens, and the OpenGraph card. Use these when posting about CultRepo anywhere.",
+      "Logos, fonts, color tokens, and the OpenGraph card. Click to download.",
     items: [
+      {
+        label: "Brand pack (.zip)",
+        href: "/cultrepo-brand.zip",
+        hint: "Wordmark + ghost + OG card, all in one",
+        download: "cultrepo-brand.zip",
+        preview: { kind: "image", src: "/opengraph-image.png", fit: "cover" },
+      },
+      {
+        label: "Fonts (.zip)",
+        href: "/cultrepo-fonts.zip",
+        hint: "Interphases Pro + Mono — 7 weights",
+        download: "cultrepo-fonts.zip",
+        preview: { kind: "fonts" },
+      },
       {
         label: "Wordmark (SVG)",
         href: "/logo-wordmark.svg",
         hint: "Vector — scales infinitely",
-        external: true,
+        download: "cultrepo-wordmark.svg",
         preview: { kind: "image", src: "/logo-wordmark.svg", bg: "#1A1E19", fit: "contain", padded: true },
       },
       {
         label: "Ghost (SVG)",
         href: "/ghost.svg",
         hint: "Vector mascot",
-        external: true,
+        download: "cultrepo-ghost.svg",
         preview: { kind: "image", src: "/ghost.svg", bg: "#87FF38", fit: "contain", padded: true },
       },
       {
         label: "Ghost (PNG)",
         href: "/ghost.png",
         hint: "For places SVG isn't supported",
-        external: true,
+        download: "cultrepo-ghost.png",
         preview: { kind: "image", src: "/ghost.png", bg: "#87FF38", fit: "contain", padded: true },
       },
       {
         label: "OpenGraph card",
         href: "/opengraph-image.png",
         hint: "1200×630, share preview",
-        external: true,
+        download: "cultrepo-og.png",
         preview: { kind: "image", src: "/opengraph-image.png", fit: "cover" },
       },
       {
@@ -127,11 +143,19 @@ function CardPreview({ preview }: { preview: Preview }) {
       </div>
     );
   }
+  if (preview.kind === "palette") {
+    return (
+      <div className="admin-card-preview admin-card-preview-palette">
+        {preview.colors.map((c) => (
+          <span key={c} className="admin-card-palette-swatch" style={{ background: c }} />
+        ))}
+      </div>
+    );
+  }
   return (
-    <div className="admin-card-preview admin-card-preview-palette">
-      {preview.colors.map((c) => (
-        <span key={c} className="admin-card-palette-swatch" style={{ background: c }} />
-      ))}
+    <div className="admin-card-preview admin-card-preview-fonts">
+      <span style={{ fontFamily: "var(--font-interphases)", fontWeight: 600 }}>Aa</span>
+      <span style={{ fontFamily: "var(--font-interphases-mono)", fontWeight: 400 }}>Aa</span>
     </div>
   );
 }
@@ -160,20 +184,25 @@ export default function AdminHubPage() {
           </div>
           <ul className={`admin-card-grid${section.items.some((i) => i.preview) ? " admin-card-grid-with-preview" : ""}`}>
             {section.items.map((item) => {
-              const Anchor = item.external ? "a" : Link;
-              const externalProps = item.external
+              const isDownload = Boolean(item.download);
+              const Anchor: React.ElementType = isDownload || item.external ? "a" : Link;
+              const externalProps = item.external && !isDownload
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {};
+              const downloadProps = isDownload
+                ? { download: typeof item.download === "string" ? item.download : true }
+                : {};
+              const arrow = isDownload ? "↓" : item.external ? "↗" : "→";
               return (
                 <li key={item.label} className="admin-card-li">
-                  <Anchor href={item.href} {...externalProps} className="admin-card">
+                  <Anchor href={item.href} {...externalProps} {...downloadProps} className="admin-card">
                     {item.preview ? <CardPreview preview={item.preview} /> : null}
                     <div className="admin-card-body">
                       <span className="admin-card-label">{item.label}</span>
                       {item.hint ? <span className="admin-card-hint">{item.hint}</span> : null}
                     </div>
                     <span className="admin-card-arrow" aria-hidden>
-                      {item.external ? "↗" : "→"}
+                      {arrow}
                     </span>
                   </Anchor>
                 </li>
