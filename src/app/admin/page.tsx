@@ -6,11 +6,16 @@ const HYGRAPH_BASE =
 const VERCEL_PROJECT =
   "https://vercel.com/layertwo/cultrepo-website";
 
+type Preview =
+  | { kind: "image"; src: string; bg?: string; fit?: "contain" | "cover"; padded?: boolean }
+  | { kind: "palette"; colors: string[] };
+
 type LinkItem = {
   label: string;
   href: string;
   hint?: string;
   external?: boolean;
+  preview?: Preview;
 };
 
 type Section = {
@@ -18,6 +23,16 @@ type Section = {
   blurb: string;
   items: LinkItem[];
 };
+
+const PALETTE = [
+  "#0D110F",
+  "#1A1E19",
+  "#282C26",
+  "#454940",
+  "#6E7366",
+  "#FAFFFF",
+  "#87FF38",
+];
 
 const SECTIONS: Section[] = [
   {
@@ -51,11 +66,40 @@ const SECTIONS: Section[] = [
     blurb:
       "Logos, fonts, color tokens, and the OpenGraph card. Use these when posting about CultRepo anywhere.",
     items: [
-      { label: "Wordmark (SVG)", href: "/logo-wordmark.svg", hint: "Vector — scales infinitely", external: true },
-      { label: "Ghost (SVG)", href: "/ghost.svg", hint: "Vector mascot", external: true },
-      { label: "Ghost (PNG)", href: "/ghost.png", hint: "For places SVG isn't supported", external: true },
-      { label: "OpenGraph card", href: "/opengraph-image.png", hint: "1200×630, share preview", external: true },
-      { label: "Color & font reference", href: "/admin/brand", hint: "Palette + typography spec" },
+      {
+        label: "Wordmark (SVG)",
+        href: "/logo-wordmark.svg",
+        hint: "Vector — scales infinitely",
+        external: true,
+        preview: { kind: "image", src: "/logo-wordmark.svg", bg: "#1A1E19", fit: "contain", padded: true },
+      },
+      {
+        label: "Ghost (SVG)",
+        href: "/ghost.svg",
+        hint: "Vector mascot",
+        external: true,
+        preview: { kind: "image", src: "/ghost.svg", bg: "#87FF38", fit: "contain", padded: true },
+      },
+      {
+        label: "Ghost (PNG)",
+        href: "/ghost.png",
+        hint: "For places SVG isn't supported",
+        external: true,
+        preview: { kind: "image", src: "/ghost.png", bg: "#87FF38", fit: "contain", padded: true },
+      },
+      {
+        label: "OpenGraph card",
+        href: "/opengraph-image.png",
+        hint: "1200×630, share preview",
+        external: true,
+        preview: { kind: "image", src: "/opengraph-image.png", fit: "cover" },
+      },
+      {
+        label: "Color & font reference",
+        href: "/admin/brand",
+        hint: "Palette + typography spec",
+        preview: { kind: "palette", colors: PALETTE },
+      },
     ],
   },
   {
@@ -68,6 +112,29 @@ const SECTIONS: Section[] = [
     ],
   },
 ];
+
+function CardPreview({ preview }: { preview: Preview }) {
+  if (preview.kind === "image") {
+    const style: React.CSSProperties = preview.bg ? { background: preview.bg } : {};
+    return (
+      <div className={`admin-card-preview${preview.padded ? " admin-card-preview-padded" : ""}`} style={style}>
+        <img
+          src={preview.src}
+          alt=""
+          className="admin-card-preview-img"
+          style={{ objectFit: preview.fit ?? "cover" }}
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="admin-card-preview admin-card-preview-palette">
+      {preview.colors.map((c) => (
+        <span key={c} className="admin-card-palette-swatch" style={{ background: c }} />
+      ))}
+    </div>
+  );
+}
 
 export default function AdminHubPage() {
   return (
@@ -91,7 +158,7 @@ export default function AdminHubPage() {
             <h2 className="admin-section-title">{section.title}</h2>
             <p className="admin-section-blurb">{section.blurb}</p>
           </div>
-          <ul className="admin-card-grid">
+          <ul className={`admin-card-grid${section.items.some((i) => i.preview) ? " admin-card-grid-with-preview" : ""}`}>
             {section.items.map((item) => {
               const Anchor = item.external ? "a" : Link;
               const externalProps = item.external
@@ -100,8 +167,11 @@ export default function AdminHubPage() {
               return (
                 <li key={item.label} className="admin-card-li">
                   <Anchor href={item.href} {...externalProps} className="admin-card">
-                    <span className="admin-card-label">{item.label}</span>
-                    {item.hint ? <span className="admin-card-hint">{item.hint}</span> : null}
+                    {item.preview ? <CardPreview preview={item.preview} /> : null}
+                    <div className="admin-card-body">
+                      <span className="admin-card-label">{item.label}</span>
+                      {item.hint ? <span className="admin-card-hint">{item.hint}</span> : null}
+                    </div>
                     <span className="admin-card-arrow" aria-hidden>
                       {item.external ? "↗" : "→"}
                     </span>

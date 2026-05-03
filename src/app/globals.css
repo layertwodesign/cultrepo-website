@@ -2461,8 +2461,7 @@ body.invert .corner-square {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 16px;
   padding: 20px 22px;
   background: #1A1E19;
   border: 1px solid #454940;
@@ -2470,7 +2469,42 @@ body.invert .corner-square {
   text-decoration: none;
   color: #FAFFFF;
   min-height: 110px;
+  overflow: hidden;
   transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+}
+.admin-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-end;
+}
+.admin-card-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0D110F;
+  border: 1px solid #282C26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-card-preview-padded { padding: 18%; }
+.admin-card-preview-padded .admin-card-preview-img { width: 100%; height: 100%; }
+.admin-card-preview-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.admin-card-preview-palette {
+  display: flex;
+  padding: 0;
+  background: #1A1E19;
+}
+.admin-card-palette-swatch {
+  flex: 1;
+  height: 100%;
 }
 .admin-card:hover {
   border-color: rgba(250, 255, 255, 0.45);
