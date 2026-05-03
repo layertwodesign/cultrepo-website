@@ -26,14 +26,18 @@ type Section = {
   items: LinkItem[];
 };
 
+// Per Figma brand guide: 4 brand swatches + 6 greys.
 const PALETTE = [
-  "#0D110F",
-  "#1A1E19",
-  "#282C26",
-  "#454940",
-  "#6E7366",
-  "#FAFFFF",
-  "#87FF38",
+  "#0D110F", // Black
+  "#1A1E19", // Dark Green
+  "#282C26", // Grey 6
+  "#454940", // Grey 5
+  "#6E7366", // Grey 4
+  "#ADB0A0", // Grey 3
+  "#D8D8CA", // Grey 2
+  "#F7F2E4", // Grey 1
+  "#FAFFFF", // White
+  "#87FF38", // Green
 ];
 
 const SECTIONS: Section[] = [
