@@ -1,4 +1,5 @@
-import Link from "next/link";
+import AdminCardGrid from "@/components/AdminCardGrid";
+import { BRAND_LINKS } from "@/app/admin/_data";
 
 const BRAND_COLORS = [
   {
@@ -73,14 +74,23 @@ export default function AdminBrandPage() {
       <header className="admin-hub-header">
         <div>
           <span className="admin-eyebrow">Brand</span>
-          <h1 className="admin-hub-title">Reference</h1>
+          <h1 className="admin-hub-title">Brand kit</h1>
           <p className="admin-hub-blurb">
-            Colors and typography used on cultrepo.com — values match the brand guide in Figma.
-            Use these when posting about CultRepo outside the site.
+            Logos, fonts, the OpenGraph card, and the colour palette — values match the Figma brand
+            guide. Click any download to save the file with a clean filename.
           </p>
         </div>
-        <Link href="/admin" className="admin-logout">← Back</Link>
       </header>
+
+      <section className="admin-section">
+        <div className="admin-section-head">
+          <h2 className="admin-section-title">Downloads</h2>
+          <p className="admin-section-blurb">
+            One-click downloads for every brand asset. Bundle archives at the top, individual files below.
+          </p>
+        </div>
+        <AdminCardGrid items={BRAND_LINKS} />
+      </section>
 
       <section className="admin-section">
         <div className="admin-section-head">

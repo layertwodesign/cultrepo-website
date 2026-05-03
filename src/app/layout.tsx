@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import SiteFooter from "@/components/SiteFooter";
-import { PageTransitionProvider } from "@/components/PageTransition";
-import { NavVisibilityProvider } from "@/components/NavVisibility";
-import SmoothScroll from "@/components/SmoothScroll";
-import RulerParallax from "@/components/RulerParallax";
-import UnicornBackground from "@/components/UnicornBackground";
-import { getFilms } from "@/lib/films";
 
 const interphases = localFont({
   src: [
@@ -63,13 +55,11 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const films = await getFilms();
-  const navFilms = films.map((f) => ({ title: f.title, slug: f.slug }));
   return (
     <html lang="en" className={`${interphases.variable} ${interphasesMono.variable}`}>
       <head>
@@ -77,21 +67,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://i.ytimg.com" />
         <link rel="preconnect" href="https://www.google.com" />
       </head>
-      <body>
-        <NavVisibilityProvider>
-          <PageTransitionProvider>
-            <SmoothScroll />
-            <RulerParallax />
-            <UnicornBackground />
-            <Navigation films={navFilms} />
-            <div className="camera-ruler camera-ruler-left" />
-            <div className="camera-ruler camera-ruler-right" />
-            {children}
-            <SiteFooter />
-            <div className="film-grain" />
-          </PageTransitionProvider>
-        </NavVisibilityProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
