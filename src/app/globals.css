@@ -1180,6 +1180,7 @@ body.invert .corner-square {
 
 /* ============ ABOUT PAGE — EDITORIAL ============ */
 .about-editorial {
+  padding-top: clamp(64px, 8vh, 96px);
   padding-bottom: 0;
 }
 .about-editorial > section {
@@ -1188,19 +1189,24 @@ body.invert .corner-square {
 .about-editorial > section:last-child {
   margin-bottom: 0;
 }
+/* Tighten the gap between hero and the backstage image so the image
+   peeks above the fold and signals "scroll for more". */
+.about-editorial > .about-hero {
+  margin-bottom: clamp(32px, 5vh, 56px);
+}
 
 .about-hero {
-  padding-top: clamp(40px, 8vw, 120px);
+  padding-top: 0;
   max-width: 1100px;
 }
 .about-title {
   font-family: var(--font-interphases), sans-serif;
   font-weight: 600;
-  font-size: clamp(40px, 5.5vw, 80px);
+  font-size: clamp(36px, 4.6vw, 68px);
   line-height: 1;
   letter-spacing: -0.04em;
   color: #FAFFFF;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   max-width: 18ch;
   text-wrap: balance;
 }
@@ -1300,8 +1306,8 @@ body.invert .corner-square {
 .about-hero-trusted {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 64px;
+  gap: 14px;
+  margin-top: 36px;
 }
 .about-partners-label {
   display: inline-block;
@@ -1331,10 +1337,11 @@ body.invert .corner-square {
   opacity: 1;
 }
 
-/* Editorial image break — contained, with rounded corners + corner ticks */
+/* Editorial image break — contained, with rounded corners + corner ticks.
+   Sized so a slice peeks above the fold once the hero is shortened. */
 .about-image-break {
   position: relative;
-  height: clamp(380px, 75vh, 760px);
+  height: clamp(380px, 70vh, 720px);
 }
 .about-image-break .reveal {
   width: 100%;
