@@ -24,9 +24,9 @@ const interphasesMono = localFont({
 });
 
 const SITE_TITLE =
-  "CultRepo | Cinematic Documentaries About the Humans Shaping Technology";
+  "CultRepo | Documenting the People Building World-Shaping Tech";
 const SITE_DESCRIPTION =
-  "CultRepo creates cinematic documentaries about the humans shaping technology. Long-form films about the people behind open source, infrastructure, and emerging systems.";
+  "CultRepo documents the people building world-shaping tech. Long-form films about the humans behind open source, infrastructure, and emerging systems.";
 const SITE_URL = "https://www.cultrepo.com";
 
 export const metadata: Metadata = {
