@@ -27,7 +27,7 @@ const ICON_FOR_CHANNEL = {
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Independent documentaries about the humans behind open source and the systems shaping modern technology.",
+    "Independent documentaries about the people behind open source and the systems shaping modern technology.",
   alternates: { canonical: "/about" },
 };
 
@@ -47,7 +47,7 @@ export default async function AboutPage() {
         </div>
         <div className="about-hero-trusted">
           <Reveal delay={300}>
-            <span className="about-partners-label">Trusted by</span>
+            <span className="about-partners-label">Supported by</span>
           </Reveal>
           <Reveal delay={420}>
             <div className="about-partners-logos">

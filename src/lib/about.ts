@@ -27,20 +27,18 @@ export type AboutPageData = {
 export const ABOUT_CACHE_TAG = "about";
 
 const localAbout: AboutPageData = {
-  heroTitle: "Films about the humans behind the systems we use every day.",
+  heroTitle: "Films about the people behind the systems we use every day.",
   heroSubtitle:
-    "Independent. Long-form. Made with the people who built the things, not about them.",
-  story: `Founded in 2018 as Honeypot, Cult.Repo is an independent media platform telling the human stories behind technology — with a particular focus on the people who build and maintain open source.
+    "Feature-length documentaries, shorts, and video essays. A repository of the canonical stories of technology.",
+  story: `Founded in 2018, Cult.Repo is an independent media company making cinematic documentaries about the people who build technology, with a special focus on open source software.
 
-What started as a single YouTube channel has grown into a small studio of filmmakers chasing the stories that don't fit into a blog post or a release note.`,
+What started as a single YouTube channel has grown into a small studio of filmmakers committed to the idea that technology has a human story worth telling.`,
   ctaTitle: "Sponsor a film.",
   ctaSubtitle: "Reach builders, engineers, and technical leaders.",
   backstageImage: "/about/backstage-1.jpg",
   stats: [
-    { value: 250, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },
-    { value: 15, suffix: "M", decimals: 0, label: "YouTube Views", channel: "YouTube" },
-    { value: 5, suffix: "K", decimals: 0, label: "Instagram Followers", channel: "Instagram" },
-    { value: 12.5, suffix: "K", decimals: 1, label: "X Followers", channel: "X" },
+    { value: 370, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },
+    { value: 20, suffix: "M", decimals: 0, label: "YouTube Views", channel: "YouTube" },
   ],
   trustedBySponsors: [
     { name: "IBM", slug: "ibm", logo: null },

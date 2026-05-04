@@ -242,7 +242,7 @@ export default function FilmPageClient({ film, allFilms }: Props) {
           {/* The Humans */}
           <section className="fp-section" id="section-humans">
             <Reveal>
-              <span className="fp-label">The Humans</span>
+              <span className="fp-label">The People</span>
             </Reveal>
 
             {/* Featuring — large portrait cards */}
@@ -407,7 +407,7 @@ export default function FilmPageClient({ film, allFilms }: Props) {
             About
           </button>
           <button className={`fp-sb-link ${activeSection === "humans" ? "active" : ""}`} onClick={() => scrollTo("humans")}>
-            The Humans
+            The People
           </button>
           {film.sponsors.length > 0 && (
             <button className={`fp-sb-link ${activeSection === "sponsors" ? "active" : ""}`} onClick={() => scrollTo("sponsors")}>

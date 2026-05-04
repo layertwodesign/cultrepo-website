@@ -34,7 +34,7 @@ const localTeam: TeamMember[] = [
     name: "Ida Bechtle",
     role: "Filmmaker",
     photo: "/team/ida.webp",
-    bio: "Joined when the YouTube channel was barely a channel. She has been a quiet engine behind its growth, with a knack for finding the human moment inside a technical story. Off-set: cats, puzzles, and a strong opinion about coffee.",
+    bio: "Joined when the YouTube channel was barely a channel. Ida has been a quiet engine behind its growth, with a knack for finding the human moment inside a technical story. Off-set: cats, puzzles, and a strong opinion about coffee.",
     email: "ida@cultrepo.com",
   },
   {

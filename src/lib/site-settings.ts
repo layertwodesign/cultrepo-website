@@ -20,7 +20,7 @@ export type SiteSettings = {
 };
 
 const local: SiteSettings = {
-  tagline: "Independent documentaries about the humans behind open source.",
+  tagline: "Independent documentaries about the people behind open source.",
   youtubeUrl: "https://www.youtube.com/@cultrepo?sub_confirmation=1",
   blueskyUrl: "https://bsky.app/profile/cultrepo.bsky.social",
   xUrl: "https://x.com/cultrepo",

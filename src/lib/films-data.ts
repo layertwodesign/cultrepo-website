@@ -102,7 +102,7 @@ export const films: Film[] = [
     youtubeId: "8pDqJVdNa44",
     poster: "/posters/react.png",
     description: "The people and decisions behind the library that reshaped frontend development.",
-    synopsis: "In 2013, Facebook open-sourced a JavaScript library that would fundamentally change how we think about building user interfaces. React's component model and virtual DOM were controversial ideas at the time. This film explores the humans behind React — from Jordan Walke's initial prototype to the team that championed it through skepticism, adoption, and evolution into one of the most influential open source projects ever created.",
+    synopsis: "In 2013, Facebook open-sourced a JavaScript library that would fundamentally change how we think about building user interfaces. React's component model and virtual DOM were controversial ideas at the time. This film explores the people behind React — from Jordan Walke's initial prototype to the team that championed it through skepticism, adoption, and evolution into one of the most influential open source projects ever created.",
     year: "2023",
     duration: "52 min",
     director: "Josiah Humphrey",

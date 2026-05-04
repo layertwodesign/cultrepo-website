@@ -838,20 +838,6 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
         {isShrinkOrLater && introPhase !== "shrink" && (
           <div className={`bottom-left ${revealed ? "revealed" : ""}`}>
             <img src="/ghost.png" alt="" className="bottom-ghost" />
-            <p className="bottom-desc">
-              {(() => {
-                const fullText = fullDescText;
-                const visible = fullText.slice(0, revealedChars);
-                const hidden = fullText.slice(revealedChars);
-                return (
-                  <>
-                    <span style={{ color: "rgba(250, 255, 255, 0.5)" }}>{visible}</span>
-                    {showCursor && <span className={`typewriter-cursor ${!typing ? "blink" : ""}`} />}
-                    <span style={{ color: "transparent" }}>{hidden}</span>
-                  </>
-                );
-              })()}
-            </p>
             <TransitionLink href="/sponsorship" className="home-cta">
               Sponsorship
             </TransitionLink>
