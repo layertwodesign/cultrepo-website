@@ -774,12 +774,12 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
               <span className={`intro-text-line-inner ${textLines[0] ? "revealed" : ""}`}>Documenting</span>
             </span>
             <span className="intro-text-line">
-              <span className={`intro-text-line-inner ${textLines[1] ? "revealed" : ""}`}>the <span className="green">Humans</span></span>
+              <span className={`intro-text-line-inner ${textLines[1] ? "revealed" : ""}`}>the <span className="green">People</span></span>
             </span>
           </div>
           <div className="intro-text-group-bottom">
             <span className="intro-text-line">
-              <span className={`intro-text-line-inner ${textLines[2] ? "revealed" : ""}`}>Behind World</span>
+              <span className={`intro-text-line-inner ${textLines[2] ? "revealed" : ""}`}>Building World-</span>
             </span>
             <span className="intro-text-line">
               <span className={`intro-text-line-inner ${textLines[3] ? "revealed" : ""}`}>Shaping Tech</span>
@@ -828,7 +828,7 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
                 <span className="line-inner revealed">Documenting</span>
               </span>
               <span className="line">
-                <span className="line-inner revealed">the <span className="green">Humans</span></span>
+                <span className="line-inner revealed">the <span className="green">People</span></span>
               </span>
             </h1>
           </div>
