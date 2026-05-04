@@ -1312,6 +1312,50 @@ body.invert .corner-square {
   color: rgba(250, 255, 255, 0.4);
 }
 
+.about-hero-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+  margin-top: 0;
+}
+.about-hero-stats {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(24px, 3vw, 56px);
+}
+.about-hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+.about-hero-stat-value {
+  font-family: var(--font-interphases), sans-serif;
+  font-weight: 600;
+  font-size: clamp(40px, 4.4vw, 64px);
+  letter-spacing: -0.04em;
+  color: #FAFFFF;
+  line-height: 1;
+}
+.about-hero-stat-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.about-hero-stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(250, 255, 255, 0.4);
+}
+.about-hero-stat-label {
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(250, 255, 255, 0.4);
+}
 .about-hero-trusted {
   display: flex;
   flex-direction: column;

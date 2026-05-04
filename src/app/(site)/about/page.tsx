@@ -11,7 +11,6 @@ import SplitReveal from "@/components/SplitReveal";
 import Typewriter from "@/components/Typewriter";
 import CornerSquares from "@/components/CornerSquares";
 import CountUp from "@/components/CountUp";
-import InvertOnView from "@/components/InvertOnView";
 import SiteFooter from "@/components/SiteFooter";
 import TeamMember from "./TeamMember";
 import { getTeam } from "@/lib/team";
@@ -45,25 +44,42 @@ export default async function AboutPage() {
             <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} />
           </p>
         </div>
-        <div className="about-hero-trusted">
-          <Reveal delay={300}>
-            <span className="about-partners-label">Supported by</span>
-          </Reveal>
-          <Reveal delay={420}>
-            <div className="about-partners-logos">
-              {about.trustedBySponsors.map((p) => (
-                <Image
-                  key={p.slug}
-                  src={p.logo ?? `/partners/${p.slug}.png`}
-                  alt={p.name}
-                  width={160}
-                  height={32}
-                  className="about-partner-logo"
-                  unoptimized={(p.logo ?? "").endsWith(".svg")}
-                />
-              ))}
-            </div>
-          </Reveal>
+        <div className="about-hero-meta">
+          <div className="about-hero-stats">
+            {about.stats.map((c, i) => (
+              <Reveal key={c.label} delay={300 + i * 120}>
+                <div className="about-hero-stat">
+                  <span className="about-hero-stat-value">
+                    <CountUp to={c.value} suffix={c.suffix} decimals={c.decimals} />
+                  </span>
+                  <div className="about-hero-stat-meta">
+                    <span className="about-hero-stat-icon">{ICON_FOR_CHANNEL[c.channel]}</span>
+                    <span className="about-hero-stat-label">{c.label}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <div className="about-hero-trusted">
+            <Reveal delay={540}>
+              <span className="about-partners-label">Supported by</span>
+            </Reveal>
+            <Reveal delay={620}>
+              <div className="about-partners-logos">
+                {about.trustedBySponsors.map((p) => (
+                  <Image
+                    key={p.slug}
+                    src={p.logo ?? `/partners/${p.slug}.png`}
+                    alt={p.name}
+                    width={160}
+                    height={32}
+                    className="about-partner-logo"
+                    unoptimized={(p.logo ?? "").endsWith(".svg")}
+                  />
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -92,25 +108,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="about-numbers-section">
-        <div className="about-numbers">
-          {about.stats.map((c, i) => (
-            <Reveal key={c.label} delay={i * 120}>
-              <div className="about-number">
-                <CornerSquares corners={i === 0 ? ["tl", "tr", "bl", "br"] : ["tr", "br"]} />
-                <span className="about-number-value">
-                  <CountUp to={c.value} suffix={c.suffix} decimals={c.decimals} />
-                </span>
-                <div className="about-number-meta">
-                  <span className="about-number-icon">{ICON_FOR_CHANNEL[c.channel]}</span>
-                  <span className="about-number-label">{c.label}</span>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
       <section className="about-team-section">
         <div className="team-grid">
           {team.map((m, i) => (
@@ -121,26 +118,24 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <InvertOnView>
-        <div className="about-final-block">
-          <section className="about-final-cta">
-            <Reveal>
-              <h2 className="about-final-cta-title">{about.ctaTitle}</h2>
-            </Reveal>
-            <Reveal delay={150}>
-              <p className="about-final-cta-sub">
-                {about.ctaSubtitle}
-              </p>
-            </Reveal>
-            <Reveal delay={300}>
-              <TransitionLink href="/sponsorship" className="about-cta-button">
-                Sponsorship
-              </TransitionLink>
-            </Reveal>
-          </section>
-          <SiteFooter force />
-        </div>
-      </InvertOnView>
+      <div className="about-final-block">
+        <section className="about-final-cta">
+          <Reveal>
+            <h2 className="about-final-cta-title">{about.ctaTitle}</h2>
+          </Reveal>
+          <Reveal delay={150}>
+            <p className="about-final-cta-sub">
+              {about.ctaSubtitle}
+            </p>
+          </Reveal>
+          <Reveal delay={300}>
+            <TransitionLink href="/sponsorship" className="about-cta-button">
+              Sponsorship
+            </TransitionLink>
+          </Reveal>
+        </section>
+        <SiteFooter force />
+      </div>
     </div>
   );
 }
