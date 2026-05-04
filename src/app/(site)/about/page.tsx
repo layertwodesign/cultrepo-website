@@ -37,12 +37,14 @@ export default async function AboutPage() {
   return (
     <div className="page-container about-editorial">
       <section className="about-hero">
-        <h1 className="about-title">
-          <SplitReveal text={about.heroTitle} stagger={45} />
-        </h1>
-        <p className="about-subtitle">
-          <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} />
-        </p>
+        <div className="about-hero-copy">
+          <h1 className="about-title">
+            <SplitReveal text={about.heroTitle} stagger={45} />
+          </h1>
+          <p className="about-subtitle">
+            <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} />
+          </p>
+        </div>
         <div className="about-hero-trusted">
           <Reveal delay={300}>
             <span className="about-partners-label">Trusted by</span>
