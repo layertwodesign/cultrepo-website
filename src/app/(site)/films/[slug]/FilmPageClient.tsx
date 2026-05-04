@@ -170,7 +170,26 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
                 title={film.title}
               />
             ) : (
-              <video src={film.video} controls playsInline preload="auto" className="fp-video-fallback" />
+              <video
+                src={film.video}
+                controls
+                playsInline
+                autoPlay
+                loop
+                preload="auto"
+                className="fp-video-fallback"
+                ref={(el) => {
+                  if (!el) return;
+                  // Try to autoplay with sound. If browser blocks (almost
+                  // always on cold loads), fall back to muted autoplay so the
+                  // clip still starts — same UX as the YouTube embed.
+                  el.muted = false;
+                  el.play().catch(() => {
+                    el.muted = true;
+                    el.play().catch(() => {});
+                  });
+                }}
+              />
             )}
           </section>
 
@@ -364,7 +383,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
 
           {/* The Film card */}
           <div className="fp-sb-card fp-sb-film">
-            <div className="fp-sb-film-row">
+            <div className={`fp-sb-film-row ${!film.poster ? "no-poster" : ""}`}>
               <div className="fp-sb-film-info">
                 <span className="fp-sb-label">
                   The Film

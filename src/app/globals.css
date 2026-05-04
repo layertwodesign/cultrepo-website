@@ -1894,6 +1894,7 @@ body.invert .corner-square {
 }
 .fp-sb-film { position: relative; }
 .fp-sb-film-row { display: flex; gap: 12px; align-items: stretch; }
+.fp-sb-film-row.no-poster .fp-sb-film-info { gap: 28px; }
 .fp-sb-film-info {
   flex: 1; min-width: 0;
   display: flex; flex-direction: column; justify-content: space-between;
