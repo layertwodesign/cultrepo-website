@@ -1198,10 +1198,10 @@ body.invert .corner-square {
 
 .about-hero {
   padding-top: 0;
-  max-width: 1100px;
+  width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(40px, 6vw, 96px);
+  gap: clamp(40px, 6vw, 120px);
   align-items: end;
 }
 .about-hero-copy {
@@ -1216,7 +1216,7 @@ body.invert .corner-square {
   letter-spacing: -0.04em;
   color: #FAFFFF;
   margin-bottom: 28px;
-  max-width: 18ch;
+  max-width: 28ch;
   text-wrap: balance;
 }
 .about-subtitle {
@@ -1315,13 +1315,9 @@ body.invert .corner-square {
 .about-hero-trusted {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 16px;
   margin-top: 0;
-  text-align: right;
-}
-.about-hero-trusted .about-partners-logos {
-  justify-content: flex-end;
 }
 .about-partners-label {
   display: inline-block;
@@ -2259,8 +2255,6 @@ body.invert .corner-square {
   .team-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .about-image-break { height: clamp(280px, 60vh, 480px); }
   .about-hero { grid-template-columns: 1fr; align-items: start; gap: 40px; }
-  .about-hero-trusted { align-items: flex-start; text-align: left; }
-  .about-hero-trusted .about-partners-logos { justify-content: flex-start; }
   .about-partners-logos { gap: 32px; }
   .about-partner-logo { height: 24px; }
   .about-story-layout { grid-template-columns: 1fr; gap: 40px; text-align: left; }
