@@ -73,11 +73,29 @@ export default function Navigation({ films }: Props) {
         <nav className="menu-cards">
           {NAV.map((item) => {
             const active = item.match(pathname);
+            if (active) {
+              return (
+                <button
+                  type="button"
+                  key={item.href}
+                  className="menu-card active"
+                  onClick={() => setOpen(false)}
+                >
+                  <CornerSquares />
+                  <span className="menu-card-title">
+                    <span className="menu-card-title-track">
+                      <span className="menu-card-title-line">{item.label}</span>
+                      <span className="menu-card-title-line" aria-hidden>{item.label}</span>
+                    </span>
+                  </span>
+                </button>
+              );
+            }
             return (
               <TransitionLink
                 key={item.href}
                 href={item.href}
-                className={`menu-card ${active ? "active" : ""}`}
+                className="menu-card"
               >
                 <CornerSquares />
                 <span className="menu-card-title">

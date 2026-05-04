@@ -39,7 +39,9 @@ export default async function FilmsPage() {
                   </div>
                   <div className="film-card-info">
                     <span className="film-card-title">{film.title}</span>
-                    <span className="film-card-status">{film.status}</span>
+                    <span className="film-card-status">
+                      {film.status === "Released" && film.year ? film.year : film.status}
+                    </span>
                   </div>
                 </TransitionLink>
               </Reveal>
