@@ -1180,7 +1180,7 @@ body.invert .corner-square {
 
 /* ============ ABOUT PAGE — EDITORIAL ============ */
 .about-editorial {
-  padding-top: clamp(96px, 11vh, 140px);
+  padding-top: clamp(192px, 22vh, 280px);
   padding-bottom: 0;
 }
 .about-editorial > section {
@@ -1189,11 +1189,11 @@ body.invert .corner-square {
 .about-editorial > section:last-child {
   margin-bottom: 0;
 }
-/* Tighten the gap between hero and the backstage image so the image
-   peeks above the fold and signals "scroll for more" — but not so
-   tight that the hero feels cramped. */
+/* Hero -> backstage image gap: enough breathing room that the hero
+   doesn't feel cramped, while still letting the image peek above the
+   fold once you've taken in the headline. */
 .about-editorial > .about-hero {
-  margin-bottom: clamp(56px, 8vh, 96px);
+  margin-bottom: clamp(84px, 12vh, 144px);
 }
 
 .about-hero {
