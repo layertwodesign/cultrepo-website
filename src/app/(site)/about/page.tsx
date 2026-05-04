@@ -49,6 +49,7 @@ export default async function AboutPage() {
             {about.stats.map((c, i) => (
               <Reveal key={c.label} delay={300 + i * 120}>
                 <div className="about-hero-stat">
+                  <CornerSquares corners={i === 0 ? ["tl", "tr", "bl", "br"] : ["tr", "br"]} />
                   <span className="about-hero-stat-value">
                     <CountUp to={c.value} suffix={c.suffix} decimals={c.decimals} />
                   </span>
@@ -60,11 +61,9 @@ export default async function AboutPage() {
               </Reveal>
             ))}
           </div>
-          <div className="about-hero-trusted">
-            <Reveal delay={540}>
-              <span className="about-partners-label">Supported by</span>
-            </Reveal>
-            <Reveal delay={620}>
+          <Reveal delay={620}>
+            <div className="about-hero-trusted">
+              <CornerSquares />
               <div className="about-partners-logos">
                 {about.trustedBySponsors.map((p) => (
                   <Image
@@ -78,8 +77,9 @@ export default async function AboutPage() {
                   />
                 ))}
               </div>
-            </Reveal>
-          </div>
+              <span className="about-partners-label">Supported by</span>
+            </div>
+          </Reveal>
         </div>
       </section>
 
