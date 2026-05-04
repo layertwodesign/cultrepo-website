@@ -11,7 +11,7 @@ import type { Film } from "@/lib/films";
 
 const NAV = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
-  { href: "/films", label: "Films", match: (p: string) => p.startsWith("/films") },
+  { href: "/films", label: "Films", match: (p: string) => p === "/films" },
   { href: "/about", label: "About", match: (p: string) => p === "/about" },
 ];
 

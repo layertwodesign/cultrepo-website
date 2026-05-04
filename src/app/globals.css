@@ -811,7 +811,7 @@ body.invert .corner-square {
 /* ============ HOME CTA ============ */
 .home-cta {
   display: inline-block;
-  margin-top: 40px;
+  margin-top: 12px;
   font-family: var(--font-interphases-mono), monospace;
   font-size: 11px;
   font-weight: 400;
@@ -1936,6 +1936,43 @@ body.invert .corner-square {
 .fp-sb-meta-val { font-size: 14px; color: #FAFFFF; }
 
 /* Sidebar anchor links */
+/* Status / fundraising card in the sidebar */
+.fp-sb-status { display: flex; flex-direction: column; gap: 14px; }
+.fp-sb-status-headline {
+  font-family: var(--font-interphases), sans-serif;
+  font-size: 17px; font-weight: 500; line-height: 1.25;
+  color: #FAFFFF; margin: 0;
+}
+.fp-sb-status-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin-top: 4px;
+}
+.fp-sb-status-step {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+  color: #6E7264;
+}
+.fp-sb-status-step.done { color: #87FF38; }
+.fp-sb-status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; flex-shrink: 0;
+}
+.fp-sb-fundraising { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.fp-sb-fundraising-bar {
+  height: 4px; border-radius: 2px;
+  background: rgba(135, 255, 56, 0.12);
+  overflow: hidden;
+}
+.fp-sb-fundraising-fill { height: 100%; background: #87FF38; transition: width 0.6s ease; }
+.fp-sb-fundraising-meta {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-interphases-mono), monospace;
+  font-size: 11px; color: #ADB0A0;
+}
+
 .fp-sb-link {
   display: block; width: 100%;
   background: #1A1E19; border-radius: 12px;

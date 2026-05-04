@@ -438,6 +438,49 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
             </div>
           </div>
 
+          {/* Status / Fundraising — only when film not yet released */}
+          {film.status !== "Released" && (
+            <div className="fp-sb-card fp-sb-status">
+              <span className="fp-sb-label">
+                {isFundraising ? "Fundraising" : "Status"}
+              </span>
+              <p className="fp-sb-status-headline">
+                {isFundraising
+                  ? `In production — targeting ${film.year}`
+                  : `${film.status}${film.year ? ` — targeting ${film.year}` : ""}`}
+              </p>
+              {film.timeline.length > 0 && (
+                <div className="fp-sb-status-steps">
+                  {film.timeline.map((step) => (
+                    <div key={step.label} className={`fp-sb-status-step ${step.done ? "done" : ""}`}>
+                      <span className="fp-sb-status-dot" />
+                      <span>{step.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {film.fundraising && (
+                <div className="fp-sb-fundraising">
+                  <div className="fp-sb-fundraising-bar">
+                    <div
+                      className="fp-sb-fundraising-fill"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          (film.fundraising.raised / film.fundraising.goal) * 100
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                  <div className="fp-sb-fundraising-meta">
+                    <span>${film.fundraising.raised.toLocaleString()} raised</span>
+                    <span>${film.fundraising.goal.toLocaleString()} goal</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Anchor links */}
           <button className={`fp-sb-link ${activeSection === "about" ? "active" : ""}`} onClick={() => scrollTo("about")}>
             About
