@@ -1,9 +1,12 @@
 export type FilmStatus = "Released" | "Post-Production" | "In Production" | "Filming" | "Pre-Production" | "Coming Soon" | "Fundraising";
 
+export type FilmType = "Feature" | "Mini-Doc" | "Short" | "Video Essay" | "Series";
+
 export type Film = {
   title: string;
   slug: string;
   status: FilmStatus;
+  filmType: FilmType;
   video: string;
   youtubeId: string | null;
   poster: string | null;
@@ -27,6 +30,7 @@ export const films: Film[] = [
     title: "Vite",
     slug: "vite",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/vite.mp4",
     youtubeId: "bmWQqAKLgT4",
     poster: "/posters/vite.png",
@@ -62,6 +66,7 @@ export const films: Film[] = [
     title: "Kubernetes",
     slug: "kubernetes",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/kubernetes.mp4",
     youtubeId: "BE77h7dmoQU",
     poster: null,
@@ -98,6 +103,7 @@ export const films: Film[] = [
     title: "React",
     slug: "react",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/reactjs.mp4",
     youtubeId: "8pDqJVdNa44",
     poster: "/posters/react.png",
@@ -133,6 +139,7 @@ export const films: Film[] = [
     title: "GraphQL",
     slug: "graphql",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/graphql.mp4",
     youtubeId: "783ccP__No8",
     poster: "/posters/graphql.png",
@@ -166,6 +173,7 @@ export const films: Film[] = [
     title: "Node.js",
     slug: "nodejs",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/nodejs.mp4",
     youtubeId: "LB8KwiiUGy0",
     poster: null,
@@ -201,6 +209,7 @@ export const films: Film[] = [
     title: "Local First",
     slug: "local-first",
     status: "Fundraising",
+    filmType: "Feature",
     video: "/clips/localfirst.mp4",
     youtubeId: null,
     poster: null,
@@ -237,6 +246,7 @@ export const films: Film[] = [
     title: "Elixir",
     slug: "elixir",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/elixir.mp4",
     youtubeId: "lxYFOM3UJzo",
     poster: null,
@@ -271,6 +281,7 @@ export const films: Film[] = [
     title: "Angular",
     slug: "angular",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/angular.mp4",
     youtubeId: "cRC9DlH45lA",
     poster: null,
@@ -305,6 +316,7 @@ export const films: Film[] = [
     title: "Vue.js",
     slug: "vuejs",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/vuejs.mp4",
     youtubeId: "OrxmtDw4pVI",
     poster: "/posters/vuejs.png",
@@ -339,6 +351,7 @@ export const films: Film[] = [
     title: "Python",
     slug: "python",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/python.mp4",
     youtubeId: "GfH4QL4VqJ0",
     poster: null,
@@ -380,6 +393,7 @@ export const films: Film[] = [
     title: "Ember.js",
     slug: "emberjs",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/emberjs.mp4",
     youtubeId: "Cvz-9ccflKQ",
     poster: null,
@@ -414,6 +428,7 @@ export const films: Film[] = [
     title: "Ruby on Rails",
     slug: "ruby-on-rails",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/rails.mp4",
     youtubeId: "HDKUEXBF3B4",
     poster: null,
@@ -449,6 +464,7 @@ export const films: Film[] = [
     title: "Java",
     slug: "java",
     status: "In Production",
+    filmType: "Feature",
     video: "/clips/java.mp4",
     youtubeId: null,
     poster: null,
@@ -486,6 +502,7 @@ export const films: Film[] = [
     title: "IntelliJ",
     slug: "intellij",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/intellij.mp4",
     youtubeId: "Kourq_Lz03U",
     poster: null,
@@ -519,6 +536,7 @@ export const films: Film[] = [
     title: "Prometheus",
     slug: "prometheus",
     status: "Released",
+    filmType: "Feature",
     video: "/clips/prometheus.mp4",
     youtubeId: "rT4fJNbfe14",
     poster: null,

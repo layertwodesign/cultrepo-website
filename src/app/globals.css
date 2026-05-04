@@ -1880,7 +1880,17 @@ body.invert .corner-square {
 .fp-sb-label {
   font-family: var(--font-interphases-mono), monospace;
   font-size: 12px; text-transform: uppercase; color: #ADB0A0;
-  margin-bottom: 14px; display: block;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.fp-sb-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid rgba(173, 176, 160, 0.4);
+  border-radius: 999px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #FAFFFF;
+  background: rgba(255, 255, 255, 0.04);
 }
 .fp-sb-film { position: relative; }
 .fp-sb-film-row { display: flex; gap: 12px; align-items: stretch; }

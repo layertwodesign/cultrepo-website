@@ -12,9 +12,9 @@ import {
   ALL_FILMS_QUERY,
   FILM_BY_SLUG_QUERY,
 } from "./hygraph/queries";
-import { films as localFilms, type Film, type FilmStatus } from "./films-data";
+import { films as localFilms, type Film, type FilmStatus, type FilmType } from "./films-data";
 
-export type { Film, FilmStatus };
+export type { Film, FilmStatus, FilmType };
 
 // Tag used for on-demand revalidation when Hygraph fires its webhook.
 export const FILMS_CACHE_TAG = "films";
@@ -25,6 +25,7 @@ type HygraphFilm = {
   title: string;
   slug: string;
   productionStatus: string;
+  filmType: string | null;
   description: string;
   synopsis: string;
   year: string | null;
@@ -54,11 +55,20 @@ const STATUS_MAP: Record<string, FilmStatus> = {
   Fundraising: "Fundraising",
 };
 
+const TYPE_MAP: Record<string, FilmType> = {
+  Feature: "Feature",
+  MiniDoc: "Mini-Doc",
+  Short: "Short",
+  VideoEssay: "Video Essay",
+  Series: "Series",
+};
+
 function fromHygraph(f: HygraphFilm): Film {
   return {
     title: f.title,
     slug: f.slug,
     status: STATUS_MAP[f.productionStatus] ?? "Released",
+    filmType: (f.filmType && TYPE_MAP[f.filmType]) || "Feature",
     description: f.description,
     synopsis: f.synopsis,
     year: f.year ?? "",

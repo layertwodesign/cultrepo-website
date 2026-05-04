@@ -9,6 +9,7 @@ const FILM_FRAGMENT = /* GraphQL */ `
     title
     slug
     productionStatus
+    filmType
     description
     synopsis
     year

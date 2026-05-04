@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getFilmBySlug, getFilms } from "@/lib/films";
+import { getVideoStats } from "@/lib/youtube";
 import FilmPageClient from "./FilmPageClient";
 
 export async function generateMetadata(
@@ -44,5 +45,6 @@ export default async function FilmPage({
     getFilms(),
   ]);
   if (!film) notFound();
-  return <FilmPageClient film={film} allFilms={allFilms} />;
+  const stats = await getVideoStats(film.youtubeId);
+  return <FilmPageClient film={film} allFilms={allFilms} liveViews={stats?.viewCount ?? null} />;
 }

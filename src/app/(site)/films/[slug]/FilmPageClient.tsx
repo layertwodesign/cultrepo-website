@@ -14,9 +14,10 @@ const GRID_COLS = 3;
 type Props = {
   film: Film;
   allFilms: Film[];
+  liveViews: number | null;
 };
 
-export default function FilmPageClient({ film, allFilms }: Props) {
+export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
   const slug = film.slug;
   const { navigateTo, consumeFilmRect } = useTransition();
   const [entered, setEntered] = useState(false);
@@ -365,7 +366,12 @@ export default function FilmPageClient({ film, allFilms }: Props) {
           <div className="fp-sb-card fp-sb-film">
             <div className="fp-sb-film-row">
               <div className="fp-sb-film-info">
-                <span className="fp-sb-label">The Film</span>
+                <span className="fp-sb-label">
+                  The Film
+                  {film.filmType && (
+                    <span className="fp-sb-type-badge">{film.filmType}</span>
+                  )}
+                </span>
                 <div className="fp-sb-film-bottom">
                   <span className="fp-sb-film-title">{film.title}</span>
                   <span className="fp-sb-film-desc">{film.description}</span>
@@ -383,22 +389,33 @@ export default function FilmPageClient({ film, allFilms }: Props) {
             </div>
             <div className="fp-sb-divider" />
             <div className="fp-sb-meta-grid">
-              <div className="fp-sb-meta">
-                <span className="fp-sb-meta-key">Director</span>
-                <span className="fp-sb-meta-val">{film.director}</span>
-              </div>
-              <div className="fp-sb-meta">
-                <span className="fp-sb-meta-key">Year</span>
-                <span className="fp-sb-meta-val">{film.year}</span>
-              </div>
-              <div className="fp-sb-meta">
-                <span className="fp-sb-meta-key">Run Time</span>
-                <span className="fp-sb-meta-val">{film.duration}</span>
-              </div>
-              <div className="fp-sb-meta">
-                <span className="fp-sb-meta-key">Views</span>
-                <span className="fp-sb-meta-val">—</span>
-              </div>
+              {(() => {
+                const director =
+                  film.crew.find((c) => /director(?! of)/i.test(c.role) && !/photography/i.test(c.role))?.name
+                  ?? (film.director || null);
+                const producer = film.crew.find((c) => /producer/i.test(c.role))?.name ?? null;
+                const rows: { key: string; val: string }[] = [];
+                if (director) rows.push({ key: "Director", val: director });
+                if (producer) rows.push({ key: "Producer", val: producer });
+                if (film.year) rows.push({ key: "Year", val: film.year });
+                if (film.duration) rows.push({ key: "Run Time", val: film.duration });
+                rows.push({
+                  key: "Views",
+                  val: liveViews != null
+                    ? liveViews >= 1_000_000
+                      ? `${(liveViews / 1_000_000).toFixed(1)}M`
+                      : liveViews >= 1_000
+                        ? `${(liveViews / 1_000).toFixed(1)}K`
+                        : liveViews.toLocaleString()
+                    : "—",
+                });
+                return rows.map((r) => (
+                  <div key={r.key} className="fp-sb-meta">
+                    <span className="fp-sb-meta-key">{r.key}</span>
+                    <span className="fp-sb-meta-val">{r.val}</span>
+                  </div>
+                ));
+              })()}
             </div>
           </div>
 
