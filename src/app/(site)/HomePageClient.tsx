@@ -820,20 +820,6 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
       )}
 
       <div className={`main ${expandingIdx !== null ? "film-exiting" : ""}`}>
-        {/* Hero heading — top left (visible after shrink completes) */}
-        {isShrinkOrLater && introPhase !== "shrink" && (
-          <div className={`hero ${showUI ? "with-wordmark" : ""}`}>
-            <h1 className="hero-title">
-              <span className="line">
-                <span className="line-inner revealed">Documenting</span>
-              </span>
-              <span className="line">
-                <span className="line-inner revealed">the <span className="green">People</span></span>
-              </span>
-            </h1>
-          </div>
-        )}
-
         {/* Bottom left — logo + description (visible after carousel phase) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
           <div className={`bottom-left ${revealed ? "revealed" : ""}`}>
@@ -841,14 +827,6 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
             <TransitionLink href="/sponsorship" className="home-cta">
               Sponsorship
             </TransitionLink>
-          </div>
-        )}
-
-        {/* Bottom right — big text (visible after shrink completes) */}
-        {isShrinkOrLater && introPhase !== "shrink" && (
-          <div className="bottom-right revealed">
-            <span className="bottom-right-line"><span className="bottom-right-line-inner">Behind World</span></span>
-            <span className="bottom-right-line"><span className="bottom-right-line-inner">Shaping Tech</span></span>
           </div>
         )}
 
