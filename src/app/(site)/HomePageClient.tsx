@@ -844,6 +844,14 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
           </div>
         )}
 
+        {/* Bottom right — big text (visible after shrink completes) */}
+        {isShrinkOrLater && introPhase !== "shrink" && (
+          <div className="bottom-right revealed">
+            <span className="bottom-right-line"><span className="bottom-right-line-inner">Building World-</span></span>
+            <span className="bottom-right-line"><span className="bottom-right-line-inner">Shaping Tech</span></span>
+          </div>
+        )}
+
         {/* Right-side scrolling ticker */}
         <div className={`ticker ${revealed ? "revealed" : ""}`}>
           <div className="ticker-track">
