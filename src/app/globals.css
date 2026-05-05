@@ -1650,6 +1650,7 @@ body.invert .corner-square {
   overflow: hidden;
   border-radius: 12px;
   background: #282C26;
+  border: 1px solid #454940;
 }
 .film-card-video {
   width: 100%;
