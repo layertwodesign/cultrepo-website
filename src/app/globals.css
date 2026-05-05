@@ -1263,21 +1263,24 @@ body.invert .corner-square {
   letter-spacing: -0.01em;
 }
 
-/* Numbers — display-size, no card chrome */
+/* Numbers — display-size, left-aligned, corner-squares between cells */
+.about-numbers-section {
+  margin-top: clamp(48px, 8vh, 96px);
+  margin-bottom: clamp(48px, 8vh, 96px);
+}
 .about-numbers {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  padding: 48px 0;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
 }
 .about-number {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
-  padding: 28px 0;
+  align-items: flex-start;
+  text-align: left;
+  gap: 18px;
+  padding: 40px 48px;
 }
 /* Each .about-number renders <CornerSquares /> internally; first box
    includes all four, subsequent boxes only TR + BR so adjacent boxes
@@ -1296,7 +1299,7 @@ body.invert .corner-square {
 .about-number-meta {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 .about-number-icon {
   display: inline-flex;
@@ -1312,69 +1315,11 @@ body.invert .corner-square {
   color: rgba(250, 255, 255, 0.4);
 }
 
-.about-hero-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
-  margin-top: 0;
-  min-width: clamp(360px, 32vw, 520px);
-}
-.about-hero-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-.about-hero-stat {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 12px;
-  padding: 28px 24px;
-}
-.about-hero-stat .corner-square {
-  --corner-color: #454940;
-}
-.about-hero-stat-value {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
-  font-size: clamp(48px, 5vw, 76px);
-  letter-spacing: -0.04em;
-  color: #FAFFFF;
-  line-height: 1;
-}
-.about-hero-stat-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.about-hero-stat-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(250, 255, 255, 0.4);
-}
-.about-hero-stat-label {
-  font-family: var(--font-interphases-mono), monospace;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(250, 255, 255, 0.4);
-}
 .about-hero-trusted {
-  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-end;
   gap: 14px;
-  padding: 28px 24px;
-  margin-top: -1px;
-}
-.about-hero-trusted .corner-square {
-  --corner-color: #454940;
 }
 .about-partners-label {
   display: inline-block;

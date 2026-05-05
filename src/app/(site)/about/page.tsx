@@ -44,43 +44,22 @@ export default async function AboutPage() {
             <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} />
           </p>
         </div>
-        <div className="about-hero-meta">
-          <div className="about-hero-stats">
-            {about.stats.map((c, i) => (
-              <Reveal key={c.label} delay={300 + i * 120}>
-                <div className="about-hero-stat">
-                  <CornerSquares corners={i === 0 ? ["tl", "tr", "bl", "br"] : ["tr", "br"]} />
-                  <span className="about-hero-stat-value">
-                    <CountUp to={c.value} suffix={c.suffix} decimals={c.decimals} />
-                  </span>
-                  <div className="about-hero-stat-meta">
-                    <span className="about-hero-stat-icon">{ICON_FOR_CHANNEL[c.channel]}</span>
-                    <span className="about-hero-stat-label">{c.label}</span>
-                  </div>
-                </div>
-              </Reveal>
+        <Reveal delay={620} className="about-hero-trusted">
+          <div className="about-partners-logos">
+            {about.trustedBySponsors.map((p) => (
+              <Image
+                key={p.slug}
+                src={p.logo ?? `/partners/${p.slug}.png`}
+                alt={p.name}
+                width={160}
+                height={32}
+                className="about-partner-logo"
+                unoptimized={(p.logo ?? "").endsWith(".svg")}
+              />
             ))}
           </div>
-          <Reveal delay={620}>
-            <div className="about-hero-trusted">
-              <CornerSquares />
-              <div className="about-partners-logos">
-                {about.trustedBySponsors.map((p) => (
-                  <Image
-                    key={p.slug}
-                    src={p.logo ?? `/partners/${p.slug}.png`}
-                    alt={p.name}
-                    width={160}
-                    height={32}
-                    className="about-partner-logo"
-                    unoptimized={(p.logo ?? "").endsWith(".svg")}
-                  />
-                ))}
-              </div>
-              <span className="about-partners-label">Supported by</span>
-            </div>
-          </Reveal>
-        </div>
+          <span className="about-partners-label">Supported by</span>
+        </Reveal>
       </section>
 
       <section className="about-image-break">
@@ -95,6 +74,25 @@ export default async function AboutPage() {
             priority
           />
         </Reveal>
+      </section>
+
+      <section className="about-numbers-section">
+        <div className="about-numbers">
+          {about.stats.map((c, i) => (
+            <Reveal key={c.label} delay={i * 120}>
+              <div className="about-number">
+                <CornerSquares corners={i === 0 ? ["tl", "tr", "bl", "br"] : ["tr", "br"]} />
+                <span className="about-number-value">
+                  <CountUp to={c.value} suffix={c.suffix} decimals={c.decimals} />
+                </span>
+                <div className="about-number-meta">
+                  <span className="about-number-icon">{ICON_FOR_CHANNEL[c.channel]}</span>
+                  <span className="about-number-label">{c.label}</span>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
       <section className="about-story">

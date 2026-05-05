@@ -80,12 +80,13 @@ async function updateAboutPage() {
           create: [
             { data: { value: 370, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" } },
             { data: { value: 20, suffix: "M", decimals: 0, label: "YouTube Views", channel: "YouTube" } },
+            { data: { value: 224, suffix: "", decimals: 0, label: "Videos", channel: "YouTube" } },
           ],
         },
       },
     }
   );
-  console.log(`✓ Replaced ${oldStatIds.length} stats with 2`);
+  console.log(`✓ Replaced ${oldStatIds.length} stats with 3`);
 
   await gql(
     `mutation P($id: ID!) {

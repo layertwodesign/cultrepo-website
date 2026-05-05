@@ -39,6 +39,7 @@ What started as a single YouTube channel has grown into a small studio of filmma
   stats: [
     { value: 370, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },
     { value: 20, suffix: "M", decimals: 0, label: "YouTube Views", channel: "YouTube" },
+    { value: 224, suffix: "", decimals: 0, label: "Videos", channel: "YouTube" },
   ],
   trustedBySponsors: [
     { name: "IBM", slug: "ibm", logo: null },
