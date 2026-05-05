@@ -6,7 +6,7 @@ import TransitionLink from "./TransitionLink";
 import CornerSquares from "./CornerSquares";
 import MenuMarquee from "./MenuMarquee";
 import UnicornBackground from "./UnicornBackground";
-import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon, YOUTUBE_URL } from "./SocialIcons";
+import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon } from "./SocialIcons";
 import type { Film } from "@/lib/films";
 
 const NAV = [
@@ -17,9 +17,13 @@ const NAV = [
 
 type Props = {
   films: Pick<Film, "title" | "slug">[];
+  blueskyUrl: string;
+  xUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
 };
 
-export default function Navigation({ films }: Props) {
+export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, youtubeUrl }: Props) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
@@ -157,7 +161,7 @@ export default function Navigation({ films }: Props) {
             <TransitionLink href="/sponsorship" className="menu-cta menu-cta-primary">
               Sponsorship
             </TransitionLink>
-            <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="menu-cta menu-cta-secondary">
+            <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="menu-cta menu-cta-secondary">
               <span>Subscribe</span>
               <YouTubeIcon size={14} />
             </a>
@@ -168,10 +172,10 @@ export default function Navigation({ films }: Props) {
           <span className="menu-footer-credit">&copy; 2026</span>
 
           <div className="menu-socials">
-            <a href="https://bsky.app/profile/cultrepo.bsky.social" target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Bluesky"><BlueskyIcon /></a>
-            <a href="https://x.com/cultrepo" target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="X"><XIcon /></a>
-            <a href="https://www.instagram.com/cult.repo" target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Instagram"><InstagramIcon /></a>
-            <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="YouTube"><YouTubeIcon /></a>
+            <a href={blueskyUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Bluesky"><BlueskyIcon /></a>
+            <a href={xUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="X"><XIcon /></a>
+            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Instagram"><InstagramIcon /></a>
+            <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="YouTube"><YouTubeIcon /></a>
           </div>
 
           <a href="https://layertwo.design" target="_blank" rel="noopener noreferrer" className="menu-footer-credit menu-footer-credit-link">Site by LayerTwo</a>

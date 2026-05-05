@@ -16,6 +16,8 @@ import TeamMember from "./TeamMember";
 import BottomWordmark from "./BottomWordmark";
 import { getTeam } from "@/lib/team";
 import { getAboutPage } from "@/lib/about";
+import { getSiteSettings } from "@/lib/site-settings";
+import { buildMetadata } from "@/lib/seo";
 
 const ICON_FOR_CHANNEL = {
   YouTube: <YouTubeIcon size={14} />,
@@ -24,16 +26,26 @@ const ICON_FOR_CHANNEL = {
   Bluesky: <YouTubeIcon size={14} />,
 } as const;
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Independent documentaries about the people behind open source and the systems shaping modern technology.",
-  alternates: { canonical: "/about" },
-};
-
+export async function generateMetadata(): Promise<Metadata> {
+  const [about, settings] = await Promise.all([getAboutPage(), getSiteSettings()]);
+  return buildMetadata(
+    about.seo,
+    settings.defaultSeo,
+    {
+      title: "About",
+      description:
+        "Independent documentaries about the people behind open source and the systems shaping modern technology.",
+    },
+    "/about"
+  );
+}
 
 export default async function AboutPage() {
-  const [team, about] = await Promise.all([getTeam(), getAboutPage()]);
+  const [team, about, settings] = await Promise.all([
+    getTeam(),
+    getAboutPage(),
+    getSiteSettings(),
+  ]);
   return (
     <div className="page-container about-editorial">
       <section className="about-hero">
@@ -134,7 +146,13 @@ export default async function AboutPage() {
             </TransitionLink>
           </Reveal>
         </section>
-        <SiteFooter force />
+        <SiteFooter
+          force
+          blueskyUrl={settings.blueskyUrl}
+          xUrl={settings.xUrl}
+          instagramUrl={settings.instagramUrl}
+          youtubeUrl={settings.youtubeUrl}
+        />
       </div>
     </div>
   );

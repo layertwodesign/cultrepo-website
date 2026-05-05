@@ -23,6 +23,12 @@ export type Film = {
   stills: string[];
   timeline: { label: string; done: boolean }[];
   fundraising: { goal: number; raised: number } | null;
+  seo?: {
+    title: string | null;
+    description: string | null;
+    noIndex: boolean | null;
+    ogImage: { url: string; width: number | null; height: number | null } | null;
+  } | null;
 };
 
 export const films: Film[] = [

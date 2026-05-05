@@ -6,6 +6,7 @@
 
 import { hygraphFetch, isHygraphConfigured } from "./hygraph/client";
 import { SITE_SETTINGS_QUERY } from "./hygraph/queries";
+import type { HygraphSeo } from "./seo";
 
 export const SETTINGS_CACHE_TAG = "settings";
 
@@ -17,6 +18,9 @@ export type SiteSettings = {
   instagramUrl: string;
   newsletterFormAction: string | null;
   featuredFilmSlug: string | null;
+  defaultSeo: HygraphSeo;
+  homeSeo: HygraphSeo;
+  filmsListingSeo: HygraphSeo;
 };
 
 const local: SiteSettings = {
@@ -27,6 +31,9 @@ const local: SiteSettings = {
   instagramUrl: "https://www.instagram.com/cult.repo",
   newsletterFormAction: null,
   featuredFilmSlug: null,
+  defaultSeo: null,
+  homeSeo: null,
+  filmsListingSeo: null,
 };
 
 type HygraphSettings = {
@@ -37,6 +44,9 @@ type HygraphSettings = {
   instagramUrl: string | null;
   newsletterFormAction: string | null;
   featuredFilm: { slug: string } | null;
+  defaultSeo: HygraphSeo;
+  homeSeo: HygraphSeo;
+  filmsListingSeo: HygraphSeo;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -56,5 +66,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     instagramUrl: cms.instagramUrl ?? local.instagramUrl,
     newsletterFormAction: cms.newsletterFormAction,
     featuredFilmSlug: cms.featuredFilm?.slug ?? null,
+    defaultSeo: cms.defaultSeo,
+    homeSeo: cms.homeSeo,
+    filmsListingSeo: cms.filmsListingSeo,
   };
 }

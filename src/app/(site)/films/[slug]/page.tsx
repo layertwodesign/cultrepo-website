@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getFilmBySlug, getFilms } from "@/lib/films";
+import { getSiteSettings } from "@/lib/site-settings";
+import { buildMetadata } from "@/lib/seo";
 import { getVideoStats } from "@/lib/youtube";
 import FilmPageClient from "./FilmPageClient";
 
@@ -8,30 +10,21 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const film = await getFilmBySlug(slug);
+  const [film, settings] = await Promise.all([
+    getFilmBySlug(slug),
+    getSiteSettings(),
+  ]);
   if (!film) return {};
-  const description = film.description;
-  const ogImage = film.poster
-    ? [{ url: film.poster, width: 1200, height: 630, alt: film.title }]
-    : undefined;
-  return {
-    title: film.title,
-    description,
-    alternates: { canonical: `/films/${film.slug}` },
-    openGraph: {
-      type: "video.movie",
-      title: `${film.title} — CultRepo`,
-      description,
-      url: `/films/${film.slug}`,
-      ...(ogImage ? { images: ogImage } : {}),
+  return buildMetadata(
+    film.seo ?? null,
+    settings.defaultSeo,
+    {
+      title: film.title,
+      description: film.description,
+      ogImage: film.poster ?? null,
     },
-    twitter: {
-      card: "summary_large_image",
-      title: `${film.title} — CultRepo`,
-      description,
-      ...(ogImage ? { images: ogImage } : {}),
-    },
-  };
+    `/films/${film.slug}`
+  );
 }
 
 export default async function FilmPage({

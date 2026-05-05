@@ -2121,6 +2121,28 @@ body.invert .corner-square {
   }
 }
 
+.sponsorship-form-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+.sponsorship-form-title {
+  font-family: var(--font-interphases), sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: #FAFFFF;
+}
+.sponsorship-form-success {
+  font-family: var(--font-interphases), sans-serif;
+  font-size: 18px;
+  color: #FAFFFF;
+  padding: 32px;
+  border: 1px solid #454940;
+  border-radius: 12px;
+  text-align: center;
+}
 .sponsorship-form {
   display: flex;
   flex-direction: column;

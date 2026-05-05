@@ -13,6 +13,7 @@ import {
   FILM_BY_SLUG_QUERY,
 } from "./hygraph/queries";
 import { films as localFilms, type Film, type FilmStatus, type FilmType } from "./films-data";
+import type { HygraphSeo } from "./seo";
 
 export type { Film, FilmStatus, FilmType };
 
@@ -43,6 +44,7 @@ type HygraphFilm = {
   timeline: { label: string; done: boolean }[];
   fundraisingGoal: number | null;
   fundraisingRaised: number | null;
+  seo: HygraphSeo;
 };
 
 const STATUS_MAP: Record<string, FilmStatus> = {
@@ -88,6 +90,7 @@ function fromHygraph(f: HygraphFilm): Film {
       f.fundraisingGoal != null && f.fundraisingRaised != null
         ? { goal: f.fundraisingGoal, raised: f.fundraisingRaised }
         : null,
+    seo: f.seo,
   };
 }
 

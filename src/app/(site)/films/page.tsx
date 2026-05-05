@@ -1,9 +1,26 @@
+import type { Metadata } from "next";
 import { getFilms } from "@/lib/films";
+import { getSiteSettings } from "@/lib/site-settings";
+import { buildMetadata } from "@/lib/seo";
 import TransitionLink from "@/components/TransitionLink";
 import Reveal from "@/components/Reveal";
 
 const STAGGER_MS = 80;
 const GRID_COLS = 3;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return buildMetadata(
+    settings.filmsListingSeo,
+    settings.defaultSeo,
+    {
+      title: "Films",
+      description:
+        "Documentaries, shorts, and video essays from CultRepo — about the people building open source and modern technology.",
+    },
+    "/films"
+  );
+}
 
 export default async function FilmsPage() {
   const films = await getFilms();

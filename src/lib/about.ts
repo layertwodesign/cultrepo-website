@@ -4,6 +4,7 @@
 
 import { hygraphFetch, isHygraphConfigured } from "./hygraph/client";
 import { ABOUT_PAGE_QUERY } from "./hygraph/queries";
+import type { HygraphSeo } from "./seo";
 
 export type AboutStat = {
   value: number;
@@ -22,6 +23,7 @@ export type AboutPageData = {
   backstageImage: string | null;
   stats: AboutStat[];
   trustedBySponsors: { name: string; slug: string; logo: string | null }[];
+  seo: HygraphSeo;
 };
 
 export const ABOUT_CACHE_TAG = "about";
@@ -48,6 +50,7 @@ What started as a single YouTube channel has grown into a small studio of filmma
     { name: "JetBrains", slug: "jetbrains", logo: null },
     { name: "Shopify", slug: "shopify", logo: null },
   ],
+  seo: null,
 };
 
 type HygraphAboutPage = {
@@ -63,6 +66,7 @@ type HygraphAboutPage = {
     slug: string;
     logo: { url: string } | null;
   }[];
+  seo: HygraphSeo;
 };
 
 export async function getAboutPage(): Promise<AboutPageData> {
@@ -91,5 +95,6 @@ export async function getAboutPage(): Promise<AboutPageData> {
           logo: s.logo?.url ?? null,
         }))
       : localAbout.trustedBySponsors,
+    seo: cms.seo,
   };
 }

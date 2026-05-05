@@ -4,6 +4,19 @@
  * Keep these aligned with the schema described in HYGRAPH_SETUP.md.
  */
 
+const SEO_FRAGMENT = /* GraphQL */ `
+  fragment SeoFields on Seo {
+    title
+    description
+    noIndex
+    ogImage {
+      url
+      width
+      height
+    }
+  }
+`;
+
 const FILM_FRAGMENT = /* GraphQL */ `
   fragment FilmFields on Film {
     title
@@ -53,10 +66,12 @@ const FILM_FRAGMENT = /* GraphQL */ `
     }
     fundraisingGoal
     fundraisingRaised
+    seo { ...SeoFields }
   }
 `;
 
 export const ALL_FILMS_QUERY = /* GraphQL */ `
+  ${SEO_FRAGMENT}
   ${FILM_FRAGMENT}
   query AllFilms {
     films(orderBy: order_ASC, first: 200) {
@@ -66,6 +81,7 @@ export const ALL_FILMS_QUERY = /* GraphQL */ `
 `;
 
 export const FILM_BY_SLUG_QUERY = /* GraphQL */ `
+  ${SEO_FRAGMENT}
   ${FILM_FRAGMENT}
   query FilmBySlug($slug: String!) {
     film(where: { slug: $slug }) {
@@ -91,6 +107,7 @@ export const TEAM_MEMBERS_QUERY = /* GraphQL */ `
 `;
 
 export const ABOUT_PAGE_QUERY = /* GraphQL */ `
+  ${SEO_FRAGMENT}
   query AboutPage {
     aboutPages(first: 1) {
       heroTitle
@@ -117,20 +134,35 @@ export const ABOUT_PAGE_QUERY = /* GraphQL */ `
           url
         }
       }
+      seo { ...SeoFields }
     }
   }
 `;
 
 export const SPONSORSHIP_PAGE_QUERY = /* GraphQL */ `
+  ${SEO_FRAGMENT}
   query SponsorshipPage {
     sponsorshipPages(first: 1) {
       heroCopy
       formRecipientEmail
+      formTitle
+      formSubmitLabel
+      formSuccessMessage
+      formFields {
+        label
+        name
+        type
+        required
+        options
+        placeholder
+      }
+      seo { ...SeoFields }
     }
   }
 `;
 
 export const SITE_SETTINGS_QUERY = /* GraphQL */ `
+  ${SEO_FRAGMENT}
   query SiteSettings {
     siteSettingsItems(first: 1) {
       tagline
@@ -142,6 +174,9 @@ export const SITE_SETTINGS_QUERY = /* GraphQL */ `
       featuredFilm {
         slug
       }
+      defaultSeo { ...SeoFields }
+      homeSeo { ...SeoFields }
+      filmsListingSeo { ...SeoFields }
     }
   }
 `;
