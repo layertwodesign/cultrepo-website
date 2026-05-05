@@ -792,6 +792,15 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
       {showUI && <style>{`.top-wordmark { opacity: 1 !important; pointer-events: auto !important; }`}</style>}
       {expandingIdx !== null && <style>{`.top-wordmark { opacity: 0 !important; transition: opacity 0.35s ease !important; }`}</style>}
 
+      {/* Hide hamburger + disable interaction until intro completes (first-time only) */}
+      {!showUI && (
+        <style>{`
+          .hamburger { opacity: 0 !important; pointer-events: none !important; transition: opacity 0.5s ease; }
+          body { cursor: wait; }
+          body * { pointer-events: none !important; }
+        `}</style>
+      )}
+
 
       {showDebug && (
         <div style={{
