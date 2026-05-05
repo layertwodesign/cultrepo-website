@@ -45,6 +45,7 @@ export default async function AboutPage() {
           </p>
         </div>
         <Reveal delay={620} className="about-hero-trusted">
+          <span className="about-partners-label">Supported by</span>
           <div className="about-partners-logos">
             {about.trustedBySponsors.map((p) => (
               <Image
@@ -58,7 +59,6 @@ export default async function AboutPage() {
               />
             ))}
           </div>
-          <span className="about-partners-label">Supported by</span>
         </Reveal>
       </section>
 

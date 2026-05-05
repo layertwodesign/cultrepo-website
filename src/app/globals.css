@@ -1318,7 +1318,7 @@ body.invert .corner-square {
 .about-hero-trusted {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
 }
 .about-partners-label {
@@ -1333,7 +1333,7 @@ body.invert .corner-square {
 .about-partners-logos {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: clamp(20px, 3vw, 48px);
 }
