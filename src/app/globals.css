@@ -1935,7 +1935,7 @@ body.invert .corner-square {
 .fp-sb-film-title {
   display: block; font-family: var(--font-interphases), sans-serif;
   font-weight: 600; font-size: 30px; line-height: 0.95;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.03em;
   color: #FAFFFF; margin-bottom: 9px;
 }
 .fp-sb-film-desc {
