@@ -1527,7 +1527,7 @@ body.invert .corner-square {
 .team-member-name {
   font-family: var(--font-interphases), sans-serif;
   font-size: 15px;
-  font-weight: 300;
+  font-weight: 600;
   color: #FAFFFF;
 }
 .team-member-role {
@@ -1808,7 +1808,7 @@ body.invert .corner-square {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
 .fp-featuring-info { display: flex; flex-direction: column; gap: 3px; }
-.fp-featuring-name { font-size: 15px; font-weight: 300; color: #FAFFFF; }
+.fp-featuring-name { font-size: 15px; font-weight: 600; color: #FAFFFF; }
 .fp-featuring-role {
   font-family: var(--font-interphases-mono), monospace;
   font-size: 10px; font-weight: 400; text-transform: uppercase;
@@ -1836,7 +1836,7 @@ body.invert .corner-square {
   font-size: 9px; font-weight: 400; text-transform: uppercase;
   letter-spacing: 0.04em; color: #6E7366;
 }
-.fp-crew-name { font-size: 13px; font-weight: 300; color: #FAFFFF; }
+.fp-crew-name { font-size: 13px; font-weight: 600; color: #FAFFFF; }
 
 /* Sponsors */
 .fp-sponsors { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
