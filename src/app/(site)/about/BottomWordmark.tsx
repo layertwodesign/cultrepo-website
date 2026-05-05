@@ -1,31 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import TransitionLink from "@/components/TransitionLink";
 
 export default function BottomWordmark() {
-  const sentinelRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setVisible(entry.isIntersecting),
-      { rootMargin: "-20% 0px 0px 0px" }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+    const onScroll = () => {
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      setVisible(atBottom);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (
-    <>
-      <div ref={sentinelRef} aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none" }} />
-      <TransitionLink
-        href="/"
-        aria-label="Home"
-        className={`bottom-wordmark ${visible ? "visible" : ""}`}
-      />
-    </>
+    <TransitionLink
+      href="/"
+      aria-label="Home"
+      className={`bottom-wordmark ${visible ? "visible" : ""}`}
+    />
   );
 }
