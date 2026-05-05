@@ -13,6 +13,7 @@ import CornerSquares from "@/components/CornerSquares";
 import CountUp from "@/components/CountUp";
 import SiteFooter from "@/components/SiteFooter";
 import TeamMember from "./TeamMember";
+import BottomWordmark from "./BottomWordmark";
 import { getTeam } from "@/lib/team";
 import { getAboutPage } from "@/lib/about";
 
@@ -117,6 +118,7 @@ export default async function AboutPage() {
       </section>
 
       <div className="about-final-block">
+        <BottomWordmark />
         <section className="about-final-cta">
           <Reveal>
             <h2 className="about-final-cta-title">{about.ctaTitle}</h2>
