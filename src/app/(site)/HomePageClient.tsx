@@ -820,6 +820,20 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
       )}
 
       <div className={`main ${expandingIdx !== null ? "film-exiting" : ""}`}>
+        {/* Hero heading — top left (visible after shrink completes) */}
+        {isShrinkOrLater && introPhase !== "shrink" && (
+          <div className={`hero ${showUI ? "with-wordmark" : ""}`}>
+            <h1 className="hero-title">
+              <span className="line">
+                <span className="line-inner revealed">Documenting</span>
+              </span>
+              <span className="line">
+                <span className="line-inner revealed">the <span className="green">People</span></span>
+              </span>
+            </h1>
+          </div>
+        )}
+
         {/* Bottom left — logo + description (visible after carousel phase) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
           <div className={`bottom-left ${revealed ? "revealed" : ""}`}>
