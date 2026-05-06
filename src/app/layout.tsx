@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const diatype = localFont({
-  src: [
-    { path: "./fonts/ABCDiatype-Regular.otf", weight: "400" },
-    { path: "./fonts/ABCDiatype-Bold.otf", weight: "700" },
-  ],
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["400", "700"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const diatypeMono = localFont({
-  src: [
-    { path: "./fonts/ABCDiatypeMono-Medium.otf", weight: "400" },
-  ],
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
   variable: "--font-mono",
   display: "swap",
 });
@@ -57,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${diatype.variable} ${diatypeMono.variable}`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://www.youtube.com" />
         <link rel="preconnect" href="https://i.ytimg.com" />
