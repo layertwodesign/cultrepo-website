@@ -1216,14 +1216,18 @@ body.invert .corner-square {
   left: 40px;
   right: 40px;
   bottom: 48px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 18px;
 }
-.menu-footer > :first-child { justify-self: start; }
-.menu-footer > :last-child { justify-self: end; }
-.menu-footer .menu-socials { justify-self: center; }
+.menu-footer-meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
 .menu-footer-credit {
   font-family: var(--font-mono), monospace;
   font-size: 12px;
@@ -1234,13 +1238,11 @@ body.invert .corner-square {
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.menu-footer-credit-link:hover {
-  color: #FAFFFF;
-}
+.menu-footer-credit-link:hover { color: #FAFFFF; }
 .menu-socials {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 .menu-social {
   color: rgba(250, 255, 255, 0.4);
@@ -1249,9 +1251,7 @@ body.invert .corner-square {
   justify-content: center;
   transition: color 0.3s ease;
 }
-.menu-social:hover {
-  color: #FAFFFF;
-}
+.menu-social:hover { color: #FAFFFF; }
 
 /* Hamburger X state */
 .hamburger.open {
@@ -2338,13 +2338,31 @@ body.invert .corner-square {
 /* ============ SITE FOOTER ============ */
 .site-footer {
   padding: 48px 40px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
-.site-footer > :first-child { justify-self: start; }
-.site-footer > :last-child { justify-self: end; }
+.site-footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.site-footer-social {
+  color: rgba(250, 255, 255, 0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+.site-footer-social:hover { color: #FAFFFF; }
+.site-footer-meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
 .site-footer-credit {
   font-family: var(--font-mono), monospace;
   font-size: 12px;
@@ -2355,25 +2373,7 @@ body.invert .corner-square {
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.site-footer-credit-link:hover {
-  color: #FAFFFF;
-}
-.site-footer-socials {
-  justify-self: center;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.site-footer-social {
-  color: rgba(250, 255, 255, 0.4);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.3s ease;
-}
-.site-footer-social:hover {
-  color: #FAFFFF;
-}
+.site-footer-credit-link:hover { color: #FAFFFF; }
 
 /* ============ HOME GRID SECTION ============ */
 .home-grid-section {
@@ -2557,10 +2557,17 @@ body.invert .corner-square {
   .site-footer { padding: 24px 16px; gap: 14px; grid-template-columns: 1fr; justify-items: center; }
   .site-footer > :first-child,
   .site-footer > :last-child { justify-self: center; }
-  .menu-overlay { padding: 9vh 16px 5vh; gap: 4vh; }
+  /* Allow vertical scroll within the menu — content can be taller than viewport */
+  .menu-overlay {
+    align-content: start;
+    overflow-y: auto;
+    padding: 11vh 16px 4vh;
+    gap: 3vh;
+  }
   .menu-marquee { margin-left: -16px; }
   .menu-cards { grid-template-columns: 1fr; gap: 1.5vh; }
-  .menu-card { min-height: 9vh; }
+  /* Generous tap targets for the main links */
+  .menu-card { min-height: 13vh; padding: 24px; }
   .menu-card-title { font-size: clamp(32px, 9vw, 52px); }
   .menu-actions {
     flex-direction: column;
@@ -2580,6 +2587,21 @@ body.invert .corner-square {
     padding: 0 16px;
     justify-content: center;
     height: 56px;
+  }
+  /* Footer moves into flow when the menu scrolls */
+  .menu-footer {
+    position: static;
+    margin-top: 3vh;
+    left: auto; right: auto; bottom: auto;
+  }
+  /* When an X is present (menu open or on a film page), scale the logo up
+     and shift its top so its vertical center aligns with the X (y=44) */
+  .top-wordmark.menu-active,
+  .top-wordmark.on-film {
+    top: 32px;
+    left: 16px;
+    width: 150px;
+    height: 24px;
   }
   .menu-footer { grid-template-columns: 1fr; gap: 12px; justify-items: center; text-align: center; }
   .menu-footer > :first-child,

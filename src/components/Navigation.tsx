@@ -187,16 +187,17 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
         </div>
 
         <div className="menu-footer">
-          <span className="menu-footer-credit">&copy; 2026</span>
-
           <div className="menu-socials">
-            <a href={blueskyUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Bluesky"><BlueskyIcon /></a>
-            <a href={xUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="X"><XIcon /></a>
-            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Instagram"><InstagramIcon /></a>
-            <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="YouTube"><YouTubeIcon /></a>
+            <a href={blueskyUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Bluesky"><BlueskyIcon size={22} /></a>
+            <a href={xUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="X"><XIcon size={22} /></a>
+            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="Instagram"><InstagramIcon size={22} /></a>
+            <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="menu-social" aria-label="YouTube"><YouTubeIcon size={22} /></a>
           </div>
 
-          <a href="https://layertwo.design" target="_blank" rel="noopener noreferrer" className="menu-footer-credit menu-footer-credit-link">Site by LayerTwo</a>
+          <div className="menu-footer-meta">
+            <span className="menu-footer-credit">&copy; 2026</span>
+            <a href="https://layertwo.design" target="_blank" rel="noopener noreferrer" className="menu-footer-credit menu-footer-credit-link">Site by LayerTwo</a>
+          </div>
         </div>
       </div>
     </>
