@@ -35,6 +35,7 @@ type HygraphFilm = {
   youtubeId: string | null;
   poster: HygraphAsset | null;
   videoClip: HygraphAsset | null;
+  videoClipHd: HygraphAsset | null;
   stills: HygraphAsset[];
   cast: { name: string; role: string; photo: { url: string } | null }[];
   crew: { name: string; role: string }[];
@@ -79,6 +80,7 @@ function fromHygraph(f: HygraphFilm): Film {
     youtubeId: f.youtubeId ?? null,
     poster: f.poster?.url ?? null,
     video: f.videoClip?.url ?? "",
+    videoHd: f.videoClipHd?.url ?? null,
     stills: f.stills.map((a) => a.url),
     cast: f.cast.map((c) => ({ name: c.name, role: c.role, photo: c.photo?.url ?? null })),
     crew: f.crew,

@@ -61,7 +61,7 @@ type IntroPhase =
 
 export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const allItems = useMemo(
-    () => films.map((f) => ({ title: f.title, slug: f.slug, status: f.status, video: f.video })),
+    () => films.map((f) => ({ title: f.title, slug: f.slug, status: f.status, video: f.video, videoHd: f.videoHd ?? null })),
     [films]
   );
   const { navigateTo, setFilmRect } = useTransition();
@@ -355,6 +355,60 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Lazy upgrade: once the intro is done, swap each carousel video from the
+  // 720p source to the 1080p source. Preloads the HD asset off-DOM, then
+  // assigns it to the live element while preserving currentTime.
+  useEffect(() => {
+    if (introPhase !== "done") return;
+
+    const upgrade = (idx: number, hdUrl: string) => {
+      const live = videoRefs.current[idx];
+      if (!live) return;
+      // Skip if already swapped
+      if (live.dataset.hdLoaded === "1") return;
+
+      const pre = document.createElement("video");
+      pre.preload = "auto";
+      pre.muted = true;
+      pre.playsInline = true;
+      pre.src = hdUrl;
+
+      const onReady = () => {
+        pre.removeEventListener("canplaythrough", onReady);
+        if (!live.isConnected || live.dataset.hdLoaded === "1") return;
+        const t = live.currentTime;
+        live.dataset.hdLoaded = "1";
+        live.src = hdUrl;
+        const onMeta = () => {
+          live.removeEventListener("loadedmetadata", onMeta);
+          try { live.currentTime = Math.min(t, (live.duration || 15) - 0.1); } catch {}
+          live.play().catch(() => {});
+        };
+        live.addEventListener("loadedmetadata", onMeta);
+        live.load();
+      };
+      pre.addEventListener("canplaythrough", onReady);
+      pre.load();
+    };
+
+    let cancelled = false;
+    const startUpgrades = () => {
+      // Stagger so we don't open 15 connections at once
+      items.forEach((item, idx) => {
+        if (!item.videoHd) return;
+        setTimeout(() => {
+          if (!cancelled) upgrade(idx, item.videoHd!);
+        }, idx * 250);
+      });
+    };
+
+    const timer = window.setTimeout(startUpgrades, 1200);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [introPhase, items]);
 
   // Cursor-label lerp loop — eases the "VIEW FILM" label toward the mouse
   // each frame and writes its visibility based on cursorRef.visible (set by

@@ -7,3 +7,7 @@ tsconfig.tsbuildinfo
 .env
 .env.local
 .env.*.local
+
+# Working dir for video clip regen pipeline (uploaded to Hygraph as assets)
+/public/clips-new/
+

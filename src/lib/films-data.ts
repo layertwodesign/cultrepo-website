@@ -8,6 +8,7 @@ export type Film = {
   status: FilmStatus;
   filmType: FilmType;
   video: string;
+  videoHd?: string | null;
   youtubeId: string | null;
   poster: string | null;
   description: string;

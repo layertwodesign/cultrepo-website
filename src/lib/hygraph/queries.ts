@@ -37,6 +37,9 @@ const FILM_FRAGMENT = /* GraphQL */ `
     videoClip {
       url
     }
+    videoClipHd {
+      url
+    }
     stills {
       url
     }
