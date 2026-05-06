@@ -421,7 +421,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       const wrapperW = wrapper.getBoundingClientRect().width;
       const centerY = wrapperH / 2;
 
-      const effectiveBaseWidth = Math.min(p.baseWidth, wrapperW * 0.6);
+      // Cap base width so the largest (maxScale) item still fits both width and height
+      const widthCap = wrapperW * 0.6;
+      const heightCap = (wrapperH * 0.78) * (16 / 9) / p.maxScale;
+      const effectiveBaseWidth = Math.min(p.baseWidth, widthCap, heightCap);
       const itemH = effectiveBaseWidth / (16 / 9);
       const slotH = itemH + p.gap;
       const totalH = slotH * items.length;
@@ -540,8 +543,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       const wrapper = wrapperRef.current;
       if (!wrapper) { rafId = requestAnimationFrame(loop); return; }
       const p = paramsRef.current;
-      const wW = wrapper.getBoundingClientRect().width;
-      const effectiveBW = Math.min(p.baseWidth, wW * 0.6);
+      const wRect = wrapper.getBoundingClientRect();
+      const wW = wRect.width;
+      const wH = wRect.height;
+      const effectiveBW = Math.min(p.baseWidth, wW * 0.6, (wH * 0.78) * (16 / 9) / p.maxScale);
 
       // While carousel is blocked, hide all items and skip positioning
       if (state.carouselBlocked) {
