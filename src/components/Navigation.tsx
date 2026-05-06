@@ -38,7 +38,9 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  const wordmarkVisible = open || (!isHome && !isFilm);
+  // On film pages: hidden on desktop (sidebar carries the brand), but shown
+  // on mobile (where the sidebar is gone). Handled by a CSS rule below.
+  const wordmarkVisible = open || !isHome;
 
   // Marquee strip — film titles, repeated for seamless scroll
   const marqueeItems = [...films, ...films].map((f, i) => (
@@ -55,7 +57,7 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
     <>
       <TransitionLink
         href="/"
-        className={`top-wordmark ${wordmarkVisible ? "visible" : ""} ${open ? "menu-active" : ""}`}
+        className={`top-wordmark ${wordmarkVisible ? "visible" : ""} ${open ? "menu-active" : ""} ${isFilm ? "on-film" : ""}`}
         style={{ zIndex: 210 }}
       />
 

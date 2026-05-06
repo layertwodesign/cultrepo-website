@@ -981,7 +981,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                       let targetW: number;
                       if (isMobile) {
                         targetLeft = 12;
-                        targetTop = 64;
+                        targetTop = 80;
                         targetW = window.innerWidth - 24;
                       } else if (isTablet) {
                         const padLeft = 28, padRight = 28, sidebarW = 300, gap = 20;

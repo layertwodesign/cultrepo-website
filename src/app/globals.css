@@ -362,6 +362,11 @@ body.invert .corner-square {
   background-color: #FAFFFF;
   z-index: 10001;
 }
+/* Wordmark on film pages: only show on mobile (sidebar carries the brand on desktop/tablet) */
+.top-wordmark.on-film:not(.menu-active) { opacity: 0; pointer-events: none; }
+@media (max-width: 640px) {
+  .top-wordmark.on-film { opacity: 1 !important; pointer-events: auto !important; }
+}
 
 .bottom-wordmark {
   position: fixed;
@@ -1773,25 +1778,30 @@ body.invert .corner-square {
 }
 .fp-close:hover { background: rgba(250, 255, 255, 0.1); }
 
-/* Mobile-only close — sits left of the hamburger; hidden on tablet+desktop */
+/* Mobile-only close — sits left of the hamburger; same size + style.
+   Display defaults to none, switched to inline-flex in the mobile media query. */
 .fp-close-mobile {
   display: none;
   position: fixed;
   top: 22px;
-  right: 60px;
-  z-index: 100;
-  width: 36px;
-  height: 36px;
-  background: rgba(250, 255, 255, 0.08);
-  border: 1px solid rgba(250, 255, 255, 0.18);
-  border-radius: 9px;
+  right: 68px; /* 16 (hamburger right) + 44 (hamburger w) + 8 (gap) */
+  z-index: 10000;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(50px) saturate(1.4);
+  -webkit-backdrop-filter: blur(50px) saturate(1.4);
+  isolation: isolate;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   color: #FAFFFF;
+  padding: 0;
   transition: background 0.3s ease;
 }
-.fp-close-mobile:hover { background: rgba(250, 255, 255, 0.16); }
+.fp-close-mobile:hover { background: rgba(255, 255, 255, 0.16); }
 
 /* Two-column layout */
 .fp-layout {
@@ -2522,7 +2532,7 @@ body.invert .corner-square {
   .home-grid-section { padding: 12px 16px 20px; }
 
   /* Single film page — sidebar hidden, video at top */
-  .fp-layout { flex-direction: column; padding: 64px 12px 48px; gap: 12px; }
+  .fp-layout { flex-direction: column; padding: 80px 12px 48px; gap: 12px; }
   .fp-sidebar { display: none; }
   .fp-close-mobile { display: inline-flex; }
   .fp-section { padding: 20px; }
