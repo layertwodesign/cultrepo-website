@@ -2510,6 +2510,15 @@ body.invert .corner-square {
   .hamburger { right: 16px; top: 22px; }
   .hero { left: 16px; top: 90px; }
   .hero.with-wordmark { top: 90px; }
+  /* Re-enable ticker on mobile as a thin right-edge column above the gradient */
+  .ticker {
+    display: block !important;
+    width: 130px;
+    z-index: 7;
+  }
+  .ticker-row { grid-template-columns: 1fr; gap: 0; padding: 2px 16px 2px 0; }
+  .ticker-name { display: none; }
+  .ticker-tech { font-size: 10px; opacity: 0.55; }
   .bottom-left { left: 16px; bottom: 16px; }
   .bottom-right { right: 16px; bottom: 16px; }
   .bottom-ghost { height: 42px; margin-bottom: 10px; }
