@@ -32,7 +32,7 @@ const localAbout: AboutPageData = {
   heroTitle: "Films about the people behind the systems we use every day.",
   heroSubtitle:
     "Feature-length documentaries, shorts, and video essays. A repository of the canonical stories of technology.",
-  story: `Founded in 2018, Cult.Repo is an independent media company making cinematic documentaries about the people who build technology, with a special focus on open source software.
+  story: `Founded in 2018, CultRepo is an independent media company making cinematic documentaries about the people who build technology, with a special focus on open source software.
 
 What started as a single YouTube channel has grown into a small studio of filmmakers committed to the idea that technology has a human story worth telling.`,
   ctaTitle: "Sponsor a film.",

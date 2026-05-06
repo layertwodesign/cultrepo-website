@@ -72,7 +72,7 @@ async function seedAboutPage() {
         heroSubtitle:
           "Independent. Long-form. Made with the people who built the things, not about them.",
         story:
-          "Founded in 2018 as Honeypot, Cult.Repo is an independent media platform telling the human stories behind technology — with a particular focus on the people who build and maintain open source.\n\nWhat started as a single YouTube channel has grown into a small studio of filmmakers chasing the stories that don't fit into a blog post or a release note.",
+          "Founded in 2018 as Honeypot, CultRepo is an independent media platform telling the human stories behind technology — with a particular focus on the people who build and maintain open source.\n\nWhat started as a single YouTube channel has grown into a small studio of filmmakers chasing the stories that don't fit into a blog post or a release note.",
         stats: {
           create: [
             { value: 250, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },

@@ -139,7 +139,7 @@ export default function AdminBrandPage() {
                 <span className="admin-type-use">{f.use}</span>
               </div>
               <div className="admin-type-sample">
-                <span style={{ fontFamily: f.fontFamilyVar }}>Cult.Repo · 0123456789</span>
+                <span style={{ fontFamily: f.fontFamilyVar }}>CultRepo · 0123456789</span>
               </div>
             </li>
           ))}
