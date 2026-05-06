@@ -10,6 +10,8 @@ import type { HygraphSeo } from "./seo";
 
 export const SETTINGS_CACHE_TAG = "settings";
 
+export type TickerEntry = { tech: string; name: string };
+
 export type SiteSettings = {
   tagline: string;
   youtubeUrl: string;
@@ -21,6 +23,7 @@ export type SiteSettings = {
   defaultSeo: HygraphSeo;
   homeSeo: HygraphSeo;
   filmsListingSeo: HygraphSeo;
+  homepageTicker: TickerEntry[];
 };
 
 const local: SiteSettings = {
@@ -34,6 +37,7 @@ const local: SiteSettings = {
   defaultSeo: null,
   homeSeo: null,
   filmsListingSeo: null,
+  homepageTicker: [],
 };
 
 type HygraphSettings = {
@@ -47,6 +51,7 @@ type HygraphSettings = {
   defaultSeo: HygraphSeo;
   homeSeo: HygraphSeo;
   filmsListingSeo: HygraphSeo;
+  homepageTicker: { name: string; people: string[] }[] | null;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -69,5 +74,28 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     defaultSeo: cms.defaultSeo,
     homeSeo: cms.homeSeo,
     filmsListingSeo: cms.filmsListingSeo,
+    homepageTicker: flattenTicker(cms.homepageTicker),
   };
+}
+
+// Flatten [{name: "Vue.js", people: ["A", "B"]}] -> [{tech, name}, {tech, name}]
+// Round-robin across techs so the same tech doesn't appear consecutively.
+function flattenTicker(
+  groups: { name: string; people: string[] }[] | null
+): TickerEntry[] {
+  if (!groups?.length) return [];
+  const queues = groups.map((g) => ({ tech: g.name, queue: [...(g.people ?? [])] }));
+  const out: TickerEntry[] = [];
+  let any = true;
+  while (any) {
+    any = false;
+    for (const q of queues) {
+      const person = q.queue.shift();
+      if (person) {
+        out.push({ tech: q.tech, name: person });
+        any = true;
+      }
+    }
+  }
+  return out;
 }

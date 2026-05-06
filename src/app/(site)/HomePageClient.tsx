@@ -4,46 +4,14 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 import type { Film } from "@/lib/films";
+import type { TickerEntry } from "@/lib/site-settings";
 import CornerSquares from "@/components/CornerSquares";
 
 type Props = {
   films: Film[];
   featuredSlug?: string | null;
+  ticker: TickerEntry[];
 };
-
-// Right-side ticker data
-const tickerData = [
-  { tech: "GraphQL", name: "Arnulfo Bayer" },
-  { tech: "Vue.js", name: "Brigitte Jast" },
-  { tech: "Kubernetes", name: "Jontae Heaney" },
-  { tech: "Prometheus", name: "Karelle Tromp" },
-  { tech: "React.js", name: "Eli Wisoky" },
-  { tech: "Ruby on Rails", name: "Doug Crona" },
-  { tech: "Node.js", name: "Kenzie Lesch" },
-  { tech: "Angular", name: "Ford Schmeler" },
-  { tech: "Python", name: "Maverick Botsford" },
-  { tech: "Vite", name: "Jaquan Grady" },
-  { tech: "Elixir", name: "Jayson Crona" },
-  { tech: "Ember.js", name: "Adrienne Jast" },
-  { tech: "GraphQL", name: "Jayson Heaney" },
-  { tech: "Vue.js", name: "Lucious Tromp" },
-  { tech: "Kubernetes", name: "Shea Trantow" },
-  { tech: "Prometheus", name: "Randy Wisoky" },
-  { tech: "React.js", name: "Newell Crona" },
-  { tech: "Ruby on Rails", name: "Kyeesha Bayer" },
-  { tech: "Node.js", name: "Newell Rohan" },
-  { tech: "Angular", name: "Eusebio Lesch" },
-  { tech: "Python", name: "Arnulfo Jast" },
-  { tech: "Vite", name: "Brigitte Crona" },
-  { tech: "Elixir", name: "Breana Beier" },
-  { tech: "Ember.js", name: "Jontae Rohan" },
-  { tech: "GraphQL", name: "Karelle Beier" },
-  { tech: "Vue.js", name: "Eli Lesch" },
-  { tech: "Kubernetes", name: "Eusebio Rohan" },
-  { tech: "Prometheus", name: "Doug Beier" },
-  { tech: "React.js", name: "Kyeesha Lesch" },
-  { tech: "Ruby on Rails", name: "Eusebio Crona" },
-];
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -91,7 +59,7 @@ type IntroPhase =
   | "carousel"       // Carousel scrolls through, UI elements appear
   | "done";          // Intro complete
 
-export default function HomePageClient({ films, featuredSlug }: Props) {
+export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const allItems = useMemo(
     () => films.map((f) => ({ title: f.title, slug: f.slug, status: f.status, video: f.video })),
     [films]
@@ -739,7 +707,9 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
   }, []);
 
   // Triple the ticker for seamless loop
-  const tickerItems = [...tickerData, ...tickerData, ...tickerData];
+  const tickerItems = ticker.length > 0
+    ? [...ticker, ...ticker, ...ticker]
+    : [];
 
   const isShrinkOrLater = introPhase === "shrink" || introPhase === "carousel" || introPhase === "done";
   const showIntroOverlay = introPhase === "loading" || introPhase === "bar-fade";

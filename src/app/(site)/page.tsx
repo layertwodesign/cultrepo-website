@@ -20,5 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const [films, settings] = await Promise.all([getFilms(), getSiteSettings()]);
-  return <HomePageClient films={films} featuredSlug={settings.featuredFilmSlug} />;
+  return (
+    <HomePageClient
+      films={films}
+      featuredSlug={settings.featuredFilmSlug}
+      ticker={settings.homepageTicker}
+    />
+  );
 }
