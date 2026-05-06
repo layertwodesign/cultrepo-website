@@ -154,6 +154,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     carouselDone: false,
     gridNotified: false,
     rulerY: 0,
+    centeredIdx: 0,
   });
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -430,6 +431,14 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       const totalH = slotH * items.length;
       const maxDist = wrapperH / 2 + itemH;
 
+      // Track which item is currently centered, so we can re-anchor on resize
+      if (state.initialized && items.length > 0) {
+        const centerOffset = wrapperH / 2 - itemH / 2;
+        const rawIdx = (state.current + centerOffset) / slotH;
+        const len = items.length;
+        state.centeredIdx = ((Math.round(rawIdx) % len) + len) % len;
+      }
+
       if (!state.carouselDone) {
         if (state.current > totalH) {
           state.current -= totalH;
@@ -692,7 +701,23 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     window.addEventListener("touchstart", onTouchStart, { passive: false });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
 
-    const onResize = () => {};
+    const onResize = () => {
+      const wrapper = wrapperRef.current;
+      if (!wrapper || !state.initialized) return;
+      const p = paramsRef.current;
+      const wRect = wrapper.getBoundingClientRect();
+      const wW = wRect.width;
+      const wH = wRect.height;
+      const eBW = Math.min(p.baseWidth, wW * 0.6, (wH * 0.78) * (16 / 9) / p.maxScale);
+      const itemH = eBW / (16 / 9);
+      const slotH = itemH + p.gap;
+      const centerOffset = wH / 2 - itemH / 2;
+      // Re-anchor so the same item stays centered after resize
+      const newPos = state.centeredIdx * slotH - centerOffset;
+      state.current = newPos;
+      state.target = newPos;
+      state.snapping = false;
+    };
     window.addEventListener("resize", onResize);
 
     return () => {
