@@ -476,9 +476,13 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       const wrapperW = wrapper.getBoundingClientRect().width;
       const centerY = wrapperH / 2;
 
-      // Cap base width so the largest (maxScale) item still fits both width and height
-      const widthCap = wrapperW * 0.6;
-      const heightCap = (wrapperH * 0.78) * (16 / 9) / p.maxScale;
+      // Cap base width so the largest (maxScale) item still fits both width and height.
+      // Mobile (≤640px): use most of the viewport — videos read as cards.
+      const isMobileWrap = wrapperW <= 640;
+      const widthMul = isMobileWrap ? 0.88 : 0.6;
+      const heightMul = isMobileWrap ? 0.92 : 0.78;
+      const widthCap = wrapperW * widthMul;
+      const heightCap = (wrapperH * heightMul) * (16 / 9) / p.maxScale;
       const effectiveBaseWidth = Math.min(p.baseWidth, widthCap, heightCap);
       const itemH = effectiveBaseWidth / (16 / 9);
       const slotH = itemH + p.gap;
@@ -609,7 +613,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       const wRect = wrapper.getBoundingClientRect();
       const wW = wRect.width;
       const wH = wRect.height;
-      const effectiveBW = Math.min(p.baseWidth, wW * 0.6, (wH * 0.78) * (16 / 9) / p.maxScale);
+      const isMobileW = wW <= 640;
+      const widthMul = isMobileW ? 0.88 : 0.6;
+      const heightMul = isMobileW ? 0.92 : 0.78;
+      const effectiveBW = Math.min(p.baseWidth, wW * widthMul, (wH * heightMul) * (16 / 9) / p.maxScale);
 
       // While carousel is blocked, hide all items and skip positioning
       if (state.carouselBlocked) {
@@ -762,7 +769,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       const wRect = wrapper.getBoundingClientRect();
       const wW = wRect.width;
       const wH = wRect.height;
-      const eBW = Math.min(p.baseWidth, wW * 0.6, (wH * 0.78) * (16 / 9) / p.maxScale);
+      const isMobileR = wW <= 640;
+      const widthMulR = isMobileR ? 0.88 : 0.6;
+      const heightMulR = isMobileR ? 0.92 : 0.78;
+      const eBW = Math.min(p.baseWidth, wW * widthMulR, (wH * heightMulR) * (16 / 9) / p.maxScale);
       const itemH = eBW / (16 / 9);
       const slotH = itemH + p.gap;
       const centerOffset = wH / 2 - itemH / 2;

@@ -2505,13 +2505,34 @@ body.invert .corner-square {
   /* Home / hero */
   .hero-title { font-size: clamp(28px, 9vw, 44px); }
   .bottom-right-line-inner { font-size: clamp(28px, 9vw, 44px); }
-  .top-wordmark { left: 16px; top: 22px; width: 76px; height: 12px; }
+  /* Wordmark sized to vertically center with the 44px hamburger (center y=44) */
+  .top-wordmark { left: 16px; top: 32px; width: 150px; height: 24px; }
   .hamburger { right: 16px; top: 22px; }
-  .hero { left: 16px; top: 22px; }
-  .hero.with-wordmark { top: 50px; }
+  .hero { left: 16px; top: 90px; }
+  .hero.with-wordmark { top: 90px; }
   .bottom-left { left: 16px; bottom: 16px; }
   .bottom-right { right: 16px; bottom: 16px; }
   .bottom-ghost { height: 42px; margin-bottom: 10px; }
+  /* Top + bottom gradient scrims so headings/logo stay legible over carousel */
+  .main::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 200px;
+    background: linear-gradient(to bottom, rgba(13,17,15,0.85) 0%, rgba(13,17,15,0.5) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 6;
+  }
+  .main::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 240px;
+    background: linear-gradient(to top, rgba(13,17,15,0.85) 0%, rgba(13,17,15,0.5) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 6;
+  }
+  .hero, .bottom-left, .bottom-right { z-index: 10; }
   .home-cta { font-size: 11px; padding: 9px 14px; }
 
   /* Page container */
