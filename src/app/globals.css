@@ -1099,6 +1099,74 @@ body.invert .corner-square {
   color: #0D110F;
 }
 
+/* Newsletter success state — replaces the form when subscribed */
+.menu-email-success {
+  flex: 0 1 880px;
+  max-width: 880px;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #87FF38;
+  background: rgba(135, 255, 56, 0.08);
+  border-radius: 14px;
+  height: 64px;
+  padding: 0 22px;
+  animation: menuEmailSuccessIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.menu-email-success-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #87FF38;
+  color: #0D110F;
+  font-size: 16px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.menu-email-success-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.menu-email-success-title {
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #87FF38;
+}
+.menu-email-success-sub {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(250, 255, 255, 0.55);
+}
+.menu-email-success-dismiss {
+  background: transparent;
+  border: 0;
+  color: rgba(250, 255, 255, 0.55);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.menu-email-success-dismiss:hover {
+  color: #FAFFFF;
+  background: rgba(250, 255, 255, 0.06);
+}
+@keyframes menuEmailSuccessIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .menu-cta-row {
   display: flex;
   gap: 16px;
@@ -1704,6 +1772,26 @@ body.invert .corner-square {
   transition: background 0.3s ease;
 }
 .fp-close:hover { background: rgba(250, 255, 255, 0.1); }
+
+/* Mobile-only close — sits left of the hamburger; hidden on tablet+desktop */
+.fp-close-mobile {
+  display: none;
+  position: fixed;
+  top: 22px;
+  right: 60px;
+  z-index: 100;
+  width: 36px;
+  height: 36px;
+  background: rgba(250, 255, 255, 0.08);
+  border: 1px solid rgba(250, 255, 255, 0.18);
+  border-radius: 9px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: #FAFFFF;
+  transition: background 0.3s ease;
+}
+.fp-close-mobile:hover { background: rgba(250, 255, 255, 0.16); }
 
 /* Two-column layout */
 .fp-layout {
@@ -2433,10 +2521,10 @@ body.invert .corner-square {
   .home-grid { grid-template-columns: 1fr; gap: 12px; }
   .home-grid-section { padding: 12px 16px 20px; }
 
-  /* Single film page — stack sidebar above main, compact */
-  .fp-layout { flex-direction: column; padding: 16px 12px 48px; gap: 12px; }
-  .fp-sidebar { width: 100%; position: static; margin-top: 0; order: -1; }
-  .fp-close { position: fixed; top: 18px; right: 60px; left: auto; }
+  /* Single film page — sidebar hidden, video at top */
+  .fp-layout { flex-direction: column; padding: 64px 12px 48px; gap: 12px; }
+  .fp-sidebar { display: none; }
+  .fp-close-mobile { display: inline-flex; }
   .fp-section { padding: 20px; }
   .fp-images-row { grid-template-columns: 1fr; gap: 10px; }
   .fp-image-full { aspect-ratio: 16 / 10; }
@@ -2459,13 +2547,30 @@ body.invert .corner-square {
   .site-footer { padding: 24px 16px; gap: 14px; grid-template-columns: 1fr; justify-items: center; }
   .site-footer > :first-child,
   .site-footer > :last-child { justify-self: center; }
-  .menu-overlay { padding: 80px 16px 24px; gap: 18px; }
+  .menu-overlay { padding: 9vh 16px 5vh; gap: 4vh; }
   .menu-marquee { margin-left: -16px; }
-  .menu-cards { grid-template-columns: 1fr; gap: 10px; }
+  .menu-cards { grid-template-columns: 1fr; gap: 1.5vh; }
+  .menu-card { min-height: 9vh; }
   .menu-card-title { font-size: clamp(32px, 9vw, 52px); }
-  .menu-actions { grid-template-columns: 1fr; gap: 14px; }
-  .menu-cta-row { flex-direction: column; }
-  .menu-cta { justify-content: center; }
+  .menu-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2vh;
+  }
+  .menu-email,
+  .menu-email-success { flex: 1 1 auto; max-width: none; width: 100%; }
+  .menu-email-submit { min-width: 0; padding: 0 24px; }
+  .menu-cta-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .menu-cta {
+    min-width: 0;
+    padding: 0 16px;
+    justify-content: center;
+    height: 56px;
+  }
   .menu-footer { grid-template-columns: 1fr; gap: 12px; justify-items: center; text-align: center; }
   .menu-footer > :first-child,
   .menu-footer > :last-child { justify-self: center; }

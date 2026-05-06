@@ -974,13 +974,26 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                       setExpandingIdx(idx);
 
                       // Calculate the target position: where the video sits on the film page
-                      const padLeft = 40;
-                      const padRight = 40;
-                      const sidebarW = 370;
-                      const gap = 16;
-                      const targetLeft = padLeft;
-                      const targetTop = 32;
-                      const targetW = window.innerWidth - padLeft - gap - sidebarW - padRight;
+                      const isMobile = window.innerWidth <= 640;
+                      const isTablet = !isMobile && window.innerWidth <= 1024;
+                      let targetLeft: number;
+                      let targetTop: number;
+                      let targetW: number;
+                      if (isMobile) {
+                        targetLeft = 12;
+                        targetTop = 64;
+                        targetW = window.innerWidth - 24;
+                      } else if (isTablet) {
+                        const padLeft = 28, padRight = 28, sidebarW = 300, gap = 20;
+                        targetLeft = padLeft;
+                        targetTop = 28;
+                        targetW = window.innerWidth - padLeft - gap - sidebarW - padRight;
+                      } else {
+                        const padLeft = 40, padRight = 40, sidebarW = 370, gap = 16;
+                        targetLeft = padLeft;
+                        targetTop = 32;
+                        targetW = window.innerWidth - padLeft - gap - sidebarW - padRight;
+                      }
                       const targetH = targetW * 9 / 16;
 
                       const el = itemRefs.current[idx];

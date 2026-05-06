@@ -114,49 +114,65 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
         </nav>
 
         <div className="menu-actions">
-          <form
-            className="menu-email"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              if (status === "loading") return;
-              setStatus("loading");
-              try {
-                const res = await fetch("/api/newsletter", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ email }),
-                });
-                if (!res.ok) throw new Error("failed");
-                setStatus("ok");
-                setEmail("");
-              } catch {
-                setStatus("error");
-              }
-            }}
-          >
-            <input
-              type="email"
-              required
-              placeholder={
-                status === "ok"
-                  ? "Thanks — check your inbox"
-                  : status === "error"
+          {status === "ok" ? (
+            <div className="menu-email-success" role="status" aria-live="polite">
+              <span className="menu-email-success-check" aria-hidden>✓</span>
+              <div className="menu-email-success-text">
+                <span className="menu-email-success-title">You&rsquo;re in</span>
+                <span className="menu-email-success-sub">Check your inbox to confirm</span>
+              </div>
+              <button
+                type="button"
+                className="menu-email-success-dismiss"
+                onClick={() => setStatus("idle")}
+                aria-label="Dismiss"
+              >
+                ×
+              </button>
+            </div>
+          ) : (
+            <form
+              className="menu-email"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (status === "loading") return;
+                setStatus("loading");
+                try {
+                  const res = await fetch("/api/newsletter", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                  });
+                  if (!res.ok) throw new Error("failed");
+                  setStatus("ok");
+                  setEmail("");
+                } catch {
+                  setStatus("error");
+                }
+              }}
+            >
+              <input
+                type="email"
+                required
+                placeholder={
+                  status === "error"
                     ? "Something went wrong, try again"
                     : "Enter email"
-              }
-              className="menu-email-input"
-              aria-label="Email address"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status !== "idle" && status !== "loading") setStatus("idle");
-              }}
-              disabled={status === "loading"}
-            />
-            <button type="submit" className="menu-email-submit" disabled={status === "loading"}>
-              {status === "loading" ? "Joining…" : "Join our email list"}
-            </button>
-          </form>
+                }
+                className="menu-email-input"
+                aria-label="Email address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (status !== "idle" && status !== "loading") setStatus("idle");
+                }}
+                disabled={status === "loading"}
+              />
+              <button type="submit" className="menu-email-submit" disabled={status === "loading"}>
+                {status === "loading" ? "Joining…" : "Join our email list"}
+              </button>
+            </form>
+          )}
           <div className="menu-cta-row">
             <TransitionLink href="/sponsorship" className="menu-cta menu-cta-primary">
               Sponsorship
