@@ -133,7 +133,7 @@ export default async function AboutPage() {
         <BottomWordmark />
         <section className="about-final-cta">
           <Reveal>
-            <h2 className="about-final-cta-title">{about.ctaTitle}</h2>
+            <h2 className="about-final-cta-title">{about.ctaTitle.replace(/\.+\s*$/, "")}</h2>
           </Reveal>
           <Reveal delay={150}>
             <p className="about-final-cta-sub">
