@@ -40,7 +40,9 @@ export default function SplitReveal({
     return () => obs.disconnect();
   }, [startDelay]);
 
-  const tokens = text.split(/(\s+)/);
+  // Split only on ASCII whitespace so NBSP (U+00A0) is preserved inside words —
+  // lets callers glue word pairs together to prevent orphans.
+  const tokens = text.split(/([ \t\n]+)/);
   let wordIdx = 0;
 
   return (

@@ -1530,7 +1530,7 @@ body.invert .corner-square {
 }
 .team-member-name {
   font-family: var(--font-sans), sans-serif;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: #FAFFFF;
 }
