@@ -490,7 +490,9 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
                   </div>
                   <div className="film-card-info">
                     <span className="film-card-title">{f.title}</span>
-                    <span className="film-card-status">{f.status}</span>
+                    <span className="film-card-status">
+                      {f.status === "Released" && f.year ? f.year : f.status}
+                    </span>
                   </div>
                 </TransitionLink>
               </Reveal>
