@@ -2339,62 +2339,130 @@ body.invert .corner-square {
 }
 
 /* ============ MOBILE ============ */
-@media screen and (max-width: 991px) {
-  .hero-title { font-size: clamp(27px, 7.5vw, 48px); }
-  .bottom-right-line-inner { font-size: clamp(27px, 7.5vw, 48px); }
+/* ============ TABLET (≤1024px) — moderate scaling, mostly side-by-side ============ */
+@media screen and (max-width: 1024px) {
+  /* Home / hero */
+  .hero-title { font-size: clamp(32px, 5.8vw, 60px); }
+  .bottom-right-line-inner { font-size: clamp(32px, 5.8vw, 60px); }
   .ticker { display: none; }
-  .top-wordmark { left: 20px; top: 28px; width: 80px; height: 13px; }
-  .hamburger { right: 20px; top: 28px; }
-  .hero { left: 20px; top: 28px; }
-  .hero.with-wordmark { top: 56px; }
+  .top-wordmark { left: 24px; top: 28px; width: 88px; height: 14px; }
+  .hamburger { right: 24px; top: 28px; }
+  .hero { left: 24px; top: 28px; }
+  .hero.with-wordmark { top: 60px; }
   .camera-ruler { display: none; }
-  .bottom-left { left: 20px; bottom: 20px; }
-  .bottom-right { right: 20px; bottom: 20px; }
-  .page-container { padding: 100px 20px 60px; }
-  .community-grid { grid-template-columns: 1fr 1fr; }
+  .bottom-left { left: 24px; bottom: 24px; }
+  .bottom-right { right: 24px; bottom: 24px; }
+  .bottom-ghost { height: 56px; margin-bottom: 14px; }
+
+  /* Page container */
+  .page-container { padding: 96px 28px 56px; }
+
+  /* About — keep most structure, just reduce columns moderately */
+  .community-grid { grid-template-columns: repeat(2, 1fr); }
   .about-numbers { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .team-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .about-image-break { height: clamp(280px, 60vh, 480px); }
+  .team-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .about-image-break { height: clamp(280px, 50vh, 460px); }
   .about-hero { grid-template-columns: 1fr; align-items: start; gap: 40px; }
   .about-partners-logos { gap: 32px; }
   .about-partner-logo { height: 24px; }
-  .about-story-layout { grid-template-columns: 1fr; gap: 40px; text-align: left; }
-  .about-story-ghost img { max-width: 280px; margin-inline: 0; }
+  .about-story-layout { gap: 48px; }
   .about-sponsors { flex-wrap: wrap; }
-  .films-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .fp-layout { flex-direction: column; padding: 20px 16px 60px; }
+
+  /* Films listing & home grid — 2-col */
+  .films-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .home-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .home-grid-section { padding: 16px 24px 24px; }
+
+  /* Single film page — slim sidebar, side-by-side preserved */
+  .fp-layout { padding: 28px 28px 64px; gap: 20px; }
+  .fp-sidebar { width: 300px; }
+  .fp-section { padding: 36px; }
+  .fp-images-row { gap: 12px; }
+  .fp-featuring { grid-template-columns: repeat(3, 1fr); }
+  .fp-crew { grid-template-columns: repeat(3, 1fr); }
+  .fp-more-films { padding: 0 28px 64px; }
+
+  /* Sponsorship */
+  .sponsorship-page { padding: 112px 28px 56px; }
+  .sponsorship-layout { gap: 48px; }
+
+  /* Footer & menu */
+  .site-footer { padding: 28px 24px; }
+  .menu-overlay { padding: 96px 28px 32px; gap: 24px; }
+  .menu-card-title { font-size: clamp(40px, 7vw, 72px); }
+  .home-footer { padding: 24px 24px; }
+  .home-footer-nav { gap: 22px; }
+}
+
+/* ============ MOBILE (≤640px) — single-column, tightest spacing ============ */
+@media screen and (max-width: 640px) {
+  /* Home / hero */
+  .hero-title { font-size: clamp(28px, 9vw, 44px); }
+  .bottom-right-line-inner { font-size: clamp(28px, 9vw, 44px); }
+  .top-wordmark { left: 16px; top: 22px; width: 76px; height: 12px; }
+  .hamburger { right: 16px; top: 22px; }
+  .hero { left: 16px; top: 22px; }
+  .hero.with-wordmark { top: 50px; }
+  .bottom-left { left: 16px; bottom: 16px; }
+  .bottom-right { right: 16px; bottom: 16px; }
+  .bottom-ghost { height: 42px; margin-bottom: 10px; }
+  .home-cta { font-size: 11px; padding: 9px 14px; }
+
+  /* Page container */
+  .page-container { padding: 80px 16px 40px; }
+
+  /* About — full single column */
+  .community-grid { grid-template-columns: 1fr; }
+  .about-numbers { grid-template-columns: 1fr; gap: 20px; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .about-image-break { height: clamp(200px, 40vh, 340px); }
+  .about-hero { gap: 28px; }
+  .about-story-layout { grid-template-columns: 1fr; gap: 32px; text-align: left; }
+  .about-story-ghost img { max-width: 220px; margin-inline: 0; }
+
+  /* Films listing & home grid — 1-col */
+  .films-grid { grid-template-columns: 1fr; gap: 14px; }
+  .home-grid { grid-template-columns: 1fr; gap: 12px; }
+  .home-grid-section { padding: 12px 16px 20px; }
+
+  /* Single film page — stack sidebar above main, compact */
+  .fp-layout { flex-direction: column; padding: 16px 12px 48px; gap: 12px; }
   .fp-sidebar { width: 100%; position: static; margin-top: 0; order: -1; }
-  .fp-close { position: fixed; top: 20px; left: auto; right: 70px; }
-  .fp-section { padding: 24px; }
-  .fp-images-row { grid-template-columns: 1fr; }
-  .fp-featuring { grid-template-columns: repeat(2, 1fr); }
-  .fp-crew { grid-template-columns: repeat(2, 1fr); }
-  .fp-more-films { padding: 0 20px 60px; }
+  .fp-close { position: fixed; top: 18px; right: 60px; left: auto; }
+  .fp-section { padding: 20px; }
+  .fp-images-row { grid-template-columns: 1fr; gap: 10px; }
+  .fp-image-full { aspect-ratio: 16 / 10; }
+  .fp-featuring { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .fp-crew { grid-template-columns: 1fr; gap: 12px; }
+  .fp-more-films { padding: 0 16px 48px; }
+  .fp-sb-card { padding: 18px; }
   .fp-sb-meta-grid { grid-template-columns: 1fr 1fr; }
-  .sponsorship-page { padding: 120px 20px 60px; }
-  .sponsorship-layout { grid-template-columns: 1fr; gap: 56px; }
+  .fp-humans-heading { font-size: 24px; margin-bottom: 18px; }
+  .fp-crew-heading { margin-top: 32px; }
+  .fp-about-text { font-size: clamp(17px, 4.8vw, 22px); }
+  .fp-status-headline { font-size: 18px; }
+
+  /* Sponsorship */
+  .sponsorship-page { padding: 88px 16px 48px; }
+  .sponsorship-layout { grid-template-columns: 1fr; gap: 40px; }
   .sponsorship-content { position: static; top: auto; }
-  .site-footer { padding: 32px 20px; gap: 16px; grid-template-columns: 1fr; justify-items: center; }
+
+  /* Footer & menu */
+  .site-footer { padding: 24px 16px; gap: 14px; grid-template-columns: 1fr; justify-items: center; }
   .site-footer > :first-child,
   .site-footer > :last-child { justify-self: center; }
-  .menu-overlay { padding: 88px 20px 32px; gap: 24px; }
-  .menu-marquee { margin-left: -20px; }
-  .menu-cards { grid-template-columns: 1fr; gap: 12px; }
-  .menu-card-title { font-size: clamp(36px, 9vw, 64px); }
-  .menu-actions { grid-template-columns: 1fr; gap: 16px; }
+  .menu-overlay { padding: 80px 16px 24px; gap: 18px; }
+  .menu-marquee { margin-left: -16px; }
+  .menu-cards { grid-template-columns: 1fr; gap: 10px; }
+  .menu-card-title { font-size: clamp(32px, 9vw, 52px); }
+  .menu-actions { grid-template-columns: 1fr; gap: 14px; }
   .menu-cta-row { flex-direction: column; }
   .menu-cta { justify-content: center; }
-  .menu-footer { grid-template-columns: 1fr; gap: 16px; justify-items: center; text-align: center; }
+  .menu-footer { grid-template-columns: 1fr; gap: 12px; justify-items: center; text-align: center; }
   .menu-footer > :first-child,
   .menu-footer > :last-child { justify-self: center; }
-  .home-grid-section { padding: 16px 20px 20px; }
-  .home-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .home-footer { padding: 24px 20px; }
-  .home-footer-nav { gap: 20px; }
-}
-@media screen and (max-width: 600px) {
-  .films-grid { grid-template-columns: 1fr; }
-  .home-grid { grid-template-columns: 1fr; }
+  .home-footer { padding: 20px 16px; }
+  .home-footer-nav { gap: 16px; }
 }
 
 /* ================================================================
