@@ -1209,6 +1209,8 @@ body.invert .corner-square {
 .about-editorial {
   padding-top: clamp(192px, 22vh, 280px);
   padding-bottom: 0;
+  max-width: 1640px;
+  margin-inline: auto;
 }
 .about-editorial > section {
   margin-bottom: clamp(96px, 14vw, 200px);
@@ -1227,7 +1229,7 @@ body.invert .corner-square {
   padding-top: 0;
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
   gap: clamp(40px, 6vw, 120px);
   align-items: end;
 }
