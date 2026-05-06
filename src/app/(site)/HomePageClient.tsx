@@ -76,7 +76,7 @@ function Slider({ label, value, min, max, step, onChange }: {
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
         style={{ flex: 1, accentColor: "#FAFFFF" }} />
-      <span style={{ width: 50, textAlign: "right", fontFamily: "var(--font-interphases-mono), monospace" }}>{value.toFixed(1)}</span>
+      <span style={{ width: 50, textAlign: "right", fontFamily: "var(--font-mono), monospace" }}>{value.toFixed(1)}</span>
     </label>
   );
 }
@@ -802,10 +802,10 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
           position: "fixed", top: 60, right: 16, zIndex: 999,
           background: "rgba(0,0,0,0.9)", border: "1px solid rgba(255,255,255,0.15)",
           borderRadius: 8, padding: "16px 20px", width: 340,
-          color: "#FAFFFF", fontFamily: "var(--font-interphases), sans-serif",
+          color: "#FAFFFF", fontFamily: "var(--font-sans), sans-serif",
           pointerEvents: "auto",
         }}>
-          <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
             Tuning Panel <span style={{ opacity: 0.4 }}>(D to toggle)</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

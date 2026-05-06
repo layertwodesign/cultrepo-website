@@ -26,8 +26,8 @@ function CardPreview({ preview }: { preview: Preview }) {
   }
   return (
     <div className="admin-card-preview admin-card-preview-fonts">
-      <span style={{ fontFamily: "var(--font-interphases)", fontWeight: 600 }}>Aa</span>
-      <span style={{ fontFamily: "var(--font-interphases-mono)", fontWeight: 400 }}>Aa</span>
+      <span style={{ fontFamily: "var(--font-sans)", fontWeight: 700 }}>Aa</span>
+      <span style={{ fontFamily: "var(--font-mono)", fontWeight: 400 }}>Aa</span>
     </div>
   );
 }

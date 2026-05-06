@@ -43,14 +43,14 @@ const FONTS = [
     role: "Display + UI",
     weights: "300 / 400 / 500 / 600 / 700",
     use: "Headlines, body text, button labels.",
-    fontFamilyVar: "var(--font-interphases)",
+    fontFamilyVar: "var(--font-sans)",
   },
   {
     name: "TT Interphases Pro Mono",
     role: "Labels, code, small caps",
     weights: "400 / 700",
     use: "Eyebrows, ticker, status pills, footers.",
-    fontFamilyVar: "var(--font-interphases-mono)",
+    fontFamilyVar: "var(--font-mono)",
   },
 ];
 

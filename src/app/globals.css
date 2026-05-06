@@ -22,7 +22,7 @@ html, body {
   min-height: 100%;
   background: #0D110F;
   color: #FAFFFF;
-  font-family: var(--font-interphases), "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans), "Helvetica Neue", sans-serif;
 }
 body {
   transition: background-color 0.6s ease, color 0.6s ease;
@@ -179,8 +179,8 @@ button, input, textarea, select {
   top: 32px;
   left: 40px;
   text-align: left;
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(64px, 9vw, 140px);
   line-height: 0.92;
   letter-spacing: -0.03em;
@@ -193,8 +193,8 @@ button, input, textarea, select {
   bottom: 40px;
   right: 40px;
   text-align: right;
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(64px, 9vw, 140px);
   line-height: 0.92;
   letter-spacing: -0.03em;
@@ -501,8 +501,8 @@ body.invert .corner-square {
   top: 76px;
 }
 .hero-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(36px, 4.5vw, 75px);
   line-height: 0.92;
   letter-spacing: -0.03em;
@@ -545,7 +545,7 @@ body.invert .corner-square {
 }
 .bottom-desc {
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.55;
   color: rgba(250, 255, 255, 0.5);
   max-width: 280px;
@@ -567,8 +567,8 @@ body.invert .corner-square {
 }
 .bottom-right-line-inner {
   display: block;
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(36px, 4.5vw, 75px);
   line-height: 0.92;
   letter-spacing: -0.03em;
@@ -616,7 +616,7 @@ body.invert .corner-square {
 }
 .ticker-tech {
   font-size: 11px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.01em;
   color: rgba(250, 255, 255, 0.3);
   text-align: right;
@@ -624,7 +624,7 @@ body.invert .corner-square {
 }
 .ticker-name {
   font-size: 11px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.01em;
   color: rgba(250, 255, 255, 0.5);
   text-align: left;
@@ -744,8 +744,8 @@ body.invert .corner-square {
   opacity: 1;
 }
 .carousel-overlay-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(32px, 3vw, 44px);
   letter-spacing: -0.02em;
   line-height: 1;
@@ -772,7 +772,7 @@ body.invert .corner-square {
   left: 0;
   z-index: 100;
   pointer-events: none;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 10px;
   font-weight: 400;
   text-transform: uppercase;
@@ -839,7 +839,7 @@ body.invert .corner-square {
 .home-cta {
   display: inline-block;
   margin-top: 12px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
@@ -957,7 +957,7 @@ body.invert .corner-square {
 .menu-marquee-item {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -1020,7 +1020,7 @@ body.invert .corner-square {
   height: 1em;
   line-height: 1;
   overflow: hidden;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-weight: 400;
   font-size: clamp(36px, 4.5vw, 72px);
   letter-spacing: 0.02em;
@@ -1069,7 +1069,7 @@ body.invert .corner-square {
   height: 100%;
   padding: 0 24px;
   color: #FAFFFF;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1086,7 +1086,7 @@ body.invert .corner-square {
   padding: 0 64px;
   min-width: 260px;
   border-radius: 9px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -1108,7 +1108,7 @@ body.invert .corner-square {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   text-transform: uppercase;
@@ -1152,7 +1152,7 @@ body.invert .corner-square {
 .menu-footer > :last-child { justify-self: end; }
 .menu-footer .menu-socials { justify-self: center; }
 .menu-footer-credit {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -1236,8 +1236,8 @@ body.invert .corner-square {
   flex-direction: column;
 }
 .about-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(36px, 4.6vw, 68px);
   line-height: 1;
   letter-spacing: -0.04em;
@@ -1247,9 +1247,9 @@ body.invert .corner-square {
   text-wrap: balance;
 }
 .about-subtitle {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(18px, 1.6vw, 22px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.5;
   color: rgba(250, 255, 255, 0.55);
   max-width: 600px;
@@ -1282,9 +1282,9 @@ body.invert .corner-square {
   .about-story-ghost img { animation: none; }
 }
 .about-story-text {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(20px, 2.2vw, 30px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.45;
   color: rgba(250, 255, 255, 0.85);
   letter-spacing: -0.01em;
@@ -1316,8 +1316,8 @@ body.invert .corner-square {
   --corner-color: #454940;
 }
 .about-number-value {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(56px, 8vw, 112px);
   letter-spacing: -0.04em;
   color: #FAFFFF;
@@ -1335,7 +1335,7 @@ body.invert .corner-square {
   color: rgba(250, 255, 255, 0.4);
 }
 .about-number-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1350,7 +1350,7 @@ body.invert .corner-square {
 }
 .about-partners-label {
   display: inline-block;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -1429,8 +1429,8 @@ body.invert .corner-square {
   margin-top: 24px;
 }
 .about-final-cta-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(48px, 9vw, 144px);
   letter-spacing: -0.04em;
   line-height: 1;
@@ -1439,9 +1439,9 @@ body.invert .corner-square {
   max-width: 14ch;
 }
 .about-final-cta-sub {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(18px, 1.8vw, 24px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.5;
   opacity: 0.6;
   max-width: 540px;
@@ -1466,8 +1466,8 @@ body.invert .corner-square {
   text-align: center;
 }
 .community-stat-value {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(40px, 5vw, 56px);
   letter-spacing: -0.03em;
   color: #FAFFFF;
@@ -1485,7 +1485,7 @@ body.invert .corner-square {
   color: rgba(250, 255, 255, 0.4);
 }
 .community-stat-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
@@ -1525,13 +1525,13 @@ body.invert .corner-square {
   gap: 4px;
 }
 .team-member-name {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: #FAFFFF;
 }
 .team-member-role {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 9px;
   font-weight: 400;
   text-transform: uppercase;
@@ -1546,12 +1546,12 @@ body.invert .corner-square {
 }
 .team-member-bio-text {
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
   color: rgba(250, 255, 255, 0.65);
 }
 .team-member-email {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1571,8 +1571,8 @@ body.invert .corner-square {
   padding: 20px 40px;
   border: 1px solid rgba(250, 255, 255, 0.08);
   border-radius: 8px;
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: 18px;
   color: rgba(250, 255, 255, 0.4);
   letter-spacing: -0.01em;
@@ -1583,8 +1583,8 @@ body.invert .corner-square {
   border-top: 1px solid rgba(250, 255, 255, 0.06);
 }
 .about-cta-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: 32px;
   letter-spacing: -0.03em;
   color: #FAFFFF;
@@ -1597,7 +1597,7 @@ body.invert .corner-square {
 .about-cta-button,
 .about-cta-button:visited {
   display: inline-block;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   text-transform: uppercase;
@@ -1623,8 +1623,8 @@ body.invert .corner-square {
   margin-bottom: 48px;
 }
 .films-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(32px, 5vw, 56px);
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -1670,12 +1670,12 @@ body.invert .corner-square {
   align-items: center;
 }
 .film-card-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 22px;
   color: #FAFFFF;
 }
 .film-card-status {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 10px;
   font-weight: 400;
   text-transform: uppercase;
@@ -1750,7 +1750,7 @@ body.invert .corner-square {
 }
 .fp-label {
   display: block;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px; font-weight: 400;
   text-transform: uppercase; letter-spacing: 0.05em;
   color: #ADB0A0; margin-bottom: 24px;
@@ -1758,7 +1758,7 @@ body.invert .corner-square {
 
 /* About */
 .fp-about-text {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(20px, 2.2vw, 28px); font-weight: 400;
   line-height: 1.5; color: #FAFFFF; max-width: 800px;
 }
@@ -1780,8 +1780,8 @@ body.invert .corner-square {
 
 /* The Humans */
 .fp-humans-heading {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600; font-size: 32px;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700; font-size: 32px;
   color: #FAFFFF; margin-bottom: 24px;
 }
 .fp-crew-heading { margin-top: 48px; }
@@ -1800,17 +1800,17 @@ body.invert .corner-square {
   overflow: hidden;
 }
 .fp-featuring-initials {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600; font-size: 28px; color: #6E7366;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700; font-size: 28px; color: #6E7366;
   text-transform: uppercase; letter-spacing: -0.02em;
 }
 .fp-featuring-photo-img {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
 .fp-featuring-info { display: flex; flex-direction: column; gap: 3px; }
-.fp-featuring-name { font-size: 15px; font-weight: 600; color: #FAFFFF; }
+.fp-featuring-name { font-size: 15px; font-weight: 700; color: #FAFFFF; }
 .fp-featuring-role {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 10px; font-weight: 400; text-transform: uppercase;
   letter-spacing: 0.04em; color: #6E7366;
 }
@@ -1827,26 +1827,26 @@ body.invert .corner-square {
   overflow: hidden;
 }
 .fp-crew-initials {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 14px; color: #6E7366;
 }
 .fp-crew-info { display: flex; flex-direction: column; gap: 2px; }
 .fp-crew-role {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 9px; font-weight: 400; text-transform: uppercase;
   letter-spacing: 0.04em; color: #6E7366;
 }
-.fp-crew-name { font-size: 13px; font-weight: 600; color: #FAFFFF; }
+.fp-crew-name { font-size: 13px; font-weight: 700; color: #FAFFFF; }
 
 /* Sponsors */
 .fp-sponsors { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
 .fp-sponsor {
   padding: 16px 32px; border: 1px solid #282C26; border-radius: 8px;
-  font-weight: 600; font-size: 16px; color: #ADB0A0;
+  font-weight: 700; font-size: 16px; color: #ADB0A0;
 }
 .fp-sponsor-note { font-size: 13px; color: #6E7366; margin-bottom: 8px; }
 .fp-sponsor-link {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
   color: #87FF38; text-decoration: none;
 }
@@ -1855,7 +1855,7 @@ body.invert .corner-square {
 /* Tech chips */
 .fp-techs { display: flex; flex-wrap: wrap; gap: 8px; }
 .fp-tech {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px; color: #ADB0A0;
   background: rgba(250, 255, 255, 0.03); border: 1px solid #282C26;
   padding: 7px 14px; border-radius: 100px;
@@ -1863,9 +1863,9 @@ body.invert .corner-square {
 
 /* Status — for unreleased films */
 .fp-status-headline {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(18px, 1.8vw, 22px);
-  font-weight: 600;
+  font-weight: 700;
   color: #FAFFFF;
   margin-bottom: 24px;
 }
@@ -1875,7 +1875,7 @@ body.invert .corner-square {
 }
 .fp-status-step {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;
   color: rgba(250, 255, 255, 0.4);
 }
@@ -1895,7 +1895,7 @@ body.invert .corner-square {
 }
 .fp-fundraising-meta {
   display: flex; justify-content: space-between;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px; color: #ADB0A0;
 }
 
@@ -1909,7 +1909,7 @@ body.invert .corner-square {
   padding: 22px 20px;
 }
 .fp-sb-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px; text-transform: uppercase; color: #ADB0A0;
   margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
 }
@@ -1933,8 +1933,8 @@ body.invert .corner-square {
 .fp-sb-film-info .fp-sb-label { margin-bottom: 0; }
 .fp-sb-film-bottom { display: flex; flex-direction: column; gap: 8px; }
 .fp-sb-film-title {
-  display: block; font-family: var(--font-interphases), sans-serif;
-  font-weight: 600; font-size: 30px; line-height: 0.95;
+  display: block; font-family: var(--font-sans), sans-serif;
+  font-weight: 700; font-size: 30px; line-height: 0.95;
   letter-spacing: -0.03em;
   color: #FAFFFF; margin-bottom: 9px;
 }
@@ -1961,7 +1961,7 @@ body.invert .corner-square {
 }
 .fp-sb-meta { display: flex; flex-direction: column; gap: 4px; }
 .fp-sb-meta-key {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 10px; text-transform: uppercase; color: #ADB0A0;
 }
 .fp-sb-meta-val { font-size: 14px; color: #FAFFFF; }
@@ -1970,8 +1970,8 @@ body.invert .corner-square {
 /* Status / fundraising card in the sidebar */
 .fp-sb-status { display: flex; flex-direction: column; gap: 14px; }
 .fp-sb-status-headline {
-  font-family: var(--font-interphases), sans-serif;
-  font-size: 17px; font-weight: 600; line-height: 1.25;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 17px; font-weight: 700; line-height: 1.25;
   color: #FAFFFF; margin: 0;
 }
 .fp-sb-status-steps {
@@ -1982,7 +1982,7 @@ body.invert .corner-square {
 }
 .fp-sb-status-step {
   display: flex; align-items: center; gap: 8px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
   color: #6E7264;
 }
@@ -2000,7 +2000,7 @@ body.invert .corner-square {
 .fp-sb-fundraising-fill { height: 100%; background: #87FF38; transition: width 0.6s ease; }
 .fp-sb-fundraising-meta {
   display: flex; justify-content: space-between;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px; color: #ADB0A0;
 }
 
@@ -2008,7 +2008,7 @@ body.invert .corner-square {
   display: block; width: 100%;
   background: #1A1E19; border-radius: 12px;
   padding: 18px 20px; border: none; cursor: pointer;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px; text-transform: uppercase; color: #ADB0A0;
   text-align: left; transition: color 0.3s ease, background 0.3s ease;
 }
@@ -2019,7 +2019,7 @@ body.invert .corner-square {
   display: flex; justify-content: space-between; align-items: center;
   background: #1A1E19; border-radius: 12px; padding: 18px 20px;
   text-decoration: none;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px; text-transform: uppercase;
   letter-spacing: -0.03em; color: #87FF38;
   transition: background 0.3s ease;
@@ -2086,8 +2086,8 @@ body.invert .corner-square {
 }
 .sponsorship-title {
   position: relative;
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(28px, 3.4vw, 48px);
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -2128,14 +2128,14 @@ body.invert .corner-square {
   width: 100%;
 }
 .sponsorship-form-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: 22px;
   letter-spacing: -0.01em;
   color: #FAFFFF;
 }
 .sponsorship-form-success {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 18px;
   color: #FAFFFF;
   padding: 32px;
@@ -2155,7 +2155,7 @@ body.invert .corner-square {
   gap: 10px;
 }
 .sponsorship-field-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
@@ -2165,9 +2165,9 @@ body.invert .corner-square {
 .sponsorship-form input,
 .sponsorship-form textarea,
 .sponsorship-form select {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   color: #FAFFFF;
   background: transparent;
   border: none;
@@ -2205,7 +2205,7 @@ body.invert .corner-square {
   min-height: 80px;
 }
 .sponsorship-submit {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 13px;
   font-weight: 400;
   text-transform: uppercase;
@@ -2240,7 +2240,7 @@ body.invert .corner-square {
 .site-footer > :first-child { justify-self: start; }
 .site-footer > :last-child { justify-self: end; }
 .site-footer-credit {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -2316,8 +2316,8 @@ body.invert .corner-square {
   animation: gridReveal 0.8s ease 0.2s both;
 }
 .home-footer-brand {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: 14px;
   color: #6E7366;
 }
@@ -2404,7 +2404,7 @@ body.invert .corner-square {
   min-height: 100vh;
   background: #0D110F;
   color: #FAFFFF;
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 .admin-main { display: block; }
 
@@ -2446,7 +2446,7 @@ body.invert .corner-square {
   -webkit-mask-repeat: no-repeat;
 }
 .admin-nav-mark-text {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2463,7 +2463,7 @@ body.invert .corner-square {
   justify-self: center;
 }
 .admin-nav-tab {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2484,7 +2484,7 @@ body.invert .corner-square {
   gap: 12px;
 }
 .admin-nav-link {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2495,7 +2495,7 @@ body.invert .corner-square {
 }
 .admin-nav-link:hover { color: #87FF38; }
 .admin-nav-logout {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2537,16 +2537,16 @@ a.admin-stat-card:hover {
   background: #282C26;
 }
 .admin-stat-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6E7366;
 }
 .admin-stat-value {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 48px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
   color: #FAFFFF;
@@ -2559,7 +2559,7 @@ a.admin-stat-card:hover {
   position: absolute;
   top: 18px;
   right: 18px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 14px;
   color: #6E7366;
   transition: color 0.25s ease, transform 0.25s ease;
@@ -2598,9 +2598,9 @@ a.admin-stat-card:hover .admin-stat-arrow {
   transform: translateY(-2px);
 }
 .admin-tab-label {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
   color: #FAFFFF;
 }
@@ -2614,7 +2614,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   position: absolute;
   bottom: 28px;
   right: 28px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 24px;
   color: #6E7366;
   transition: color 0.25s ease, transform 0.25s ease;
@@ -2647,14 +2647,14 @@ a.admin-stat-card:hover .admin-stat-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6E7366;
 }
 .ga-delta {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   letter-spacing: 0.04em;
   font-size: 11px;
 }
@@ -2678,14 +2678,14 @@ a.admin-stat-card:hover .admin-stat-arrow {
   gap: 12px;
 }
 .ga-list-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #FAFFFF;
 }
 .ga-list-hint {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.04em;
   color: #6E7366;
@@ -2705,7 +2705,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   align-items: baseline;
 }
 .ga-list-name {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   color: #FAFFFF;
   letter-spacing: 0.02em;
@@ -2714,7 +2714,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   text-overflow: ellipsis;
 }
 .ga-list-count {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   color: #87FF38;
   letter-spacing: 0.04em;
@@ -2750,8 +2750,8 @@ a.admin-stat-card:hover .admin-stat-arrow {
   gap: 16px;
 }
 .ga-setup-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: 22px;
   color: #FAFFFF;
 }
@@ -2772,7 +2772,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   color: rgba(250, 255, 255, 0.7);
 }
 .ga-setup-list code {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   background: #282C26;
   padding: 2px 6px;
@@ -2811,7 +2811,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   -webkit-mask-repeat: no-repeat;
 }
 .admin-login-title {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0.16em;
@@ -2829,7 +2829,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   gap: 8px;
 }
 .admin-login-label {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2847,7 +2847,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
 }
 .admin-login-input:focus { border-color: #87FF38; }
 .admin-login-error {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   color: #FF8F8F;
   letter-spacing: 0.08em;
@@ -2860,7 +2860,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   border: 0;
   border-radius: 10px;
   padding: 14px 20px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -2885,7 +2885,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
 }
 .admin-eyebrow {
   display: inline-block;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2893,8 +2893,8 @@ a.admin-stat-card:hover .admin-stat-arrow {
   margin-bottom: 12px;
 }
 .admin-hub-title {
-  font-family: var(--font-interphases), sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
   font-size: clamp(40px, 6vw, 72px);
   letter-spacing: -0.03em;
   line-height: 1;
@@ -2908,7 +2908,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   color: #6E7366;
 }
 .admin-logout {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2926,7 +2926,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
 .admin-section { margin-bottom: clamp(56px, 8vh, 96px); }
 .admin-section-head { margin-bottom: 24px; }
 .admin-section-title {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.16em;
@@ -3014,15 +3014,15 @@ a.admin-stat-card:hover .admin-stat-arrow {
   transform: translateY(-2px);
 }
 .admin-card-label {
-  font-family: var(--font-interphases), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: #FAFFFF;
 }
 .admin-card-hint {
   display: block;
   margin-top: 4px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.06em;
   color: #6E7366;
@@ -3032,7 +3032,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   position: absolute;
   top: 18px;
   right: 18px;
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 14px;
   color: #6E7366;
   transition: color 0.25s ease, transform 0.25s ease;
@@ -3056,7 +3056,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
 .admin-hub-footer a { color: #FAFFFF; text-decoration: none; }
 .admin-hub-footer a:hover { color: #87FF38; }
 .admin-hub-footer-mono {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -3086,9 +3086,9 @@ a.admin-stat-card:hover .admin-stat-arrow {
   flex-shrink: 0;
 }
 .admin-color-meta { display: flex; flex-direction: column; gap: 2px; }
-.admin-color-name { font-size: 14px; font-weight: 600; }
+.admin-color-name { font-size: 14px; font-weight: 700; }
 .admin-color-hex {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   color: #6E7366;
   letter-spacing: 0.04em;
@@ -3115,9 +3115,9 @@ a.admin-stat-card:hover .admin-stat-arrow {
   border-radius: 14px;
 }
 .admin-type-meta { display: flex; flex-direction: column; gap: 4px; }
-.admin-type-name { font-size: 18px; font-weight: 600; }
+.admin-type-name { font-size: 18px; font-weight: 700; }
 .admin-type-role {
-  font-family: var(--font-interphases-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;

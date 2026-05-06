@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const interphases = localFont({
+const diatype = localFont({
   src: [
-    { path: "./fonts/TTInterphasesPro-Lt.ttf", weight: "300" },
-    { path: "./fonts/TTInterphasesPro-DmBd.ttf", weight: "600" },
+    { path: "./fonts/ABCDiatype-Regular.otf", weight: "400" },
+    { path: "./fonts/ABCDiatype-Bold.otf", weight: "700" },
   ],
-  variable: "--font-interphases",
+  variable: "--font-sans",
   display: "swap",
 });
 
-const interphasesMono = localFont({
+const diatypeMono = localFont({
   src: [
-    { path: "./fonts/TTInterphasesProMono-Rg.ttf", weight: "400" },
+    { path: "./fonts/ABCDiatypeMono-Medium.otf", weight: "400" },
   ],
-  variable: "--font-interphases-mono",
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${interphases.variable} ${interphasesMono.variable}`}>
+    <html lang="en" className={`${diatype.variable} ${diatypeMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://www.youtube.com" />
         <link rel="preconnect" href="https://i.ytimg.com" />
