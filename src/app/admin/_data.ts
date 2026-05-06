@@ -11,8 +11,7 @@ export const VERCEL_PROJECT =
 
 export type Preview =
   | { kind: "image"; src: string; bg?: string; fit?: "contain" | "cover"; padded?: boolean }
-  | { kind: "palette"; colors: string[] }
-  | { kind: "fonts" };
+  | { kind: "palette"; colors: string[] };
 
 export type LinkItem = {
   label: string;
@@ -68,13 +67,6 @@ export const BRAND_LINKS: LinkItem[] = [
     hint: "Wordmark + ghost + OG card, all in one",
     download: "cultrepo-brand.zip",
     preview: { kind: "image", src: "/opengraph-image.png", fit: "cover" },
-  },
-  {
-    label: "Fonts (.zip)",
-    href: "/cultrepo-fonts.zip",
-    hint: "Interphases Pro + Mono — 7 weights",
-    download: "cultrepo-fonts.zip",
-    preview: { kind: "fonts" },
   },
   {
     label: "Wordmark (SVG)",

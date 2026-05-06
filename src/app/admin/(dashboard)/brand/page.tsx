@@ -39,17 +39,17 @@ const GREYS = [
 
 const FONTS = [
   {
-    name: "TT Interphases Pro",
+    name: "Inter",
     role: "Display + UI",
-    weights: "300 / 400 / 500 / 600 / 700",
-    use: "Headlines, body text, button labels.",
+    weights: "400 Regular / 600 SemiBold / 700 Bold",
+    use: "Body text, mixed-case headings (600), big all-caps headlines (700). Loaded via Google Fonts.",
     fontFamilyVar: "var(--font-sans)",
   },
   {
-    name: "TT Interphases Pro Mono",
-    role: "Labels, code, small caps",
-    weights: "400 / 700",
-    use: "Eyebrows, ticker, status pills, footers.",
+    name: "Fragment Mono",
+    role: "Labels, eyebrows, ticker",
+    weights: "400 Regular",
+    use: "Eyebrows, ticker, status pills, footer credits, form labels.",
     fontFamilyVar: "var(--font-mono)",
   },
 ];
@@ -125,7 +125,8 @@ export default function AdminBrandPage() {
         <div className="admin-section-head">
           <h2 className="admin-section-title">Typography</h2>
           <p className="admin-section-blurb">
-            Both families ship with the site and are bundled in the Fonts (.zip) on the admin home.
+            Both families are free Google Fonts loaded through next/font — only the weights actually
+            used are shipped to visitors.
           </p>
         </div>
         <ul className="admin-type-list">

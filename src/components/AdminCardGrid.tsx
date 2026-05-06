@@ -15,19 +15,11 @@ function CardPreview({ preview }: { preview: Preview }) {
       </div>
     );
   }
-  if (preview.kind === "palette") {
-    return (
-      <div className="admin-card-preview admin-card-preview-palette">
-        {preview.colors.map((c) => (
-          <span key={c} className="admin-card-palette-swatch" style={{ background: c }} />
-        ))}
-      </div>
-    );
-  }
   return (
-    <div className="admin-card-preview admin-card-preview-fonts">
-      <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600 }}>Aa</span>
-      <span style={{ fontFamily: "var(--font-mono)", fontWeight: 400 }}>Aa</span>
+    <div className="admin-card-preview admin-card-preview-palette">
+      {preview.colors.map((c) => (
+        <span key={c} className="admin-card-palette-swatch" style={{ background: c }} />
+      ))}
     </div>
   );
 }
