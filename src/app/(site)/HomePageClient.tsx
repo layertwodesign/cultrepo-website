@@ -805,7 +805,7 @@ export default function HomePageClient({ films, featuredSlug }: Props) {
           color: "#FAFFFF", fontFamily: "var(--font-sans), sans-serif",
           pointerEvents: "auto",
         }}>
-          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
             Tuning Panel <span style={{ opacity: 0.4 }}>(D to toggle)</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
