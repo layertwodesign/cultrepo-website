@@ -2521,7 +2521,7 @@ body.invert .corner-square {
   .ticker-tech { font-size: 10px; opacity: 0.55; }
   .bottom-left { left: 16px; bottom: 16px; }
   .bottom-right { right: 16px; bottom: 16px; }
-  .bottom-ghost { height: 42px; margin-bottom: 10px; }
+  .bottom-ghost { height: 90px; margin-bottom: 0; }
   /* Top + bottom gradient scrims so headings/logo stay legible over carousel */
   .main::before {
     content: '';
@@ -2542,7 +2542,7 @@ body.invert .corner-square {
     z-index: 6;
   }
   .hero, .bottom-left, .bottom-right { z-index: 10; }
-  .home-cta { font-size: 11px; padding: 9px 14px; }
+  .home-cta { display: none; }
 
   /* Page container */
   .page-container { padding: 80px 16px 40px; }
