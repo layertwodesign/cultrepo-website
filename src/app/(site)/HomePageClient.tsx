@@ -13,15 +13,6 @@ type Props = {
   ticker: TickerEntry[];
 };
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 const DEFAULTS = {
   gap: 46,
   minScale: 0.7,
@@ -100,16 +91,25 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     const safety = setTimeout(() => setShowUI(true), 14000);
     return () => clearTimeout(safety);
   }, []);
+
+  // Hide hamburger during the intro by tagging <body>. CSS rule in globals.css.
+  useEffect(() => {
+    if (showUI) document.body.classList.remove("intro-running");
+    else document.body.classList.add("intro-running");
+    return () => { document.body.classList.remove("intro-running"); };
+  }, [showUI]);
   const [items] = useState(() => {
-    const shuffled = shuffle(allItems);
+    // Films arrive pre-sorted by their `order` field (same as the films grid).
+    // Keep that order; only the featured film is pinned to the front.
+    const ordered = [...allItems];
     if (featuredSlug) {
-      const idx = shuffled.findIndex((i) => i.slug === featuredSlug);
+      const idx = ordered.findIndex((i) => i.slug === featuredSlug);
       if (idx > 0) {
-        const [featured] = shuffled.splice(idx, 1);
-        shuffled.unshift(featured);
+        const [featured] = ordered.splice(idx, 1);
+        ordered.unshift(featured);
       }
     }
-    return shuffled;
+    return ordered;
   });
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
   const [centeredSlug, setCenteredSlug] = useState<string | null>(null);

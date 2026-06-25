@@ -60,7 +60,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://i.ytimg.com" />
         <link rel="preconnect" href="https://www.google.com" />
       </head>
-      <body>{children}</body>
+      <body>
+        {/* Pre-paint: hide the hamburger on the homepage until the intro
+            finishes. Runs synchronously during HTML parse — before the nav is
+            even parsed — so there is no flash of the menu over the loading
+            screen. HomePageClient's effect clears `intro-running` once the
+            intro completes, and this never adds it on return visits (same
+            sessionStorage flag) or on non-home routes. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(location.pathname==='/'&&sessionStorage.getItem('cultrepo-intro-seen')!=='1')document.body.classList.add('intro-running')}catch(e){}`,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
