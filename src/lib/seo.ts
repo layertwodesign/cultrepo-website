@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import defaultSharingImage from "@/app/opengraph-image.png";
 
 export type SeoFields = {
   title: string | null;
@@ -25,12 +26,12 @@ export function buildMetadata(
   const description =
     page?.description ?? fallback?.description ?? defaults.description;
   const ogUrl =
-    page?.ogImage?.url ?? fallback?.ogImage?.url ?? defaults.ogImage ?? null;
+    page?.ogImage?.url ?? fallback?.ogImage?.url ?? defaults.ogImage ?? defaultSharingImage.src;
   const noIndex = page?.noIndex ?? fallback?.noIndex ?? false;
 
-  const images = ogUrl
-    ? [{ url: ogUrl, width: 1200, height: 630, alt: title }]
-    : undefined;
+  // Page metadata replaces the root image metadata, so always supply a fallback.
+  // The static import gives the artwork a new URL whenever the file changes.
+  const images = [{ url: ogUrl, width: 1200, height: 630, alt: title }];
 
   return {
     title,
@@ -42,13 +43,13 @@ export function buildMetadata(
       title,
       description,
       url: canonical,
-      ...(images ? { images } : {}),
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(images ? { images } : {}),
+      images,
     },
   };
 }
