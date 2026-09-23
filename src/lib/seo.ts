@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import defaultSharingImage from "@/app/opengraph-image.png";
 
+// The custom domain still serves the legacy site. Keep the new artwork on
+// this project's public production domain until the custom domain is migrated.
+const defaultSharingImageUrl = new URL(
+  defaultSharingImage.src,
+  "https://cultrepo-website-lac.vercel.app",
+).toString();
+
 export type SeoFields = {
   title: string | null;
   description: string | null;
@@ -26,7 +33,7 @@ export function buildMetadata(
   const description =
     page?.description ?? fallback?.description ?? defaults.description;
   const ogUrl =
-    page?.ogImage?.url ?? fallback?.ogImage?.url ?? defaults.ogImage ?? defaultSharingImage.src;
+    page?.ogImage?.url ?? fallback?.ogImage?.url ?? defaults.ogImage ?? defaultSharingImageUrl;
   const noIndex = page?.noIndex ?? fallback?.noIndex ?? false;
 
   // Page metadata replaces the root image metadata, so always supply a fallback.
