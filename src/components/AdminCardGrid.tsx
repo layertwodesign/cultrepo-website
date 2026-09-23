@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { LinkItem, Preview } from "@/app/admin/_data";
 
@@ -6,7 +7,8 @@ function CardPreview({ preview }: { preview: Preview }) {
     const style: React.CSSProperties = preview.bg ? { background: preview.bg } : {};
     return (
       <div className={`admin-card-preview${preview.padded ? " admin-card-preview-padded" : ""}`} style={style}>
-        <img
+        <Image
+          width={640} height={480} sizes="(max-width: 768px) 100vw, 33vw"
           src={preview.src}
           alt=""
           className="admin-card-preview-img"

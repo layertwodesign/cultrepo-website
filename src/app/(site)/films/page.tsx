@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getFilms } from "@/lib/films";
 import { getSiteSettings } from "@/lib/site-settings";
 import { buildMetadata } from "@/lib/seo";
+import FilmPreview from "@/components/FilmPreview";
 import TransitionLink from "@/components/TransitionLink";
 import Reveal from "@/components/Reveal";
 
@@ -43,7 +44,9 @@ export default async function FilmsPage() {
                   className="film-card"
                 >
                   <div className="film-card-video-wrap">
-                    <video
+                    <FilmPreview
+                      title={film.title}
+                      poster={film.poster}
                       src={film.video}
                       muted
                       loop

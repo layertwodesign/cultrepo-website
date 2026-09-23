@@ -8,6 +8,7 @@ import {
   useRef,
   useEffect,
 } from "react";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 
 type TransitionState = "idle" | "exiting" | "entering";
@@ -39,7 +40,9 @@ export function PageTransitionProvider({
   const [showOverlay, setShowOverlay] = useState(true);
   const prevPathname = useRef(pathname);
   const stateRef = useRef(state);
-  stateRef.current = state;
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
   const filmRectRef = useRef<FilmTransitionRect>(null);
 
   const setFilmRect = useCallback((rect: FilmTransitionRect) => {
@@ -61,6 +64,7 @@ export function PageTransitionProvider({
         router.push(href);
       } else {
         setShowOverlay(true);
+        stateRef.current = "exiting";
         setState("exiting");
         setTimeout(() => {
           router.push(href);
@@ -71,20 +75,24 @@ export function PageTransitionProvider({
   );
 
   useEffect(() => {
-    if (pathname !== prevPathname.current) {
-      prevPathname.current = pathname;
+    if (pathname === prevPathname.current) return;
+    prevPathname.current = pathname;
+    window.scrollTo(0, 0);
+
+    let settleTimer: ReturnType<typeof setTimeout> | undefined;
+    const frame = requestAnimationFrame(() => {
       if (showOverlay) {
         setState("entering");
-        window.scrollTo(0, 0);
-        setTimeout(() => {
-          setState("idle");
-        }, 500);
+        settleTimer = setTimeout(() => setState("idle"), 500);
       } else {
-        window.scrollTo(0, 0);
         setState("idle");
         setShowOverlay(true);
       }
-    }
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(settleTimer);
+    };
   }, [pathname, showOverlay]);
 
   return (
@@ -93,7 +101,7 @@ export function PageTransitionProvider({
 
       {showOverlay && (
         <div className={`page-transition ${state}`} aria-hidden="true">
-          <img src="/ghost.png" alt="" className="page-transition-ghost" />
+          <Image width={144} height={144} src="/ghost.png" alt="" className="page-transition-ghost" />
         </div>
       )}
     </TransitionContext.Provider>

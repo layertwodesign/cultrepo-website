@@ -111,7 +111,7 @@ export default async function AboutPage() {
       <section className="about-story">
         <div className="about-story-layout">
           <Reveal className="about-story-ghost">
-            <img src="/ghost.svg" alt="" />
+            <Image width={386} height={387} src="/ghost.svg" alt="" />
           </Reveal>
           <div className="about-story-text">
             <Typewriter text={about.story} speed={32} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 const BASE_SPEED = 60; // px per second at full speed
 const HOVER_SPEED = 0.15; // multiplier when hovered
@@ -12,7 +12,7 @@ type Props = {
 
 export default function MenuMarquee({ items }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [hovered, setHovered] = useState(false);
+  const hoveredRef = useRef(false);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -60,16 +60,11 @@ export default function MenuMarquee({ items }: Props) {
     };
   }, []);
 
-  const hoveredRef = useRef(false);
-  useEffect(() => {
-    hoveredRef.current = hovered;
-  }, [hovered]);
-
   return (
     <div
       className="menu-marquee"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => { hoveredRef.current = true; }}
+      onMouseLeave={() => { hoveredRef.current = false; }}
     >
       <div className="menu-marquee-track" ref={trackRef}>
         {items}

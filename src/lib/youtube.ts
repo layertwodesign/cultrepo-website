@@ -1,43 +1,76 @@
 /**
- * YouTube Data API v3 stats fetch with Next.js cache.
+ * YouTube stats. The film route caches the small parsed result hourly.
  *
- * Returns the live view/like/comment counts for a video. Cached for 1 hour
- * via Next's `revalidate`. Falls back to `null` if the API key is missing
- * or the request fails — callers should render a placeholder ("—") in that
- * case rather than throwing.
+ * Prefer the Data API when configured, then use the public watch page's
+ * player metadata for views. Unavailable counts stay null, never a fake zero.
  */
 
 export type VideoStats = {
   viewCount: number;
-  likeCount: number;
-  commentCount: number;
+  likeCount: number | null;
+  commentCount: number | null;
 };
 
-const API_KEY = process.env.YOUTUBE_API_KEY;
-const CACHE_SECONDS = 60 * 60; // 1 hour
+function parseCount(value: unknown): number | null {
+  if (typeof value !== "string" || !/^\d+$/.test(value)) return null;
+  const count = Number(value);
+  return Number.isSafeInteger(count) ? count : null;
+}
+
+async function getApiStats(youtubeId: string, apiKey: string): Promise<VideoStats | null> {
+  try {
+    const url = new URL("https://www.googleapis.com/youtube/v3/videos");
+    url.search = new URLSearchParams({ part: "statistics", id: youtubeId, key: apiKey }).toString();
+    const res = await fetch(url, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const stats = json.items?.find((item: { id?: string }) => item.id === youtubeId)?.statistics;
+    const viewCount = parseCount(stats?.viewCount);
+    if (viewCount === null) return null;
+    return {
+      viewCount,
+      likeCount: parseCount(stats?.likeCount),
+      commentCount: parseCount(stats?.commentCount),
+    };
+  } catch {
+    return null;
+  }
+}
 
 export async function getVideoStats(
   youtubeId: string | null | undefined
 ): Promise<VideoStats | null> {
-  if (!API_KEY || !youtubeId) return null;
+  if (!youtubeId || !/^[\w-]{11}$/.test(youtubeId)) return null;
+
+  const apiKey = process.env.YOUTUBE_API_KEY;
+  if (apiKey) {
+    const stats = await getApiStats(youtubeId, apiKey);
+    if (stats) return stats;
+  }
 
   try {
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${encodeURIComponent(
-      youtubeId
-    )}&key=${API_KEY}`;
-    const res = await fetch(url, {
-      next: { revalidate: CACHE_SECONDS, tags: ["youtube-stats"] },
+    const res = await fetch(`https://www.youtube.com/watch?v=${youtubeId}&hl=en`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8_000),
     });
     if (!res.ok) return null;
-    const json = (await res.json()) as {
-      items?: { statistics?: { viewCount?: string; likeCount?: string; commentCount?: string } }[];
-    };
-    const stats = json.items?.[0]?.statistics;
-    if (!stats) return null;
+    const html = await res.text();
+    // Parse only the player response, never counts belonging to related videos.
+    const playerJson = html.match(
+      /<script\b[^>]*>\s*var ytInitialPlayerResponse\s*=\s*(\{[\s\S]*?\})\s*;\s*<\/script>/
+    )?.[1];
+    if (!playerJson) return null;
+    const details = JSON.parse(playerJson).videoDetails;
+    if (details?.videoId !== youtubeId) return null;
+    const viewCount = parseCount(details.viewCount);
+    if (viewCount === null) return null;
     return {
-      viewCount: Number(stats.viewCount ?? 0),
-      likeCount: Number(stats.likeCount ?? 0),
-      commentCount: Number(stats.commentCount ?? 0),
+      viewCount,
+      likeCount: null,
+      commentCount: null,
     };
   } catch {
     return null;

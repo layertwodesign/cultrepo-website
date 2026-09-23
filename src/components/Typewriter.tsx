@@ -18,14 +18,15 @@ export default function Typewriter({ text, speed = 14, className = "", startDela
     const node = ref.current;
     if (!node) return;
     if (typeof IntersectionObserver === "undefined") {
-      setStarted(true);
-      return;
+      const frame = requestAnimationFrame(() => setStarted(true));
+      return () => cancelAnimationFrame(frame);
     }
+    let delayTimer: ReturnType<typeof setTimeout> | undefined;
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           if (startDelay) {
-            setTimeout(() => setStarted(true), startDelay);
+            delayTimer = setTimeout(() => setStarted(true), startDelay);
           } else {
             setStarted(true);
           }
@@ -35,7 +36,10 @@ export default function Typewriter({ text, speed = 14, className = "", startDela
       { threshold: 0.2 },
     );
     obs.observe(node);
-    return () => obs.disconnect();
+    return () => {
+      obs.disconnect();
+      clearTimeout(delayTimer);
+    };
   }, [startDelay]);
 
   useEffect(() => {

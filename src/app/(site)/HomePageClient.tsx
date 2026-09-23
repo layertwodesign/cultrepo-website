@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import FilmPreview from "@/components/FilmPreview";
+import Image from "next/image";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 import type { Film } from "@/lib/films";
@@ -52,12 +54,11 @@ type IntroPhase =
 
 export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const allItems = useMemo(
-    () => films.map((f) => ({ title: f.title, slug: f.slug, status: f.status, video: f.video, videoHd: f.videoHd ?? null })),
+    () => films.map((f) => ({ title: f.title, slug: f.slug, status: f.status, poster: f.poster, video: f.video, videoHd: f.videoHd ?? null })),
     [films]
   );
   const { navigateTo, setFilmRect } = useTransition();
   // Check sessionStorage after mount to avoid hydration mismatch
-  const [hasSeenIntro, setHasSeenIntro] = useState(false);
   const [introPhase, setIntroPhase] = useState<IntroPhase>("loading");
   const [loadProgress, setLoadProgress] = useState(0);
   const [textLines, setTextLines] = useState([false, false, false, false]);
@@ -65,39 +66,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const [showUI, setShowUI] = useState(false);
   const [showGradient, setShowGradient] = useState(false);
   const [gridRevealed, setGridRevealed] = useState(false);
-  const fullDescText = "CultRepo creates cinematic documentaries\nabout the people behind the technology\nshaping our era.";
-  const [revealedChars, setRevealedChars] = useState(0);
-  const [showCursor, setShowCursor] = useState(false);
-  const [typing, setTyping] = useState(false);
-
-  // Hydration-safe: check sessionStorage on mount
-  useEffect(() => {
-    if (sessionStorage.getItem("cultrepo-intro-seen") === "1") {
-      setHasSeenIntro(true);
-      setIntroPhase("done");
-      setLoadProgress(100);
-      setTextLines([true, true, true, true]);
-      setRevealed(true);
-      setShowUI(true);
-      setRevealedChars(fullDescText.length);
-      // Unblock carousel immediately
-      const s = stateRef.current;
-      s.initialized = true;
-      s.carouselBlocked = false;
-      s.introProgress = 1;
-      s.introOffsetY = 0;
-    }
-    // Hard safety net — never leave the hamburger hidden for more than 14s
-    const safety = setTimeout(() => setShowUI(true), 14000);
-    return () => clearTimeout(safety);
-  }, []);
-
-  // Hide hamburger during the intro by tagging <body>. CSS rule in globals.css.
-  useEffect(() => {
-    if (showUI) document.body.classList.remove("intro-running");
-    else document.body.classList.add("intro-running");
-    return () => { document.body.classList.remove("intro-running"); };
-  }, [showUI]);
   const [items] = useState(() => {
     // Films arrive pre-sorted by their `order` field (same as the films grid).
     // Keep that order; only the featured film is pinned to the front.
@@ -119,7 +87,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const [showDebug, setShowDebug] = useState(false);
   const [params, setParams] = useState<Params>(DEFAULTS);
   const paramsRef = useRef(params);
-  paramsRef.current = params;
+  useEffect(() => { paramsRef.current = params; }, [params]);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -141,7 +109,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     startY: 0,
     dragStart: 0,
     initialized: false,
-    initStart: Date.now(),
+    initStart: 0,
     introReady: false,
     introStart: 0,
     introEnd: 0,
@@ -157,6 +125,34 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     centeredIdx: 0,
   });
 
+  // Hydration-safe: check sessionStorage on mount
+  useEffect(() => {
+    let introSeen = false;
+    try { introSeen = sessionStorage.getItem("cultrepo-intro-seen") === "1"; } catch { /* Storage may be disabled. */ }
+    let restoreFrame = 0;
+    if (introSeen) {
+      restoreFrame = requestAnimationFrame(() => {
+        setIntroPhase("done");
+        setLoadProgress(100);
+        setTextLines([true, true, true, true]);
+        setRevealed(true);
+        setShowUI(true);
+      });
+      // Unblock carousel immediately
+      const s = stateRef.current;
+      s.initialized = true;
+      s.carouselBlocked = false;
+      s.introProgress = 1;
+      s.introOffsetY = 0;
+    }
+    // Hard safety net — never leave the hamburger hidden for more than 14s
+    const safety = setTimeout(() => setShowUI(true), 14000);
+    return () => {
+      clearTimeout(safety);
+      cancelAnimationFrame(restoreFrame);
+    };
+  }, []);
+
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
   // ============ VIDEO LOADING + INTRO PHASE ORCHESTRATION ============
@@ -164,14 +160,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     if (introPhase !== "loading") return;
 
     const videos = videoRefs.current.filter(Boolean) as HTMLVideoElement[];
-    if (videos.length === 0) {
-      const t = setTimeout(() => setLoadProgress(p => p === 0 ? 0.1 : 0), 100);
-      return () => clearTimeout(t);
-    }
-
     // Track progress across: videos (90% weight) + fonts (10% weight)
     let fontsReady = false;
     let done = false;
+    let phaseTimer: ReturnType<typeof setTimeout> | undefined;
 
     // Font loading
     if (document.fonts && document.fonts.ready) {
@@ -184,13 +176,13 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       if (done) return;
 
       // Video progress: count videos that can play through
-      const videoReady = videos.filter(v => v.readyState >= 3).length;
-      const videoPct = videoReady / videos.length;
+      const videoReady = videos.filter(v => v.readyState >= 3 || v.error).length;
+      const videoPct = videos.length ? videoReady / videos.length : 1;
 
       // Also check buffered progress for partial loading indication
       let bufferPct = 0;
       videos.forEach(v => {
-        if (v.readyState >= 3) {
+        if (v.readyState >= 3 || v.error) {
           bufferPct += 1;
         } else if (v.buffered.length > 0 && v.duration > 0) {
           bufferPct += v.buffered.end(v.buffered.length - 1) / v.duration;
@@ -198,7 +190,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
           bufferPct += 0.1; // metadata loaded
         }
       });
-      bufferPct /= videos.length;
+      bufferPct = videos.length ? bufferPct / videos.length : 1;
 
       // Use the smoother of the two metrics
       const smoothVideoPct = Math.max(videoPct, bufferPct);
@@ -210,7 +202,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
       if (videoReady >= videos.length && fontsReady) {
         done = true;
-        setTimeout(() => setIntroPhase("bar-fade"), 400);
+        phaseTimer = setTimeout(() => setIntroPhase("bar-fade"), 400);
       }
     };
 
@@ -218,6 +210,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     videos.forEach(v => {
       v.addEventListener("canplaythrough", checkProgress);
       v.addEventListener("progress", checkProgress);
+      v.addEventListener("error", checkProgress);
     });
 
     // Fallback: after 8s, proceed anyway
@@ -225,18 +218,20 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       if (done) return;
       done = true;
       setLoadProgress(100);
-      setTimeout(() => setIntroPhase("bar-fade"), 400);
+      phaseTimer = setTimeout(() => setIntroPhase("bar-fade"), 400);
     }, 8000);
 
     return () => {
       clearInterval(interval);
       clearTimeout(fallback);
+      clearTimeout(phaseTimer);
       videos.forEach(v => {
         v.removeEventListener("canplaythrough", checkProgress);
         v.removeEventListener("progress", checkProgress);
+        v.removeEventListener("error", checkProgress);
       });
     };
-  }, [introPhase, loadProgress]);
+  }, [introPhase]);
 
   // Phase: bar-fade → text-reveal
   useEffect(() => {
@@ -289,34 +284,16 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     if (introPhase !== "carousel") return;
     // Show hamburger + wordmark after carousel starts
     const t1 = setTimeout(() => setShowUI(true), 800);
-    // Start typewriter for bottom-left description
-    const t2 = setTimeout(() => setShowCursor(true), 1200);
-
-    let charIndex = 0;
-    const t3 = setTimeout(() => {
-      setTyping(true);
-      const typeInterval = setInterval(() => {
-        charIndex++;
-        if (charIndex <= fullDescText.length) {
-          setRevealedChars(charIndex);
-        } else {
-          clearInterval(typeInterval);
-          setTyping(false);
-          // Blink briefly then hide cursor
-          setTimeout(() => {
-            setShowCursor(false);
-            setIntroPhase("done");
-            sessionStorage.setItem("cultrepo-intro-seen", "1");
-          }, 800);
-        }
-      }, 30);
-      return () => clearInterval(typeInterval);
-    }, 1500);
+    // Keep the intro cadence without rendering an unused description typewriter.
+    const completion = setTimeout(() => {
+      setIntroPhase("done");
+      try { sessionStorage.setItem("cultrepo-intro-seen", "1"); } catch { /* Storage may be disabled. */ }
+    }, 5300);
 
     // Show bottom-left area (ghost is already there from shrink)
     const t4 = setTimeout(() => setRevealed(true), 600);
 
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+    return () => { clearTimeout(t1); clearTimeout(completion); clearTimeout(t4); };
   }, [introPhase]);
 
   // Track centered carousel item for YouTube preloading
@@ -544,7 +521,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
         const offset = visualOffset(signedDist, maxDist, itemH, slotH, p);
         const scaledH = (effectiveBaseWidth * scale) / (16 / 9);
-        const scaledW = effectiveBaseWidth * scale;
         const visualCenter = logicalCenter + offset;
         const top = visualCenter - scaledH / 2;
 
@@ -633,7 +609,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         // Snap to nearest item center after input settles
         const itemH = effectiveBW / (16 / 9);
         const slotH = itemH + p.gap;
-        const totalH = slotH * items.length;
         const wrapperH = wrapper.getBoundingClientRect().height;
         const timeSinceInput = Date.now() - state.lastInputTime;
         const velocity = Math.abs(state.target - state.current);
@@ -814,6 +789,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
   return (
     <>
+      {!showUI && <style>{`.hamburger { visibility: hidden; pointer-events: none; }`}</style>}
       {/* ============ HEADER GRADIENT ============ */}
       <div className={`header-gradient ${showGradient ? "visible" : ""}`} />
 
@@ -828,7 +804,8 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
       {/* ============ CENTERED GHOST — visible during loading through text-reveal, fades on shrink ============ */}
       {(showIntroOverlay || showIntroText) && (
-        <img
+        <Image
+          width={144} height={144} loading="eager"
           src="/ghost.png"
           alt=""
           className={`intro-ghost visible center ${introPhase === "shrink" ? "fade-out" : ""}`}
@@ -908,7 +885,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         {/* Bottom left — logo + description (visible after carousel phase) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
           <div className={`bottom-left ${revealed ? "revealed" : ""}`}>
-            <img src="/ghost.png" alt="" className="bottom-ghost" />
+            <Image width={144} height={144} src="/ghost.png" alt="" className="bottom-ghost" />
             <TransitionLink href="/sponsorship" className="home-cta">
               Sponsorship
             </TransitionLink>
@@ -1038,7 +1015,9 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                     }
                   }}
                 >
-                  <video
+                  <FilmPreview
+                    title={item.title}
+                    poster={item.poster}
                     ref={(el) => { videoRefs.current[idx] = el; }}
                     src={item.video}
                     muted loop playsInline autoPlay preload="auto"
@@ -1065,7 +1044,9 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                 className="home-grid-card"
                 onClick={() => navigateTo(`/films/${film.slug}`)}
               >
-                <video
+                <FilmPreview
+                  title={film.title}
+                  poster={film.poster}
                   src={film.video}
                   muted
                   loop

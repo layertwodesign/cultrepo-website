@@ -49,9 +49,10 @@ export function useForwardPointer(ref: RefObject<HTMLElement | null>) {
 
 type Props = {
   className?: string;
+  paused?: boolean;
 };
 
-export default function UnicornBackground({ className = "unicorn-bg" }: Props) {
+export default function UnicornBackground({ className = "unicorn-bg", paused = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   useForwardPointer(ref);
 
@@ -63,6 +64,7 @@ export default function UnicornBackground({ className = "unicorn-bg" }: Props) {
         width="100%"
         height="100%"
         production
+        paused={paused}
       />
     </div>
   );

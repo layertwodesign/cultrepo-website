@@ -40,30 +40,30 @@ const FILM_FRAGMENT = /* GraphQL */ `
     videoClipHd {
       url
     }
-    stills {
+    stills(first: 50) {
       url
     }
-    cast {
+    cast(first: 50) {
       name
       role
       photo {
         url
       }
     }
-    crew {
+    crew(first: 50) {
       name
       role
     }
     technologies
-    sponsors {
+    sponsors(first: 50) {
       name
       slug
     }
-    extras {
+    extras(first: 50) {
       title
       youtubeId
     }
-    timeline {
+    timeline(first: 50) {
       label
       done
     }

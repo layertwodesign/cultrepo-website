@@ -16,8 +16,8 @@ export default function Reveal({ children, delay = 0, className = "" }: Props) {
     const node = ref.current;
     if (!node) return;
     if (typeof IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
+      const frame = requestAnimationFrame(() => setShown(true));
+      return () => cancelAnimationFrame(frame);
     }
     const obs = new IntersectionObserver(
       ([entry]) => {

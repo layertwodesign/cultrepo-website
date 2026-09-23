@@ -1865,8 +1865,22 @@ body.invert .corner-square {
 /* About */
 .fp-about-text {
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(20px, 2.2vw, 28px); font-weight: 400;
-  line-height: 1.5; color: #FAFFFF; max-width: 800px;
+  font-size: 17px; font-weight: 400;
+  line-height: 1.6; color: #FAFFFF; max-width: 800px;
+  white-space: pre-line;
+}
+.fp-about-text p + p { margin-top: 1em; }
+.fp-about-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; margin-top: 8px; padding: 4px 0;
+  border: 0; background: transparent; cursor: pointer;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 16px; line-height: 1.5; color: #ADB0A0;
+  text-decoration: none;
+}
+.fp-about-toggle:hover { color: #FAFFFF; }
+.fp-about-toggle:focus-visible {
+  outline: 2px solid #FAFFFF; outline-offset: 4px; border-radius: 2px;
 }
 
 /* Parallax image frames */
@@ -1891,6 +1905,10 @@ body.invert .corner-square {
   color: #FAFFFF; margin-bottom: 24px;
 }
 .fp-crew-heading { margin-top: 48px; }
+.fp-photo-credits { margin-top: 20px; font-size: 12px; color: #ADB0A0; }
+.fp-photo-credits summary { cursor: pointer; width: fit-content; }
+.fp-photo-credits p { margin-top: 8px; }
+.fp-photo-credits a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Featuring — large portrait cards */
 .fp-featuring {
@@ -2575,7 +2593,7 @@ body.invert .corner-square {
   .fp-sb-meta-grid { grid-template-columns: 1fr 1fr; }
   .fp-humans-heading { font-size: 24px; margin-bottom: 18px; }
   .fp-crew-heading { margin-top: 32px; }
-  .fp-about-text { font-size: clamp(17px, 4.8vw, 22px); }
+  .fp-about-text { font-size: 14px; }
   .fp-status-headline { font-size: 18px; }
 
   /* Sponsorship */

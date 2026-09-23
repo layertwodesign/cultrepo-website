@@ -25,8 +25,8 @@ export default function CountUp({
     const node = ref.current;
     if (!node) return;
     if (typeof IntersectionObserver === "undefined") {
-      setStarted(true);
-      return;
+      const frame = requestAnimationFrame(() => setStarted(true));
+      return () => cancelAnimationFrame(frame);
     }
     const obs = new IntersectionObserver(
       ([entry]) => {

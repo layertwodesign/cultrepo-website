@@ -16,6 +16,17 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Film view counts
+
+Film pages read each video's public YouTube view count and cache the parsed
+statistics for one hour. No API key is required. If `YOUTUBE_API_KEY` is set on
+the server, the YouTube Data API is tried first, with public player metadata as
+a fallback. Failed refreshes retain the last cached count; videos with no
+available count display a dash. Public metadata can change or be blocked by
+YouTube, so a configured Data API key is the more dependable production source.
+
+Run the loader checks with `node --import tsx --test src/lib/youtube.test.ts`.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

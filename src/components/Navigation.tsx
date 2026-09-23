@@ -72,7 +72,8 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
       </button>
 
       <div className={`menu-overlay ${open ? "open" : ""}`}>
-        {open ? <UnicornBackground className="menu-unicorn" /> : null}
+        {/* Keep the scene mounted to avoid SDK teardown races when closing the menu. */}
+        <UnicornBackground className="menu-unicorn" paused={!open} />
 
         <MenuMarquee items={marqueeItems} />
 

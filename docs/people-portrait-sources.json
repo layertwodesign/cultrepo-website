@@ -1,0 +1,1069 @@
+{
+  "updated": "2026-09-23",
+  "portraits": [
+    {
+      "name": "Brad Green",
+      "source": "https://angularu.com/ng/speaker/2015sf/brad-green-31684",
+      "sourceImage": "https://angularu.com/ng/assets/images/speaker/20150226040941-31684.jpg",
+      "assetId": "cmudlbfcui4s007lkfi3bultl",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlbfcui4s107lk8pk3cgen",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Kara Erickson",
+      "source": "https://www.ng-poland.pl/speaker/2022/kara-erickson",
+      "sourceImage": "https://ng-poland.pl/images/speakers/angular-kara-erickson.webp",
+      "assetId": "cmudlcmrwic3807lswttzld0i",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlcmrwic3907ls6vml17qx",
+      "width": 300,
+      "height": 300,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Minko Gechev",
+      "source": "https://www.ng-poland.pl/speaker/2022/kara-erickson",
+      "sourceImage": "https://ng-poland.pl/images/speakers/angular-minko-gechev.webp",
+      "assetId": "cmudldu46icth07lsg5pcr8pk",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudldu46icti07lsrfvtf67j",
+      "width": 600,
+      "height": 600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Alex Rickabaugh",
+      "source": "https://www.ng-poland.pl/speaker/2022/kara-erickson",
+      "sourceImage": "https://ng-poland.pl/images/speakers/angular-alex-rickabaugh.webp",
+      "assetId": "cmudlf1uki6ze07lkgcslwgtv",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf1uki6zf07lkzn4gxorz",
+      "width": 600,
+      "height": 600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Igor Minar",
+      "source": "https://angularu.com/ng/speaker/2015sf/igor-minar-31683",
+      "sourceImage": "https://angularu.com/ng/assets/images/speaker/20150218181456-31683.jpg",
+      "assetId": "cmudlf2zeidn607ls0avj409a",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf2zeidn707lsw1jiu4o5",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Joe Eames",
+      "source": "https://angularu.com/ng/speaker/2015sf/joe-eames-31783",
+      "sourceImage": "https://angularu.com/ng/assets/images/speaker/20150304005103-31783.jpg",
+      "assetId": "cmudlf3suido707lswof0b160",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf3suido807lsedezlajz",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Rasmus Andersson",
+      "source": "https://app-2025.localfirstconf.com/speakers",
+      "sourceImage": "https://app-2025.localfirstconf.com/images/speakers/rasmus-andersson.png",
+      "assetId": "cmudlf4nsidom07lsovhcr72s",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf4nsidon07lslfxvynhz",
+      "width": 1223,
+      "height": 1099,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Thomas Artman",
+      "source": "https://app-2025.localfirstconf.com/speakers",
+      "sourceImage": "https://app-2025.localfirstconf.com/images/speakers/tuomas-artman.png",
+      "assetId": "cmudlf5mfi72z07lkqmp1vz4j",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf5mfi73007lk5jt12wtt",
+      "width": 1223,
+      "height": 1099,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Johannes Schickling",
+      "source": "https://app-2025.localfirstconf.com/speakers",
+      "sourceImage": "https://app-2025.localfirstconf.com/images/speakers/johannes-schickling.png",
+      "assetId": "cmudlf6lxi73y07lkcoon39v2",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf6lxi73z07lkic9tauky",
+      "width": 1223,
+      "height": 1099,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Anselm Einckhoff",
+      "source": "https://app-2025.localfirstconf.com/speakers",
+      "sourceImage": "https://app-2025.localfirstconf.com/images/speakers/anselm-eickhoff.png",
+      "assetId": "cmudlf7fxidq007lsuzj5jeb1",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf7fxidq107ls0qud4aci",
+      "width": 1223,
+      "height": 1099,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Peter van Hardenberg",
+      "source": "https://app-2025.localfirstconf.com/speakers",
+      "sourceImage": "https://app-2025.localfirstconf.com/images/speakers/pvh.png",
+      "assetId": "cmudlf89yidq607ls0imq595a",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf89yidq707lsklku9h8l",
+      "width": 1223,
+      "height": 1099,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Rae McKelvey",
+      "source": "https://app-2026.localfirstconf.com/profile/rae-mckelvey",
+      "sourceImage": "https://app-2026.localfirstconf.com/images/speakers/rae-mckelvey.webp",
+      "assetId": "cmudlf94ui74x07lk2boqpzoh",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf94ui74y07lk2at1278w",
+      "width": 512,
+      "height": 527,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Mark Thompson",
+      "source": "https://ng-poland.pl/speaker/2025/jeremy-elbourn",
+      "sourceImage": "https://ng-poland.pl/images/speakers/mark-thompson.webp",
+      "assetId": "cmudlf9ztidrb07ls91q8c7m4",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlf9ztidrc07ls5zbkxmbw",
+      "width": 600,
+      "height": 600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Pawel Kozlowski",
+      "source": "https://ng-poland.pl/speaker/2025/jeremy-elbourn",
+      "sourceImage": "https://ng-poland.pl/images/speakers/angular-pawel-kozlowski.webp",
+      "assetId": "cmudlfavuidrw07ls2yda44t0",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfavuidrx07lsp8jrc1c1",
+      "width": 600,
+      "height": 600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Jeremy Elbourn",
+      "source": "https://ng-poland.pl/speaker/2025/jeremy-elbourn",
+      "sourceImage": "https://ng-poland.pl/images/speakers/angular-jeremy-elbourn.webp",
+      "assetId": "cmudlfbp0i77j07lkczcx6sr1",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfbp0i77k07lkbvu2xsab",
+      "width": 600,
+      "height": 600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Piotr Tomiak",
+      "source": "https://ng-poland.pl/speaker/2025/piotr-tomiak",
+      "sourceImage": "https://ng-poland.pl/images/speakers/angular-piotr-tomiak.webp",
+      "assetId": "cmudlfcj7i78907lkixrbgq3w",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfcj7i78a07lkmatki8a4",
+      "width": 600,
+      "height": 600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Bjarne Stroustrup",
+      "source": "https://www.nae.edu/177032/Dr-Bjarne-Stroustrup",
+      "sourceImage": "https://www.nae.edu/File.aspx?id=177034&v=8950df03",
+      "assetId": "cmudlj9fei9dy07lkn5z5kz78",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlj9fei9dz07lkwrsi9ngb",
+      "width": 540,
+      "height": 707,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Chris Lattner",
+      "source": "https://www.nondot.org/sabre/Resume.html",
+      "sourceImage": "https://www.nondot.org/sabre/img/ChrisPhoto5.jpg",
+      "assetId": "cmudlfeahi78t07lk571dhc7q",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfeahi78u07lkjto9kwsu",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Barbara Moo",
+      "source": "https://www.informit.com/authors/bio/764d4f1b-b868-4115-862e-4fe85e69f321",
+      "sourceImage": "https://ptgmedia.pearsoncmg.com/authors/m/moo_barbara/moo_barbara_c.jpg",
+      "assetId": "cmudlff5li78z07lkzj0o26kc",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlff5li79007lkjzw1g9y3",
+      "width": 125,
+      "height": 125,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Gabriel Dos Reis",
+      "source": "https://meetingcpp.com/2020/Speaker/items/Gabriel_Dos_Reis.html",
+      "sourceImage": "https://meetingcpp.com/files/mcpp/speaker/gabydosreis.jpg",
+      "assetId": "cmudlffydi79z07lkdobivs58",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlffydi7a007lklb4oqbox",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Herb Sutter",
+      "source": "https://herbsutter.com/",
+      "sourceImage": "https://herbsutter.files.wordpress.com/2024/03/herb-cppcon-2021.jpg",
+      "assetId": "cmudlfgszi7a507lk9gdfwlov",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfgszi7a607lkuj5q1cgh",
+      "width": 652,
+      "height": 500,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Brandon Roberts",
+      "source": "https://brandonroberts.dev/about/",
+      "sourceImage": "https://brandonroberts.dev/assets/images/brandonroberts.jpg",
+      "assetId": "cmudlfhnqidtz07lse3pvji7a",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfhnqidu007lszpheao0v",
+      "width": 460,
+      "height": 460,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Adam Wiggins",
+      "source": "https://adamwiggins.com/",
+      "sourceImage": "https://adamwiggins.com/assets/adam-wiggins.jpg",
+      "assetId": "cmudlfikii7as07lkofo2x5z6",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfikii7at07lkqp6s03cj",
+      "width": 1000,
+      "height": 1000,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Ben Lesh",
+      "source": "https://github.com/BenLesh",
+      "sourceImage": "https://avatars.githubusercontent.com/u/1540597?v=4",
+      "assetId": "cmudlfjdqi7c307lkx66l0dlt",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfjdqi7c407lkchl0q42t",
+      "width": 460,
+      "height": 460,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Sebastián Ramírez",
+      "source": "https://tiangolo.com/",
+      "sourceImage": "https://github.com/tiangolo.png",
+      "assetId": "cmudlfkaqidx507lssrf3hg87",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfkaqidx607lsbzl48s7b",
+      "width": 460,
+      "height": 460,
+      "films": [
+        "fastapi"
+      ]
+    },
+    {
+      "name": "Tara Z. Manicsic",
+      "source": "https://github.com/tzmanics/tara-z-manicsic-bio",
+      "sourceImage": "https://raw.githubusercontent.com/tzmanics/tara-z-manicsic-bio/master/tara-z-manicsic_headshot3.jpg",
+      "assetId": "cmudlfl6bidy307ls5pjhtf2s",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfl6bidy407lsoe32hhwu",
+      "width": 2720,
+      "height": 3634,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Tor Norbye",
+      "source": "https://io.google/2025/speakers/tor-norbye/",
+      "sourceImage": "https://io.google/2025/assets/images/cms/tnorbye.2e16d0ba.fill-400x400.jpg",
+      "assetId": "cmudlfm2midyn07ls5ascdb67",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfm2midyo07ls9thityru",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "George Andrianakis",
+      "source": "https://devoxx.gr/schedule/speaker-details/?id=1335",
+      "sourceImage": "https://devoxxian-image-thumbnails.s3-eu-west-1.amazonaws.com/profile-9babf031-6098-4a10-83ac-32908e7c9912.jpg",
+      "assetId": "cmudlfmxoidyt07ls6vesm3or",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfmxoidyu07lswukn84eb",
+      "width": 200,
+      "height": 300,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Dmitry Jemerov",
+      "source": "https://gotober.com/2017/speakers/325/dmitry-jemerov",
+      "sourceImage": "https://files.gotocon.com/uploads/portraits/258/square_large/dmitry_jemerov_1548158249.jpg",
+      "assetId": "cmudlfntvidzw07lsywg681vy",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfntvidzx07ls7690b1so",
+      "width": 800,
+      "height": 800,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Maxim Shafirov",
+      "source": "https://blog.jetbrains.com/author/maxim-shafirov",
+      "sourceImage": "https://secure.gravatar.com/avatar/4acab31756e5e8fc3224668f1ed5ef19?s=1024&r=g",
+      "assetId": "cmudlfoqpi7ge07lk9l33ofse",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfoqpi7gf07lkbqwdbikp",
+      "width": 1024,
+      "height": 1024,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Trisha Gee",
+      "source": "https://blog.jetbrains.com/idea/2021/03/meet-the-java-developer-advocacy-team/",
+      "sourceImage": "https://blog.jetbrains.com/wp-content/uploads/2021/03/trisha.jpeg",
+      "assetId": "cmudlfpn7ie0u07lskba38vvx",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfpn7ie0v07lslea7ft81",
+      "width": 500,
+      "height": 500,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Konstantin Bulenkov",
+      "source": "https://blog.jetbrains.com/team/2021/07/16/the-big-question-i-like-to-ask-is-what-can-we-create-that-would-be-helpful-to-a-million-of-people/",
+      "sourceImage": "https://blog.jetbrains.com/wp-content/uploads/2021/07/Bulenkov_pr.jpg",
+      "assetId": "cmudlfqi1i7hd07lkrvyfjv1z",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfqi1i7he07lkni4oejir",
+      "width": 2500,
+      "height": 1786,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Rich Hickey",
+      "source": "https://www.cognitect.com/about.html",
+      "sourceImage": "https://www.cognitect.com/assets/images/rich-hickey.jpg",
+      "assetId": "cmudlfrdwie1s07lsep0vvpsk",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfrdwie1t07lsqep99wu3",
+      "width": 456,
+      "height": 456,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Alexander Stepanov",
+      "source": "https://commons.wikimedia.org/wiki/File:Alexander_Stepanov.jpg",
+      "sourceImage": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Alexander_Stepanov.jpg",
+      "assetId": "cmudlfs9yi7iw07lk6x5f8n65",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfs9yi7ix07lkfdxqk5r7",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "c-plus-plus-documentary"
+      ],
+      "author": "Paul R. McJones",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "modification": "Converted to JPEG; cropped by the site layout."
+    },
+    {
+      "name": "Danilo Piparo",
+      "source": "https://root.cern/about/team/",
+      "sourceImage": "https://root.cern/assets/images/DP.jpg",
+      "assetId": "cmudlft3si7j607lkpyyoudpt",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlft3si7j707lkiyhira17",
+      "width": 323,
+      "height": 265,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Jessica Janiuk",
+      "source": "https://sessionize.com/jessica-janiuk/",
+      "sourceImage": "https://cdn.sessionize.com/image/7621-400o400o2-5bb9a443-0958-4e2c-b02c-699faeb6772a.jpg",
+      "assetId": "cmudlfu04i7jq07lkcereygu3",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfu04i7jr07lki4xmb5ti",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Kevin Wittek",
+      "source": "https://sessionize.com/kevin-wittek/",
+      "sourceImage": "https://cdn.sessionize.com/image/99e5-400o400o2-YpPzLy8n2ZKJ1QGdeNrmtH.jpg",
+      "assetId": "cmudlfuvuie4907ls5z8qpr2v",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfuvuie4a07ls1oose166",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Wahbeh Qardaji",
+      "source": "https://responsivewebdesign.com/podcast/google-plus/",
+      "sourceImage": "https://responsivewebdesign.com/_assets/headshots/wahbeh-qardaji.jpg",
+      "assetId": "cmudlfvpkie4t07lso5adleno",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfvpkie4u07lsd37i1ywf",
+      "width": 164,
+      "height": 180,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Simona Cotin",
+      "source": "https://ng-be.org/talks/2023/3/24/simona-cotin",
+      "sourceImage": "https://images.squarespace-cdn.com/content/v1/5b7b64d52714e503eebf914c/9be4add5-9cfe-404d-80fb-e853b3e1ef73/simona_cotin.jpeg",
+      "assetId": "cmudlfwkhi7kp07lkeon4kpec",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfwkhi7kq07lkjuo9b7mi",
+      "width": 2500,
+      "height": 4443,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Stuart Halloway",
+      "source": "https://www.cognitect.com/about.html",
+      "sourceImage": "https://www.cognitect.com/assets/images/stu-halloway.jpg",
+      "assetId": "cmudlfxg2ie5w07lsxdhlyg3j",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfxg2ie5x07lsabdfj00b",
+      "width": 200,
+      "height": 200,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Anna Kozlova",
+      "source": "https://jpoint.ru/en/archive/2021/persons/3lluxjcui86fdyy0boryno/",
+      "sourceImage": "https://squidex.jugru.team/api/assets/srm/7J12DxxdSj8O5EgGJ1c4hm/102027-479325884-anna-kozlova-mnogostupenchatyye-refaktoringi-v-intellij-idea.jpg",
+      "assetId": "cmudlfycgie7f07lsrvhrzisy",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfycgie7g07lsew99od62",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Joey Bania",
+      "source": "https://mottvisuals.com/about/",
+      "sourceImage": "https://mottvisuals.com/wp-content/uploads/2025/06/0000_Joey-Bania-Director-Cinematographer-Video-Editor.pdf.jpg",
+      "assetId": "cmudlfz62i7n807lke6k8ndis",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlfz62i7n907lkx4e1ca1b",
+      "width": 800,
+      "height": 1200,
+      "films": [
+        "java",
+        "fastapi"
+      ]
+    },
+    {
+      "name": "Brian Kernighan",
+      "source": "https://www.cs.princeton.edu/~bwk/",
+      "sourceImage": "https://www.cs.princeton.edu/~bwk/bwk.carolines.crop.jpg",
+      "assetId": "cmudlg02di7od07lkekmutf49",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg02di7oe07lklsl2wdaw",
+      "width": 2072,
+      "height": 1266,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Jaś Miszewski",
+      "source": "https://www.jasfilmsthings.com/contact-1",
+      "sourceImage": "https://images.squarespace-cdn.com/content/v1/615304e7d2f74d24b22a0b3a/1634053512090-RC411FHUYZLA5ALB1MVJ/F1090029.JPG",
+      "assetId": "cmudlg0yei7pg07lkh4wa6ph6",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg0yei7ph07lk60ukpkvc",
+      "width": 2500,
+      "height": 1667,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Nina Ranns",
+      "source": "https://cpp-summit.org/speaker/702?lang=en&uid=c1036",
+      "sourceImage": "https://boolan.com/UploadResources/api/5a8f6fbc0d5f4e08bbcd4e7dbb582bbc.jpg",
+      "assetId": "cmudlg1tvie9z07lsourkruw5",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg1tviea007lsi9fwzttx",
+      "width": 376,
+      "height": 241,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Sergey Chernov",
+      "source": "https://www.linkedin.com/in/schernov",
+      "sourceImage": "https://media.licdn.com/dms/image/v2/D4E03AQGe4cQHCbCLMw/profile-displayphoto-shrink_200_200/B4EZY.HrgLHkAY-/0/1744798923163?e=2147483647&v=beta&t=_SeQB_jwqX70G_mQqsJrvcm9z42n6FCOtU-XxeNFABY",
+      "assetId": "cmudlg2o9i7qx07lkizhzxhff",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg2o9i7qy07lko715u79u",
+      "width": 200,
+      "height": 200,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Carolina Cabral",
+      "source": "https://theorg.com/org/honeypot/org-chart/carolina-cabral",
+      "sourceImage": "https://cdn.theorg.com/85ccd3d3-0f87-452f-989f-fcf1a34fc673_medium.jpg",
+      "assetId": "cmudlg3i1iea707lslwdcl4uw",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg3i1iea807ls7ycm71lk",
+      "width": 182,
+      "height": 182,
+      "films": [
+        "ruby-on-rails"
+      ]
+    },
+    {
+      "name": "Vojta Jina",
+      "source": "https://webexpo.net/prague2011/talk/angular-js/",
+      "sourceImage": "https://webexpo.net/prague2011/files/img/speakers/webexpo2011/cache/vojta-jina_1_talk2011.jpg",
+      "assetId": "cmudlg4esi7so07lkjt4m7iyw",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg4esi7sp07lkv3rg59lg",
+      "width": 190,
+      "height": 210,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Anders Hejlsberg",
+      "source": "https://www.microsoftalumnivoices.com/microsoft-origins",
+      "sourceImage": "https://static.wixstatic.com/media/ff6e33_36ade68c281949a993ed9d395abecf9e~mv2.jpg",
+      "assetId": "cmudlg5bqieb207ls5o4doqks",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg5bqieb307lskgsqd8sb",
+      "width": 1080,
+      "height": 1080,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "John Romero",
+      "source": "https://romero.com/bios",
+      "sourceImage": "https://images.squarespace-cdn.com/content/v1/5fef3318f8ce9b562500206e/1609511708856-LJ8L73SG6507CR18AJD9/poster-to-win-2.jpg",
+      "assetId": "cmudlg660i7t407lkrv2is4vj",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg660i7t507lk36b3rcro",
+      "width": 600,
+      "height": 900,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Doug Parker",
+      "source": "https://dwac.dev/",
+      "sourceImage": "https://blog.dwac.dev/res/img/social.webp",
+      "assetId": "cmudlg72hieb807lsp4ty83wy",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg72hieb907lsy70btjxk",
+      "width": 1200,
+      "height": 630,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Ed Wible",
+      "source": "https://archive.qconsf.com/speakers/edward-wible",
+      "sourceImage": "https://archive.qconsf.com/sites/qcon_sf/files/nubank_edward_wible_02.jpg",
+      "assetId": "cmudlg7w6iebo07ls6juk5who",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg7w6iebp07lsllusecct",
+      "width": 964,
+      "height": 1444,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Eugene Belyaev",
+      "source": "http://jaoo.dk/gotocon-common-content/archives/alltimespeakers/show_speaker.jsp?OID=457",
+      "sourceImage": "http://jaoo.dk/dl/alltime/images/speakers/eugene_belyaev.jpg",
+      "assetId": "cmudlg8roi7u207lkdoj5wpqd",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudlg8roi7u307lkz1xk3geg",
+      "width": 105,
+      "height": 106,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "James Arthur",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkdvhu1qgwd07mwibi6vmt4",
+      "assetId": "cmtkdvhu1qgwc07mwhrz7f1pt",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkdvhu1qgwd07mwibi6vmt4",
+      "width": 800,
+      "height": 1066,
+      "films": [
+        "local-first"
+      ]
+    },
+    {
+      "name": "Aaron Frost",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebcw0qsvt07n1ul3jtixq",
+      "assetId": "cmtkebcw0qsvs07n19p8xc1tw",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebcw0qsvt07n1ul3jtixq",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Addy Osmani",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebf2brcoc07mwrcfu9vum",
+      "assetId": "cmtkebf2brcob07mwyu3siy1x",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebf2brcoc07mwrcfu9vum",
+      "width": 671,
+      "height": 895,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Ady Ngom",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebgy0rcpe07mwbwhrkam8",
+      "assetId": "cmtkebgy0rcpd07mwg39ac2s4",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebgy0rcpe07mwbwhrkam8",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Jan-Niklas Wortmann",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebiqvrcq807mwfvc5tjoc",
+      "assetId": "cmtkebiqvrcq707mwje36l7xa",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebiqvrcq807mwfvc5tjoc",
+      "width": 1145,
+      "height": 1527,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Zeb Evans",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebkxhrcrz07mwunosafz3",
+      "assetId": "cmtkebkxhrcry07mw0danmakx",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkebkxhrcrz07mwunosafz3",
+      "width": 970,
+      "height": 1294,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "David Heinemeier Hansson",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfahfft21v07mwmge0ptnh",
+      "assetId": "cmtkfahfft21u07mwtiyc85ti",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfahfft21v07mwmge0ptnh",
+      "width": 694,
+      "height": 925,
+      "films": [
+        "ruby-on-rails"
+      ]
+    },
+    {
+      "name": "Jason Fried",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfaif8sjca07n1x52ota22",
+      "assetId": "cmtkfaif8sjc907n1xa8dtjjx",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfaif8sjca07n1x52ota22",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "ruby-on-rails"
+      ]
+    },
+    {
+      "name": "Jeremy Daer",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfajv4sjdv07n1uiyzis94",
+      "assetId": "cmtkfajv4sjdu07n11h5x9j53",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfajv4sjdv07n1uiyzis94",
+      "width": 718,
+      "height": 958,
+      "films": [
+        "ruby-on-rails"
+      ]
+    },
+    {
+      "name": "Jamis Buck",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfakszt26p07mwh48igz7c",
+      "assetId": "cmtkfakszt26o07mwdi5ymt6l",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfakszt26p07mwh48igz7c",
+      "width": 730,
+      "height": 974,
+      "films": [
+        "ruby-on-rails"
+      ]
+    },
+    {
+      "name": "Tobias Lütke",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfalyzsjfv07n111erql2y",
+      "assetId": "cmtkfalyzsjfu07n1m0papngn",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfalyzsjfv07n111erql2y",
+      "width": 1198,
+      "height": 1598,
+      "films": [
+        "ruby-on-rails"
+      ]
+    },
+    {
+      "name": "Andrei Alexandrescu",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbgk5ski007n11hssx124",
+      "assetId": "cmtkfbgk5skhz07n1iyc0bqxy",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbgk5ski007n11hssx124",
+      "width": 982,
+      "height": 1309,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Eric Lubin",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbn4kskou07n10wibkuk7",
+      "assetId": "cmtkfbn4kskot07n1fcffyp9i",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbn4kskou07n10wibkuk7",
+      "width": 928,
+      "height": 1238,
+      "films": [
+        "c-plus-plus-documentary"
+      ]
+    },
+    {
+      "name": "Alessandra Sierra",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbxeisl4i07n1a6zqerc2",
+      "assetId": "cmtkfbxeisl4h07n1f6g14ku2",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbxeisl4i07n1a6zqerc2",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Alex Miller",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbyh8sl6q07n1encz4j69",
+      "assetId": "cmtkfbyh8sl6p07n1uzfu4uq9",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbyh8sl6q07n1encz4j69",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Chris Houser",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbzodt3xi07mwvrw8i7q4",
+      "assetId": "cmtkfbzodt3xh07mwqbt8g0ou",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfbzodt3xi07mwvrw8i7q4",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "David Nolen",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkdtyuspuog07n1l7p79bnq",
+      "assetId": "cmtkdtyuspuof07n14y1p7lmg",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkdtyuspuog07n1l7p79bnq",
+      "width": 1018,
+      "height": 1357,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Eric Normand",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc0jct3yh07mw2jtn8k3r",
+      "assetId": "cmtkfc0jct3yg07mw5g2h061m",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc0jct3yh07mw2jtn8k3r",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Eric Thorsen",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc1h2slac07n1k2g58tr7",
+      "assetId": "cmtkfc1h2slab07n1bb8nn3yp",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc1h2slac07n1k2g58tr7",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Lucas Cavalcanti",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc2dat3zr07mwb8shehw3",
+      "assetId": "cmtkfc2dat3zq07mweel6v54f",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc2dat3zr07mwb8shehw3",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Michael Fogus",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc3a3t41a07mw41mx8rnn",
+      "assetId": "cmtkfc3a3t41907mwqxph85yx",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc3a3t41a07mw41mx8rnn",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Nathan Marz",
+      "source": "Cult Repo CMS: named film portrait asset",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc4htsld707n1l0ynd8hg",
+      "assetId": "cmtkfc4htsld607n1tdmvwwhc",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtkfc4htsld707n1l0ynd8hg",
+      "width": 1200,
+      "height": 1600,
+      "films": [
+        "clojure"
+      ]
+    },
+    {
+      "name": "Miško Hevery",
+      "source": "Cult Repo published vite cast portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmruptgrw26xi08k6ju2wae8m",
+      "assetId": "cmruptgrw26xh08k6t3rgc2l1",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmruptgrw26xi08k6ju2wae8m",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Sarah Drasner",
+      "source": "Cult Repo published vuejs cast portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmrur1gpa2s2d07myh5vf90mf",
+      "assetId": "cmrur1gpa2s2c07mygict9neb",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmrur1gpa2s2d07myh5vf90mf",
+      "width": 447,
+      "height": 447,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Ryan Carniato",
+      "source": "Cult Repo published vite cast portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmrupx4no283g08k6am1ptqcu",
+      "assetId": "cmrupx4no283f08k6w5ar3dud",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmrupx4no283g08k6am1ptqcu",
+      "width": 400,
+      "height": 400,
+      "films": [
+        "angular"
+      ]
+    },
+    {
+      "name": "Brian Goetz",
+      "source": "Cult Repo published java cast portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtk5k4etbpsa07mw2xf2lh91",
+      "assetId": "cmtk5k4etbps907mweumda9xl",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtk5k4etbpsa07mw2xf2lh91",
+      "width": 2160,
+      "height": 2700,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Josh Long",
+      "source": "Cult Repo published java cast portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtk5lmc3b88k07n13ja0o1bu",
+      "assetId": "cmtk5lmc3b88j07n1fu1nktrl",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmtk5lmc3b88k07n13ja0o1bu",
+      "width": 2160,
+      "height": 2700,
+      "films": [
+        "intellij"
+      ]
+    },
+    {
+      "name": "Emma Tracey",
+      "source": "Cult Repo published team portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmoonz1r17ase07mx61iriyo5",
+      "assetId": "cmoonz1r17asd07mxchf4vit2",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmoonz1r17ase07mx61iriyo5",
+      "width": 1536,
+      "height": 2048,
+      "films": [
+        "graphql",
+        "local-first",
+        "elixir",
+        "vuejs",
+        "emberjs",
+        "java",
+        "c-plus-plus-documentary",
+        "clojure",
+        "fastapi"
+      ]
+    },
+    {
+      "name": "Josiah McGarvie",
+      "source": "Cult Repo published team portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmoonzube7af307lm8qgpd6zr",
+      "assetId": "cmoonzube7af207lm1shztdff",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmoonzube7af307lm8qgpd6zr",
+      "width": 700,
+      "height": 880,
+      "films": [
+        "vite",
+        "kubernetes",
+        "graphql",
+        "elixir",
+        "vuejs",
+        "emberjs",
+        "prometheus"
+      ]
+    },
+    {
+      "name": "Ida Bechtle",
+      "source": "Cult Repo published team portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmooo0n5k7al607lm5o3u7oi8",
+      "assetId": "cmooo0n5k7al507lmd5a3jhze",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmooo0n5k7al607lm5o3u7oi8",
+      "width": 700,
+      "height": 880,
+      "films": [
+        "react",
+        "nodejs",
+        "python"
+      ]
+    },
+    {
+      "name": "Guillermo Lopez",
+      "source": "Cult Repo published team portrait",
+      "sourceImage": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmooo1gcn7baj07mxd5w2qx44",
+      "assetId": "cmooo1gcn7bai07mx705vyxox",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmooo1gcn7baj07mxd5w2qx44",
+      "width": 700,
+      "height": 880,
+      "films": [
+        "vite",
+        "kubernetes",
+        "local-first",
+        "angular",
+        "intellij",
+        "prometheus",
+        "spring"
+      ]
+    },
+    {
+      "name": "Cormac Dunne",
+      "source": "https://vimeo.com/cormacdunne",
+      "sourceImage": "https://i.vimeocdn.com/portrait/109711120_300x300?subrect=77%2C93%2C559%2C575&r=cover&sig=6bd767684c2ccedc296f56b29d76e522752b719792291b20d1ac37bb60aae831&v=1&region=us",
+      "assetId": "cmudljb0si9en07lku5d9wvcw",
+      "image": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudljb0si9eo07lkafcqwzo8",
+      "width": 300,
+      "height": 300,
+      "films": [
+        "clojure"
+      ]
+    }
+  ],
+  "remaining": [
+    {
+      "film": "c-plus-plus-documentary",
+      "name": "Andrew Koenig",
+      "reason": "No sufficiently reliable public portrait selected."
+    },
+    {
+      "film": "clojure",
+      "name": "Steph Hickey",
+      "reason": "No sufficiently reliable public portrait selected."
+    },
+    {
+      "film": "spring",
+      "name": "Guillermo Cistari",
+      "reason": "Company profile uses an illustration; photographic headshot still needed."
+    }
+  ]
+}

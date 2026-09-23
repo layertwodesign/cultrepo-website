@@ -93,7 +93,9 @@ export default function StippleOverlay({
   const glRef = useRef<ReturnType<typeof initGL>>(null);
   const animRef = useRef(0);
   const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   // Initialize WebGL
   useEffect(() => {

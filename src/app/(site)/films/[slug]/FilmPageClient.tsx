@@ -3,13 +3,54 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import type { Film } from "@/lib/films";
+import FilmPreview from "@/components/FilmPreview";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 import Reveal from "@/components/Reveal";
-import SplitReveal from "@/components/SplitReveal";
+import { getCrewPortrait, portraitCredits } from "@/lib/people-portraits";
 
 const STAGGER_MS = 80;
 const GRID_COLS = 3;
+const ABOUT_PREVIEW_WORDS = 80;
+
+function FilmAbout({ synopsis }: { synopsis: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const words = Array.from(synopsis.matchAll(/\S+/g));
+  const canExpand = words.length > ABOUT_PREVIEW_WORDS;
+  const lastPreviewWord = words[ABOUT_PREVIEW_WORDS - 1];
+  const previewText = canExpand
+    ? synopsis.slice(0, lastPreviewWord.index! + lastPreviewWord[0].length)
+    : synopsis;
+  const previewParagraphs = previewText.trim().split(/\n\s*\n/);
+  if (canExpand && previewParagraphs.length > 1 && previewParagraphs.at(-1)!.split(/\s+/).length < 12) {
+    previewParagraphs.pop();
+  }
+  const preview = previewParagraphs.join("\n\n");
+
+  return (
+    <>
+      <div id="film-about-copy" className="fp-about-text">
+        {(expanded ? synopsis : preview).trim().split(/\n\s*\n/).map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
+      </div>
+      {canExpand && (
+        <button
+          type="button"
+          className="fp-about-toggle"
+          aria-expanded={expanded}
+          aria-controls="film-about-copy"
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? "read less" : "read more"}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d={expanded ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      )}
+    </>
+  );
+}
 
 type Props = {
   film: Film;
@@ -23,9 +64,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
   const [entered, setEntered] = useState(false);
   const [activeSection, setActiveSection] = useState("film");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  const [lightboxRect, setLightboxRect] = useState<DOMRect | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const pageRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -37,8 +76,8 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
     const rect = consumeFilmRect();
     const el = videoSectionRef.current;
     if (!rect || !el) {
-      setEntered(true);
-      return;
+      const frame = requestAnimationFrame(() => setEntered(true));
+      return () => cancelAnimationFrame(frame);
     }
 
     // Get the video's natural position
@@ -54,8 +93,10 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
     el.style.transition = "none";
 
     // Next frame: animate to natural position
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    let secondFrame = 0;
+    let settleTimer: ReturnType<typeof setTimeout> | undefined;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
         el.style.transition = "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
         el.style.left = `${natural.left}px`;
         el.style.top = `${natural.top}px`;
@@ -63,12 +104,18 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         el.style.height = `${natural.height}px`;
 
         // After settle, clear inline styles and show rest of content
-        setTimeout(() => {
+        settleTimer = setTimeout(() => {
           el.style.cssText = "";
           setEntered(true);
         }, 520);
       });
     });
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+      clearTimeout(settleTimer);
+      el.style.cssText = "";
+    };
   }, [consumeFilmRect]);
 
   const scrollPausedRef = useRef(false);
@@ -136,14 +183,13 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
   const openLightbox = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const img = e.currentTarget;
     const src = img.dataset.src || img.querySelector("video")?.src || "";
-    setLightboxRect(img.getBoundingClientRect());
     setLightboxSrc(src);
     requestAnimationFrame(() => requestAnimationFrame(() => setLightboxOpen(true)));
   }, []);
 
   const closeLightbox = useCallback(() => {
     setLightboxOpen(false);
-    setTimeout(() => { setLightboxSrc(null); setLightboxRect(null); }, 400);
+    setTimeout(() => { setLightboxSrc(null); }, 400);
   }, []);
 
   const isFundraising = film.status === "Fundraising";
@@ -157,7 +203,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
       {/* Mobile-only close button — sits left of the hamburger */}
       <button
         className="fp-close-mobile"
-        onClick={() => navigateTo("/")}
+        onClick={() => navigateTo("/films")}
         aria-label="Close film"
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -180,7 +226,9 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
                 title={film.title}
               />
             ) : (
-              <video
+              <FilmPreview
+                title={film.title}
+                poster={film.poster}
                 src={film.video}
                 controls
                 playsInline
@@ -252,19 +300,17 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
             <Reveal>
               <span className="fp-label">About</span>
             </Reveal>
-            <p className="fp-about-text">
-              <SplitReveal text={film.synopsis} stagger={18} startDelay={150} />
-            </p>
+            <FilmAbout key={film.slug} synopsis={film.synopsis} />
           </section>
 
           {/* Parallax images */}
           {film.stills.length >= 2 && (
             <div className="fp-images-row">
               <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[0] = el; }}>
-                <img src={film.stills[0]} alt="" className="fp-parallax-img" data-src={film.stills[0]} onClick={openLightbox} />
+                <Image width={1600} height={900} sizes="(max-width: 768px) 50vw, 35vw" src={film.stills[0]} alt="" className="fp-parallax-img" data-src={film.stills[0]} onClick={openLightbox} />
               </div>
               <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[1] = el; }}>
-                <img src={film.stills[1]} alt="" className="fp-parallax-img" data-src={film.stills[1]} onClick={openLightbox} />
+                <Image width={1600} height={900} sizes="(max-width: 768px) 50vw, 35vw" src={film.stills[1]} alt="" className="fp-parallax-img" data-src={film.stills[1]} onClick={openLightbox} />
               </div>
             </div>
           )}
@@ -305,31 +351,50 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
               ))}
             </div>
 
+            {portraitCredits.filter((credit) => film.cast.some((person) => person.photo === credit.photo)).map((credit) => (
+              <details className="fp-photo-credits" key={credit.photo}>
+                <summary>Photo credits</summary>
+                <p>
+                  <a href={credit.source} target="_blank" rel="noopener noreferrer">{credit.person}</a>
+                  {" by "}{credit.author}{" · "}
+                  <a href={credit.licenseUrl} target="_blank" rel="noopener noreferrer">{credit.license}</a>
+                  {". Cropped to fit."}
+                </p>
+              </details>
+            ))}
+
             {/* Crew — smaller inline */}
             <Reveal>
               <h3 className="fp-humans-heading fp-crew-heading">Crew</h3>
             </Reveal>
             <div className="fp-crew">
-              {film.crew.map((person, i) => (
-                <Reveal key={person.name + person.role} delay={120 + i * 60}>
-                  <div className="fp-crew-member">
-                    <div className="fp-crew-photo">
-                      <span className="fp-crew-initials">{person.name.split(" ").map((n) => n[0]).join("")}</span>
+              {film.crew.map((person, i) => {
+                const photo = getCrewPortrait(person.name);
+                return (
+                  <Reveal key={person.name + person.role} delay={120 + i * 60}>
+                    <div className="fp-crew-member">
+                      <div className="fp-crew-photo">
+                        {photo ? (
+                          <Image src={photo} alt={person.name} width={56} height={56} sizes="56px" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        ) : (
+                          <span className="fp-crew-initials">{person.name.trim().split(/\s+/).map((n) => n[0]).join("")}</span>
+                        )}
+                      </div>
+                      <div className="fp-crew-info">
+                        <span className="fp-crew-role">{person.role}</span>
+                        <span className="fp-crew-name">{person.name}</span>
+                      </div>
                     </div>
-                    <div className="fp-crew-info">
-                      <span className="fp-crew-role">{person.role}</span>
-                      <span className="fp-crew-name">{person.name}</span>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
+                  </Reveal>
+                );
+              })}
             </div>
           </section>
 
           {/* More parallax images */}
           {film.stills.length >= 3 && (
             <div className="fp-image-frame fp-image-full fp-section" ref={(el) => { parallaxRefs.current[2] = el; }}>
-              <img src={film.stills[2]} alt="" className="fp-parallax-img" data-src={film.stills[2]} onClick={openLightbox} />
+              <Image width={1600} height={900} sizes="(max-width: 768px) 100vw, 70vw" src={film.stills[2]} alt="" className="fp-parallax-img" data-src={film.stills[2]} onClick={openLightbox} />
             </div>
           )}
 
@@ -338,7 +403,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
             <div className="fp-images-row">
               {film.stills.slice(3, 5).map((src, i) => (
                 <div key={src} className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[3 + i] = el; }}>
-                  <img src={src} alt="" className="fp-parallax-img" data-src={src} onClick={openLightbox} />
+                  <Image width={1600} height={900} sizes="(max-width: 768px) 50vw, 35vw" src={src} alt="" className="fp-parallax-img" data-src={src} onClick={openLightbox} />
                 </div>
               ))}
             </div>
@@ -385,7 +450,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         {/* ===== SIDEBAR (RIGHT, STICKY) ===== */}
         <aside className={`fp-sidebar ${entered ? "fp-entered" : ""}`}>
           {/* X close button */}
-          <button className="fp-close" onClick={() => navigateTo("/")} aria-label="Close">
+          <button className="fp-close" onClick={() => navigateTo("/films")} aria-label="Close">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
@@ -407,7 +472,8 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
                 </div>
               </div>
               {film.poster && (
-                <img
+                <Image
+                  width={480} height={680} sizes="96px" style={{ height: "auto" }}
                   src={film.poster}
                   alt={`${film.title} poster`}
                   className="fp-sb-poster-img"
@@ -495,7 +561,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
               <Reveal key={f.slug} delay={delay}>
                 <TransitionLink href={`/films/${f.slug}`} className="film-card">
                   <div className="film-card-video-wrap">
-                    <video src={f.video} muted loop playsInline autoPlay preload="metadata" className="film-card-video" />
+                    <FilmPreview title={f.title} poster={f.poster} src={f.video} muted loop playsInline autoPlay preload="metadata" className="film-card-video" />
                     <div className="film-card-overlay" />
                   </div>
                   <div className="film-card-info">
@@ -517,7 +583,9 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {lightboxSrc.endsWith(".mp4") ? (
             <video src={lightboxSrc} muted loop playsInline autoPlay className="fp-lightbox-media" />
           ) : (
-            <img src={lightboxSrc} alt="" className="fp-lightbox-media" />
+            <div style={{ position: "relative", width: "80vw", height: "80vh" }}>
+              <Image src={lightboxSrc} alt={`${film.title} still`} fill sizes="80vw" className="fp-lightbox-media" style={{ objectFit: "contain" }} />
+            </div>
           )}
         </div>
       )}
