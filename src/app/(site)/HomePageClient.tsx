@@ -145,7 +145,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       s.introProgress = 1;
       s.introOffsetY = 0;
     }
-    // Hard safety net — never leave the hamburger hidden for more than 14s
+    // Hard safety net for the homepage wordmark and hero layout.
     const safety = setTimeout(() => setShowUI(true), 14000);
     return () => {
       clearTimeout(safety);
@@ -282,7 +282,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   // Phase: carousel — show UI elements progressively
   useEffect(() => {
     if (introPhase !== "carousel") return;
-    // Show hamburger + wordmark after carousel starts
+    // Reveal the homepage wordmark after the carousel starts.
     const t1 = setTimeout(() => setShowUI(true), 800);
     // Keep the intro cadence without rendering an unused description typewriter.
     const completion = setTimeout(() => {
@@ -789,7 +789,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
   return (
     <>
-      {!showUI && <style>{`.hamburger { visibility: hidden; pointer-events: none; }`}</style>}
       {/* ============ HEADER GRADIENT ============ */}
       <div className={`header-gradient ${showGradient ? "visible" : ""}`} />
 

@@ -866,7 +866,7 @@ body.invert .corner-square {
 .menu-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 205;
   background: #0D110F;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
