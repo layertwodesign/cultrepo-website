@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import TransitionLink from "./TransitionLink";
 import CornerSquares from "./CornerSquares";
@@ -25,6 +25,8 @@ type Props = {
 
 export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, youtubeUrl }: Props) {
   const [open, setOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const pathname = usePathname();
@@ -34,8 +36,39 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
   useEffect(() => { setOpen(false); }, [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    const toggle = toggleRef.current;
+    document.body.style.overflow = "hidden";
+    toggle?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+      }
+      if (event.key !== "Tab") return;
+      const controls = Array.from(navRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not(:disabled), input:not(:disabled), [tabindex="0"]'
+      ) ?? []).filter((element) => element.getClientRects().length > 0);
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (!first || !last) return;
+      const outside = !navRef.current?.contains(document.activeElement);
+      if (event.shiftKey && (document.activeElement === first || outside)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || outside)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+      toggle?.focus({ preventScroll: true });
+    };
   }, [open]);
 
   // On film pages: hidden on desktop (sidebar carries the brand), but shown
@@ -54,30 +87,41 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
   ));
 
   return (
-    <>
+    <div ref={navRef} onClickCapture={(event) => {
+      // Close even when a link points to the page we are already viewing.
+      if (event.target instanceof Element && event.target.closest("a[href]")) {
+        setOpen(false);
+      }
+    }}>
       <TransitionLink
         href="/"
+        aria-label="CultRepo home"
+        inert={!wordmarkVisible}
         className={`top-wordmark ${wordmarkVisible ? "visible" : ""} ${open ? "menu-active" : ""} ${isFilm ? "on-film" : ""}`}
         style={{ zIndex: 210 }}
       />
 
       <button
+        ref={toggleRef}
+        type="button"
         className={`hamburger visible ${open ? "open" : ""}`}
         style={{ zIndex: 10000 }}
         aria-label={open ? "Close menu" : "Open menu"}
-        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-controls="site-menu"
+        onClick={() => setOpen((value) => !value)}
       >
         <span />
         <span />
       </button>
 
-      <div className={`menu-overlay ${open ? "open" : ""}`}>
+      <div id="site-menu" className={`menu-overlay ${open ? "open" : ""}`} inert={!open} aria-hidden={!open} data-lenis-prevent>
         {/* Keep the scene mounted to avoid SDK teardown races when closing the menu. */}
         <UnicornBackground className="menu-unicorn" paused={!open} />
 
         <MenuMarquee items={marqueeItems} />
 
-        <nav className="menu-cards">
+        <nav className="menu-cards" aria-label="Main navigation">
           {NAV.map((item) => {
             const active = item.match(pathname);
             if (active) {
@@ -201,6 +245,6 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
