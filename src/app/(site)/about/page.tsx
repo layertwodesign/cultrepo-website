@@ -111,7 +111,8 @@ export default async function AboutPage() {
       <section className="about-story">
         <div className="about-story-layout">
           <Reveal className="about-story-ghost">
-            <Image width={386} height={387} src="/ghost.svg" alt="" />
+            {/* 2x raster of ghost.svg: the vector is 5 MB of stipple paths */}
+            <Image width={386} height={387} src="/ghost-about.webp" alt="" unoptimized />
           </Reveal>
           <div className="about-story-text">
             <Typewriter text={about.story} speed={32} />

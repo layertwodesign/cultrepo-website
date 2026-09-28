@@ -79,6 +79,9 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     }
     return ordered;
   });
+  // Only the clips on screen when the intro lands (the centred one and its two
+  // neighbours) load up front; the rest load when the carousel reaches them.
+  const eager = useMemo(() => new Set([0, 1, items.length - 1]), [items.length]);
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
   const [centeredSlug, setCenteredSlug] = useState<string | null>(null);
   const pendingSlugRef = useRef<string | null>(null);
@@ -159,7 +162,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   useEffect(() => {
     if (introPhase !== "loading") return;
 
-    const videos = videoRefs.current.filter(Boolean) as HTMLVideoElement[];
+    const videos = videoRefs.current.filter((v, i) => v && eager.has(i)) as HTMLVideoElement[];
     // Track progress across: videos (90% weight) + fonts (10% weight)
     let fontsReady = false;
     let done = false;
@@ -231,7 +234,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         v.removeEventListener("error", checkProgress);
       });
     };
-  }, [introPhase]);
+  }, [introPhase, eager]);
 
   // Phase: bar-fade → text-reveal
   useEffect(() => {
@@ -312,8 +315,15 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     return () => clearInterval(interval);
   }, [items, centeredSlug]);
 
-  // Get YouTube ID for preloading
-  const preloadFilm = centeredSlug ? films.find((f) => f.slug === centeredSlug) : null;
+  // Warm the YouTube player for the film the visitor settles on. Desktop only:
+  // on phones this hidden iframe pulled the whole player for every film passed.
+  const [ytSlug, setYtSlug] = useState<string | null>(null);
+  useEffect(() => {
+    if (!centeredSlug || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const timer = window.setTimeout(() => setYtSlug(centeredSlug), 1500);
+    return () => clearTimeout(timer);
+  }, [centeredSlug]);
+  const preloadFilm = ytSlug ? films.find((f) => f.slug === ytSlug) : null;
   const preloadYtId = preloadFilm?.youtubeId;
 
   useEffect(() => {
@@ -333,59 +343,53 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lazy upgrade: once the intro is done, swap each carousel video from the
-  // 720p source to the 1080p source. Preloads the HD asset off-DOM, then
-  // assigns it to the live element while preserving currentTime.
+  // Once the intro is done, swap the centred clip from the 720p source to the
+  // 1080p one after the visitor settles on it. Wide screens only (phones and
+  // tablets never show the extra pixels) and never with Save-Data on. Preloads
+  // the HD asset off-DOM, then assigns it to the live element at the same time.
   useEffect(() => {
-    if (introPhase !== "done") return;
+    if (introPhase !== "done" || !centeredSlug) return;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (window.innerWidth <= 1024 || connection?.saveData) return;
+    const idx = items.findIndex((item) => item.slug === centeredSlug);
+    const hdUrl = items[idx]?.videoHd;
+    const live = videoRefs.current[idx];
+    if (!hdUrl || !live || live.dataset.hdLoaded) return;
 
-    const upgrade = (idx: number, hdUrl: string) => {
-      const live = videoRefs.current[idx];
-      if (!live) return;
-      // Skip if already swapped
-      if (live.dataset.hdLoaded === "1") return;
-
-      const pre = document.createElement("video");
+    let pre: HTMLVideoElement | null = null;
+    const onReady = () => {
+      if (!live.isConnected || live.dataset.hdLoaded === "1") return;
+      const t = live.currentTime;
+      live.dataset.hdLoaded = "1";
+      live.src = hdUrl;
+      const onMeta = () => {
+        live.removeEventListener("loadedmetadata", onMeta);
+        try { live.currentTime = Math.min(t, (live.duration || 15) - 0.1); } catch {}
+        live.play().catch(() => {});
+      };
+      live.addEventListener("loadedmetadata", onMeta);
+      live.load();
+    };
+    const timer = window.setTimeout(() => {
+      live.dataset.hdLoaded = "pending";
+      pre = document.createElement("video");
       pre.preload = "auto";
       pre.muted = true;
       pre.playsInline = true;
       pre.src = hdUrl;
-
-      const onReady = () => {
-        pre.removeEventListener("canplaythrough", onReady);
-        if (!live.isConnected || live.dataset.hdLoaded === "1") return;
-        const t = live.currentTime;
-        live.dataset.hdLoaded = "1";
-        live.src = hdUrl;
-        const onMeta = () => {
-          live.removeEventListener("loadedmetadata", onMeta);
-          try { live.currentTime = Math.min(t, (live.duration || 15) - 0.1); } catch {}
-          live.play().catch(() => {});
-        };
-        live.addEventListener("loadedmetadata", onMeta);
-        live.load();
-      };
-      pre.addEventListener("canplaythrough", onReady);
+      pre.addEventListener("canplaythrough", onReady, { once: true });
       pre.load();
-    };
-
-    let cancelled = false;
-    const startUpgrades = () => {
-      // Stagger so we don't open 15 connections at once
-      items.forEach((item, idx) => {
-        if (!item.videoHd) return;
-        setTimeout(() => {
-          if (!cancelled) upgrade(idx, item.videoHd!);
-        }, idx * 250);
-      });
-    };
-
-    const timer = window.setTimeout(startUpgrades, 1200);
+    }, 800);
     return () => {
-      cancelled = true;
       clearTimeout(timer);
+      if (pre) {
+        pre.removeEventListener("canplaythrough", onReady);
+        pre.removeAttribute("src");
+        pre.load();
+        if (live.dataset.hdLoaded === "pending") delete live.dataset.hdLoaded;
+      }
     };
-  }, [introPhase, items]);
+  }, [introPhase, centeredSlug, items]);
 
   // Cursor-label lerp loop — eases the "VIEW FILM" label toward the mouse
   // each frame and writes its visibility based on cursorRef.visible (set by
@@ -577,6 +581,20 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
             videoEl.style.opacity = String(Math.min(1, videoOpacity));
           } else {
             videoEl.style.opacity = "1";
+          }
+        }
+
+        // Play clips while they're on screen and pause the rest, so a clip
+        // only downloads once the carousel brings it into view.
+        if (videoEl && state.initialized && !videoEl.dataset.playBlocked) {
+          const onScreen = norm < 0.9;
+          if (onScreen && videoEl.paused) {
+            videoEl.play().catch((err: DOMException) => {
+              // Autoplay refused (e.g. Low Power Mode): leave the poster up.
+              if (err?.name === "NotAllowedError") videoEl.dataset.playBlocked = "1";
+            });
+          } else if (!onScreen && !videoEl.paused) {
+            videoEl.pause();
           }
         }
       });
@@ -1018,9 +1036,12 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                   <FilmPreview
                     title={item.title}
                     poster={item.poster}
+                    posterWidth={960}
                     ref={(el) => { videoRefs.current[idx] = el; }}
                     src={item.video}
-                    muted loop playsInline autoPlay preload="auto"
+                    muted loop playsInline
+                    autoPlay={eager.has(idx)}
+                    preload={eager.has(idx) ? "auto" : "none"}
                     className="carousel-video"
                   />
                   <div className="carousel-overlay">
@@ -1047,10 +1068,12 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                 <FilmPreview
                   title={film.title}
                   poster={film.poster}
+                  posterWidth={800}
                   src={film.video}
                   muted
                   loop
                   playsInline
+                  lazy
                   preload="metadata"
                   className="home-grid-video"
                 />

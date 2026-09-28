@@ -47,11 +47,13 @@ export default async function FilmsPage() {
                     <FilmPreview
                       title={film.title}
                       poster={film.poster}
+                      posterWidth={800}
                       src={film.video}
                       muted
                       loop
                       playsInline
                       autoPlay
+                      lazy
                       preload="metadata"
                       className="film-card-video"
                     />
