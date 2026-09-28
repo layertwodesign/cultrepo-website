@@ -52,6 +52,27 @@ function FilmAbout({ synopsis }: { synopsis: string }) {
   );
 }
 
+// Sidebar shortcuts to sections further down the page. The arrow and counts
+// make it clear the content lives below (they read as empty panels before).
+function JumpLink({ label, count, active, onClick }: { label: string; count?: number; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className={`fp-sb-link ${active ? "active" : ""}`}
+      onClick={onClick}
+      aria-label={`Jump to ${label}${count ? ` (${count})` : ""}`}
+    >
+      <span>{label}</span>
+      <span className="fp-sb-link-meta" aria-hidden="true">
+        {count ? <span>{count}</span> : null}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+    </button>
+  );
+}
+
 type Props = {
   film: Film;
   allFilms: Film[];
@@ -516,23 +537,26 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
 
           {/* Anchor links */}
           {film.status !== "Released" && (
-            <button
-              className={`fp-sb-link ${activeSection === "fundraising" ? "active" : ""}`}
+            <JumpLink
+              label={isFundraising ? "Fundraising" : "Status"}
+              active={activeSection === "fundraising"}
               onClick={() => scrollTo("fundraising")}
-            >
-              {isFundraising ? "Fundraising" : "Status"}
-            </button>
+            />
           )}
-          <button className={`fp-sb-link ${activeSection === "about" ? "active" : ""}`} onClick={() => scrollTo("about")}>
-            About
-          </button>
-          <button className={`fp-sb-link ${activeSection === "humans" ? "active" : ""}`} onClick={() => scrollTo("humans")}>
-            The People
-          </button>
+          <JumpLink label="About" active={activeSection === "about"} onClick={() => scrollTo("about")} />
+          <JumpLink
+            label="The People"
+            count={film.cast.length + film.crew.length}
+            active={activeSection === "humans"}
+            onClick={() => scrollTo("humans")}
+          />
           {film.sponsors.length > 0 && (
-            <button className={`fp-sb-link ${activeSection === "sponsors" ? "active" : ""}`} onClick={() => scrollTo("sponsors")}>
-              Sponsors
-            </button>
+            <JumpLink
+              label="Sponsors"
+              count={film.sponsors.length}
+              active={activeSection === "sponsors"}
+              onClick={() => scrollTo("sponsors")}
+            />
           )}
 
           {/* Watch on YouTube */}

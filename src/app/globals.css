@@ -2131,7 +2131,8 @@ body.invert .corner-square {
 }
 
 .fp-sb-link {
-  display: block; width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%;
   background: #1A1E19; border-radius: 12px;
   padding: 18px 20px; border: none; cursor: pointer;
   font-family: var(--font-mono), monospace;
@@ -2139,6 +2140,21 @@ body.invert .corner-square {
   text-align: left; transition: color 0.3s ease, background 0.3s ease;
 }
 .fp-sb-link:hover, .fp-sb-link.active { color: #FAFFFF; background: #282C26; }
+.fp-sb-link:focus-visible { outline: 1px solid #87FF38; outline-offset: 2px; color: #FAFFFF; background: #282C26; }
+/* Count + down arrow: says "this jumps to content below", not "empty panel" */
+.fp-sb-link-meta {
+  display: inline-flex; align-items: center; gap: 12px;
+  color: #6E7366; transition: color 0.3s ease;
+}
+.fp-sb-link-meta svg { flex-shrink: 0; transition: transform 0.3s ease; }
+.fp-sb-link:hover .fp-sb-link-meta,
+.fp-sb-link:focus-visible .fp-sb-link-meta,
+.fp-sb-link.active .fp-sb-link-meta { color: #87FF38; }
+.fp-sb-link:hover .fp-sb-link-meta svg,
+.fp-sb-link:focus-visible .fp-sb-link-meta svg { transform: translateY(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .fp-sb-link-meta svg { transition: none; }
+}
 
 /* Watch on YouTube */
 .fp-sb-yt {
