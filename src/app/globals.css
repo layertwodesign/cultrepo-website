@@ -870,7 +870,10 @@ body.invert .corner-square {
   background: #0D110F;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto auto;
+  /* max-content, not auto: when the menu is taller than the screen, auto rows
+     squeezed the overflow-hidden film-title strip down to 0px. */
+  grid-template-rows: repeat(3, max-content);
+  grid-auto-rows: max-content;
   align-content: center;
   padding: 10vh 40px 9vh;
   gap: 10vh;
