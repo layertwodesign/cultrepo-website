@@ -901,7 +901,8 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
         {/* Right-side scrolling ticker */}
         <div className={`ticker ${revealed ? "revealed" : ""}`}>
-          <div className="ticker-track">
+          {/* ~1.5s per row keeps the original scroll speed as the list grows */}
+          <div className="ticker-track" style={{ animationDuration: `${Math.max(40, ticker.length * 1.5)}s` }}>
             {tickerItems.map((item, i) => (
               <div key={i} className="ticker-row">
                 <span className="ticker-tech">{item.tech}</span>

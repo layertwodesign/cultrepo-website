@@ -180,7 +180,7 @@ export const SITE_SETTINGS_QUERY = /* GraphQL */ `
       defaultSeo { ...SeoFields }
       homeSeo { ...SeoFields }
       filmsListingSeo { ...SeoFields }
-      homepageTicker {
+      homepageTicker(first: 100) {
         name
         people
       }
