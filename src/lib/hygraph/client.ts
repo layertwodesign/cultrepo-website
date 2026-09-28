@@ -6,6 +6,9 @@
  *   HYGRAPH_READ_TOKEN       — optional bearer; only needed if the public API
  *                              is gated. Most projects expose Published stage
  *                              publicly and don't need a token for reads.
+ *   HYGRAPH_STAGE            — optional; "DRAFT" makes a staging deploy read
+ *                              unpublished edits. Anything else (or unset)
+ *                              keeps the token's default, PUBLISHED.
  *
  * Returns null when the env isn't configured so callers can fall back to the
  * local hardcoded data during local dev / before the CMS is provisioned.
@@ -18,6 +21,7 @@ export type GraphQLResponse<T> = {
 
 const API_URL = process.env.HYGRAPH_API_URL;
 const READ_TOKEN = process.env.HYGRAPH_READ_TOKEN;
+const STAGE = process.env.HYGRAPH_STAGE === "DRAFT" ? "DRAFT" : null;
 
 export const isHygraphConfigured = Boolean(API_URL);
 
@@ -32,6 +36,7 @@ export async function hygraphFetch<T>(
     "Content-Type": "application/json",
   };
   if (READ_TOKEN) headers.Authorization = `Bearer ${READ_TOKEN}`;
+  if (STAGE) headers["gcms-stage"] = STAGE;
 
   const res = await fetch(API_URL, {
     method: "POST",

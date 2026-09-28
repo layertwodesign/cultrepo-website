@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "media.graphassets.com" },
     ],
   },
+  async headers() {
+    // Staging copies set SITE_NOINDEX=1 so review links stay out of search results.
+    if (process.env.SITE_NOINDEX !== "1") return [];
+    return [
+      { source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+    ];
+  },
   async redirects() {
     return [
       // Map cultrepo.com (Webflow) /documentaries/* slugs to the new /films/*.
