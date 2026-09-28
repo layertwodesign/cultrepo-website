@@ -37,9 +37,17 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
 
   useEffect(() => {
     if (!open) return;
+    const root = document.documentElement;
     const previousOverflow = document.body.style.overflow;
+    const previousRootOverflow = root.style.overflow;
     const toggle = toggleRef.current;
+    // Lock <html> as well as <body>: mobile Safari scrolls the root element.
+    // The class and event tell SmoothScroll and the homepage carousel to stop
+    // taking wheel/touch input, so the menu itself can scroll.
     document.body.style.overflow = "hidden";
+    root.style.overflow = "hidden";
+    root.classList.add("menu-open");
+    window.dispatchEvent(new CustomEvent("cultrepo:menu", { detail: { open: true } }));
     toggle?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -66,6 +74,9 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      root.style.overflow = previousRootOverflow;
+      root.classList.remove("menu-open");
+      window.dispatchEvent(new CustomEvent("cultrepo:menu", { detail: { open: false } }));
       document.removeEventListener("keydown", onKeyDown);
       toggle?.focus({ preventScroll: true });
     };

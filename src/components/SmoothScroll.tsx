@@ -14,6 +14,14 @@ export default function SmoothScroll() {
       touchMultiplier: 1.5,
     });
 
+    // The open menu locks the page; Lenis would otherwise keep scrolling it.
+    const onMenu = (event: Event) => {
+      if ((event as CustomEvent<{ open: boolean }>).detail?.open) lenis.stop();
+      else lenis.start();
+    };
+    window.addEventListener("cultrepo:menu", onMenu);
+    if (document.documentElement.classList.contains("menu-open")) lenis.stop();
+
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -21,6 +29,7 @@ export default function SmoothScroll() {
     const id = requestAnimationFrame(raf);
 
     return () => {
+      window.removeEventListener("cultrepo:menu", onMenu);
       cancelAnimationFrame(id);
       lenis.destroy();
     };

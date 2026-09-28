@@ -699,8 +699,11 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     }
     rafId = requestAnimationFrame(loop);
 
+    // While the menu is open it owns wheel/touch input (and can scroll).
+    const menuOpen = () => document.documentElement.classList.contains("menu-open");
+
     const onWheel = (e: WheelEvent) => {
-      if (state.carouselBlocked || state.carouselDone) return;
+      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
       e.preventDefault();
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       state.target += delta * 0.8;
@@ -711,7 +714,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     window.addEventListener("wheel", onWheel, { passive: false });
 
     const onMouseDown = (e: MouseEvent) => {
-      if (state.carouselBlocked || state.carouselDone) return;
+      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
       if (!state.initialized) { state.initialized = true; state.current = state.target; }
       state.isDragging = true;
       state.hasDragged = false;
@@ -734,12 +737,12 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
     let touchPrevY = 0;
     const onTouchStart = (e: TouchEvent) => {
-      if (state.carouselBlocked || state.carouselDone) return;
+      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
       touchPrevY = e.touches[0].clientY;
       if (!state.initialized) { state.initialized = true; state.current = state.target; }
     };
     const onTouchMove = (e: TouchEvent) => {
-      if (state.carouselBlocked || state.carouselDone) return;
+      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
       e.preventDefault();
       const y = e.touches[0].clientY;
       const inc = (touchPrevY - y) * 1.2;
