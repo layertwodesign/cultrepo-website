@@ -40,7 +40,7 @@ const localTeam: TeamMember[] = [
   {
     name: "Guillermo Lopez",
     role: "Filmmaker",
-    photo: "/team/guillermo.webp",
+    photo: "/team/guillermo-closeup.webp",
     bio: "Filmmaker and producer who came up in advertising before turning fully to tech documentaries. Brings a sharper narrative spine to production. Credits include Kubernetes, Prometheus, Angular, Vite, TypeScript, the Investors Masterclass, and various minidocs.",
     email: "guillermo@cultrepo.com",
   },

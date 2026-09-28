@@ -7,7 +7,7 @@ const crewPortraits: Record<string, string> = {
   "emma tracey": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmoonz1r17ase07mx61iriyo5",
   "josiah mcgarvie": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmoonzube7af307lm8qgpd6zr",
   "ida bechtle": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmooo0n5k7al607lm5o3u7oi8",
-  "guillermo lopez": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmooo1gcn7baj07mxd5w2qx44",
+  "guillermo lopez": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmulbf1kf3fa507licergdmng",
   "cormac dunne": "https://us-west-2.graphassets.com/cmoddotfn04vc08ln4tjm1we2/cmudljb0si9eo07lkafcqwzo8"
 };
 
