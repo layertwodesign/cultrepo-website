@@ -39,7 +39,7 @@ What started as a single YouTube channel has grown into a small studio of filmma
   ctaSubtitle: "Reach builders, engineers, and technical leaders.",
   backstageImage: "/about/backstage-1.jpg",
   stats: [
-    { value: 370, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },
+    { value: 500, suffix: "K", decimals: 0, label: "YouTube Subscribers", channel: "YouTube" },
     { value: 20, suffix: "M", decimals: 0, label: "YouTube Views", channel: "YouTube" },
     { value: 224, suffix: "", decimals: 0, label: "Videos", channel: "YouTube" },
   ],
