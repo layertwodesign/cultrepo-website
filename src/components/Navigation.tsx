@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { sitePath } from "@/lib/site-path";
 import TransitionLink from "./TransitionLink";
 import CornerSquares from "./CornerSquares";
 import MenuMarquee from "./MenuMarquee";
@@ -29,7 +30,8 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = sitePath(rawPathname);
   const isHome = pathname === "/";
   const isFilm = pathname.startsWith("/films/") && pathname !== "/films";
 
@@ -123,7 +125,7 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
   ));
 
   return (
-    <div ref={navRef} onClickCapture={(event) => {
+    <div ref={navRef} data-route-path={rawPathname} onClickCapture={(event) => {
       // Close even when a link points to the page we are already viewing.
       if (event.target instanceof Element && event.target.closest("a[href]")) {
         setOpen(false);

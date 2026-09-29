@@ -27,7 +27,8 @@ export default function YouTubeFacade({ youtubeId, title, onPlay }: {
         alt=""
         fill
         sizes={PLAYER_SIZES}
-        preload
+        loading="eager"
+        fetchPriority="high"
         className="fp-yt-facade-img"
         onError={() => setQuality("hqdefault")}
       />

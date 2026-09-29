@@ -10,6 +10,7 @@ import {
 } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
+import { sitePath } from "@/lib/site-path";
 
 type TransitionState = "idle" | "exiting" | "entering";
 
@@ -38,7 +39,7 @@ export function PageTransitionProvider({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = sitePath(usePathname());
   const [state, setState] = useState<TransitionState>("idle");
   const [showOverlay, setShowOverlay] = useState(true);
   const prevPathname = useRef(pathname);

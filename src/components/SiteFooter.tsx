@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { sitePath } from "@/lib/site-path";
 import { BlueskyIcon, InstagramIcon, XIcon, YouTubeIcon } from "./SocialIcons";
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 };
 
 export default function SiteFooter({ force = false, blueskyUrl, xUrl, instagramUrl, youtubeUrl }: Props) {
-  const pathname = usePathname();
+  const pathname = sitePath(usePathname());
   if (!force && (pathname === "/" || pathname === "/about")) return null;
 
   return (

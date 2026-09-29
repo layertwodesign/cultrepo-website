@@ -22,11 +22,12 @@ export default function SmoothScroll() {
     window.addEventListener("cultrepo:menu", onMenu);
     if (document.documentElement.classList.contains("menu-open")) lenis.stop();
 
+    let id = 0;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      id = requestAnimationFrame(raf);
     }
-    const id = requestAnimationFrame(raf);
+    id = requestAnimationFrame(raf);
 
     return () => {
       window.removeEventListener("cultrepo:menu", onMenu);
