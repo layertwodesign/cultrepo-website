@@ -54,29 +54,19 @@ type Props = {
 
 export default function UnicornBackground({ className = "unicorn-bg", paused = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(className === "menu-unicorn");
   useForwardPointer(ref);
 
-  // Decorative WebGL shouldn't compete with the initial content and media.
-  // Start once those resources have loaded and the main thread is available.
+  // The scene reacts to the pointer. Initialise on the first interaction,
+  // keeping decorative GPU work and its SDK off the initial content path.
+  // Menu scenes mount on explicit intent and are ready immediately.
   useEffect(() => {
-    let idle = 0;
-    let frame = 0;
-    const start = () => {
-      if ("requestIdleCallback" in window) {
-        idle = window.requestIdleCallback(() => setReady(true), { timeout: 1500 });
-      } else {
-        frame = requestAnimationFrame(() => setReady(true));
-      }
-    };
-    if (document.readyState === "complete") start();
-    else window.addEventListener("load", start, { once: true });
-    return () => {
-      window.removeEventListener("load", start);
-      if (idle) window.cancelIdleCallback(idle);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  }, []);
+    if (ready) return;
+    const start = () => setReady(true);
+    const events = ["pointermove", "pointerdown", "keydown", "scroll"] as const;
+    events.forEach((event) => window.addEventListener(event, start, { once: true, passive: true }));
+    return () => events.forEach((event) => window.removeEventListener(event, start));
+  }, [ready]);
 
   return (
     <div ref={ref} className={className} aria-hidden>

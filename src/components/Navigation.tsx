@@ -30,37 +30,15 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
-  const rawPathname = usePathname();
-  const pathname = sitePath(rawPathname);
+  const pathname = sitePath(usePathname());
   const isHome = pathname === "/";
   const isFilm = pathname.startsWith("/films/") && pathname !== "/films";
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
-  // The menu's WebGL scene is a second full Unicorn scene that nobody sees until
-  // the menu opens. Mount it on the first sign of intent (hover, focus or press
-  // on the toggle) or once the loaded page has sat idle, not during page load.
-  // Once mounted it stays mounted, as before.
+  // Prepare the menu scene on intent, then keep it mounted to preserve SDK state.
   const [menuScene, setMenuScene] = useState(false);
   const wantMenuScene = () => setMenuScene(true);
-  useEffect(() => {
-    if (menuScene) return;
-    let timer = 0;
-    let idle = 0;
-    const whenIdle = () => {
-      timer = window.setTimeout(() => {
-        if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setMenuScene(true), { timeout: 2000 });
-        else setMenuScene(true);
-      }, 4000);
-    };
-    if (document.readyState === "complete") whenIdle();
-    else window.addEventListener("load", whenIdle, { once: true });
-    return () => {
-      window.removeEventListener("load", whenIdle);
-      clearTimeout(timer);
-      if (idle) window.cancelIdleCallback(idle);
-    };
-  }, [menuScene]);
 
   useEffect(() => {
     if (!open) return;
@@ -125,7 +103,7 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
   ));
 
   return (
-    <div ref={navRef} data-route-path={rawPathname} onClickCapture={(event) => {
+    <div ref={navRef} onClickCapture={(event) => {
       // Close even when a link points to the page we are already viewing.
       if (event.target instanceof Element && event.target.closest("a[href]")) {
         setOpen(false);
