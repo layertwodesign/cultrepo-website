@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { preload } from "react-dom";
 import { getFilms } from "@/lib/films";
-import { hygraphImage } from "@/lib/image";
+import { videoPoster } from "@/lib/image";
 import { getSiteSettings } from "@/lib/site-settings";
 import { buildMetadata } from "@/lib/seo";
 import FilmPreview from "@/components/FilmPreview";
@@ -33,7 +33,7 @@ export default async function FilmsPage() {
   // The first card's poster is the page's LCP (on phones the first row is the
   // first screen too): fetch it from <head> at high priority, same URL as the
   // card's <video poster>.
-  const firstPoster = films[0]?.video ? hygraphImage(films[0].poster, POSTER_WIDTH) : undefined;
+  const firstPoster = films[0]?.video ? videoPoster(films[0].poster, POSTER_WIDTH) : undefined;
   if (firstPoster) preload(firstPoster, { as: "image", fetchPriority: "high" });
   return (
     <div className="page-container">

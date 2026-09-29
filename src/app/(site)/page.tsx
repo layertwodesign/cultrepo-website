@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { preconnect, preload } from "react-dom";
 import { getFilms } from "@/lib/films";
 import { CAROUSEL_POSTER_WIDTH, carouselOrder } from "@/lib/carousel";
-import { hygraphImage } from "@/lib/image";
+import { videoPoster } from "@/lib/image";
 import { getSiteSettings } from "@/lib/site-settings";
 import { buildMetadata } from "@/lib/seo";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/site";
@@ -32,7 +32,7 @@ export default async function HomePage() {
   // The landing card's poster is the page's LCP: fetch it from <head> at high
   // priority. Same URL as the card's <video poster>, so it's one request.
   const first = carouselOrder(films, settings.featuredFilmSlug)[0];
-  const firstPoster = first?.video ? hygraphImage(first.poster, CAROUSEL_POSTER_WIDTH) : undefined;
+  const firstPoster = first?.video ? videoPoster(first.poster, CAROUSEL_POSTER_WIDTH) : undefined;
   if (firstPoster) preload(firstPoster, { as: "image", fetchPriority: "high" });
   return (
     <>

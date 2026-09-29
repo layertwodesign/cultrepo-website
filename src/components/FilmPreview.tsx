@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type ComponentPropsWithRef } from "react";
-import { hygraphImage } from "@/lib/image";
+import { videoPoster } from "@/lib/image";
 
 type Props = Omit<ComponentPropsWithRef<"video">, "src" | "poster"> & {
   src: string;
@@ -100,7 +100,7 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
         {...props}
         ref={setVideoRef}
         src={loaded ? src : undefined}
-        poster={loaded || priority || seen ? hygraphImage(poster, posterWidth) : undefined}
+        poster={loaded || priority || seen ? videoPoster(poster, posterWidth) : undefined}
         autoPlay={lazy ? undefined : autoPlay}
         preload={loaded ? preload : "none"}
         className={className}
