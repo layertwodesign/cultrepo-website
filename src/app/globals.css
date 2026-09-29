@@ -68,9 +68,12 @@ body.invert .top-wordmark {
 body.invert .top-wordmark:hover {
   background-color: #454940;
 }
-body.invert .site-footer-credit,
 body.invert .site-footer-social {
   color: rgba(13, 17, 15, 0.5);
+}
+/* Text needs 4.5:1 on #FAFFFF; 0.5 measured 3.78. */
+body.invert .site-footer-credit {
+  color: rgba(13, 17, 15, 0.62);
 }
 body.invert .site-footer-credit-link:hover,
 body.invert .site-footer-social:hover {
@@ -250,6 +253,7 @@ button, input, textarea, select {
 /* Entry trigger: any of the supported "now showing" parent contexts grow +
    gently rotate the corner squares into place. */
 .reveal.reveal-in .corner-square,
+.reveal.reveal-auto .corner-square,
 .carousel-item:hover .corner-square,
 .corners-in .corner-square {
   transform: scale(1) rotate(0deg);
@@ -283,11 +287,34 @@ body.invert .corner-square {
 .split-reveal-in .split-reveal-word-inner {
   transform: translateY(0);
 }
+/* Above-the-fold variant: the same rise, started by CSS at first paint instead
+   of waiting for hydration + an IntersectionObserver (keeps LCP off the JS path). */
+.split-reveal-auto .split-reveal-word-inner {
+  animation: split-reveal-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes split-reveal-rise {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
 @media (prefers-reduced-motion: reduce) {
   .split-reveal-word-inner {
     transform: none;
     transition: none;
   }
+  .split-reveal-auto .split-reveal-word-inner { animation: none; }
+}
+
+/* Present for screen readers and crawlers, not drawn. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 /* Scroll-triggered reveal animation */
@@ -303,12 +330,19 @@ body.invert .corner-square {
   opacity: 1;
   transform: translateY(0);
 }
+/* Above-the-fold cards are visible immediately; lower rows still reveal on scroll. */
+.reveal.reveal-auto {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
     transform: none;
     transition: none;
   }
+  .reveal.reveal-auto { animation: none; }
   .typewriter-cursor.blink { animation: none; }
 }
 
@@ -798,9 +832,10 @@ body.invert .corner-square {
   z-index: 9999;
   pointer-events: none;
   opacity: 0.4;
-  background-image: url("/web-noise.png");
+  /* 256px 1:1 crop of web-noise.png (27KB vs 431KB); same grain size. */
+  background-image: url("/noise-tile.png");
   background-repeat: repeat;
-  background-size: 1441px 812px;
+  background-size: 256px 256px;
 }
 
 /* ============ PAGE TRANSITION OVERLAY ============ */
@@ -1435,7 +1470,7 @@ body.invert .corner-square {
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(250, 255, 255, 0.4);
+  color: rgba(250, 255, 255, 0.5);
 }
 .about-partners-logos {
   display: flex;
@@ -1828,6 +1863,17 @@ body.invert .corner-square {
 .fp-main.fp-entered > *:nth-child(3) { transition-delay: 0.25s; }
 .fp-main.fp-entered > *:nth-child(4) { transition-delay: 0.35s; }
 .fp-main.fp-entered > *:nth-child(n+5) { transition-delay: 0.4s; }
+/* Direct visits: the same entrance as a CSS animation from first paint, so the
+   text doesn't wait for hydration. .fp-entered stays for the carousel handoff. */
+.fp-main.fp-auto > *:not(.fp-video) { animation: fp-rise 0.5s ease both; }
+.fp-main.fp-auto > *:nth-child(2) { animation-delay: 0.15s; }
+.fp-main.fp-auto > *:nth-child(3) { animation-delay: 0.25s; }
+.fp-main.fp-auto > *:nth-child(4) { animation-delay: 0.35s; }
+.fp-main.fp-auto > *:nth-child(n+5) { animation-delay: 0.4s; }
+@keyframes fp-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* Sidebar */
 .fp-sidebar {
@@ -1841,6 +1887,15 @@ body.invert .corner-square {
 .fp-sidebar.fp-entered {
   opacity: 1; transform: translateX(0);
 }
+.fp-sidebar.fp-auto { animation: fp-slide-in 0.5s ease 0.1s both; }
+@keyframes fp-slide-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.fp-mobile-title { display: none; }
+@media screen and (max-width: 640px) {
+  .fp-mobile-title { display: block; }
+}
 
 /* Video embed */
 .fp-video {
@@ -1851,6 +1906,48 @@ body.invert .corner-square {
 .fp-video-iframe, .fp-video-fallback {
   position: absolute; inset: 0; width: 100%; height: 100%;
   border: none; object-fit: cover;
+}
+
+/* YouTube facade — thumbnail + play control until the visitor presses Play */
+.fp-yt-facade {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; padding: 0; border: none; background: #000;
+  cursor: pointer; color: #FAFFFF;
+}
+.fp-yt-facade-img { object-fit: cover; }
+/* Legibility for the title only; the frame itself stays as the thumbnail. */
+.fp-yt-facade::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 30%;
+  background: linear-gradient(to top, rgba(13, 17, 15, 0.7), rgba(13, 17, 15, 0));
+  pointer-events: none;
+}
+.fp-yt-facade-title {
+  position: absolute; left: 24px; right: 104px; bottom: 20px; z-index: 1;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px; font-weight: 400; letter-spacing: 0.05em;
+  text-transform: uppercase; text-align: left;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.fp-yt-facade-play {
+  position: absolute; top: 50%; left: 50%; z-index: 1;
+  width: 68px; height: 48px; margin: -24px 0 0 -34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px;
+  background: rgba(13, 17, 15, 0.72);
+  border: 1px solid rgba(250, 255, 255, 0.18);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.fp-yt-facade:hover .fp-yt-facade-play,
+.fp-yt-facade:focus-visible .fp-yt-facade-play {
+  background: #87FF38; color: #0D110F; border-color: #87FF38;
+}
+.fp-yt-facade:focus-visible { outline: 2px solid #87FF38; outline-offset: -4px; }
+@media (prefers-reduced-motion: reduce) {
+  .fp-yt-facade-play { transition: none; }
+}
+@media screen and (max-width: 640px) {
+  .fp-yt-facade-title { left: 14px; bottom: 12px; font-size: 11px; }
+  .fp-yt-facade-play { width: 56px; height: 40px; margin: -20px 0 0 -28px; }
 }
 
 /* Content sections */
@@ -2408,7 +2505,8 @@ body.invert .corner-square {
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(250, 255, 255, 0.4);
+  /* 0.55 clears 4.5:1 on #0D110F (0.4 was below it). */
+  color: rgba(250, 255, 255, 0.55);
   text-decoration: none;
   transition: color 0.3s ease;
 }

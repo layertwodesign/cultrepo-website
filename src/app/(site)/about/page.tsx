@@ -51,10 +51,10 @@ export default async function AboutPage() {
       <section className="about-hero">
         <div className="about-hero-copy">
           <h1 className="about-title">
-            <SplitReveal text={about.heroTitle} stagger={45} />
+            <SplitReveal text={about.heroTitle} stagger={45} immediate />
           </h1>
           <p className="about-subtitle">
-            <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} />
+            <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} immediate />
           </p>
         </div>
         <Reveal delay={620} className="about-hero-trusted">
@@ -84,7 +84,7 @@ export default async function AboutPage() {
             fill
             sizes="(max-width: 768px) 100vw, 1200px"
             style={{ objectFit: "cover" }}
-            priority
+            preload
           />
         </Reveal>
       </section>

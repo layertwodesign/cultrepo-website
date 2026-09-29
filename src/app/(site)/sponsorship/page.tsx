@@ -31,7 +31,7 @@ export default async function SponsorshipPage() {
         <div className="sponsorship-content">
           <h1 className="sponsorship-title">
             <span className="sponsorship-title-anchor" aria-hidden />
-            <SplitReveal text={page.heroCopy} stagger={45} />
+            <SplitReveal text={page.heroCopy} stagger={45} immediate />
           </h1>
         </div>
         <div className="sponsorship-form-wrap">

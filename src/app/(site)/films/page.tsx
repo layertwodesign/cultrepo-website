@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { preload } from "react-dom";
 import { getFilms } from "@/lib/films";
+import { hygraphImage } from "@/lib/image";
 import { getSiteSettings } from "@/lib/site-settings";
 import { buildMetadata } from "@/lib/seo";
 import FilmPreview from "@/components/FilmPreview";
 import TransitionLink from "@/components/TransitionLink";
 import Reveal from "@/components/Reveal";
+import JsonLd from "@/components/JsonLd";
+import { filmsListJsonLd } from "@/lib/structured-data";
 
 const STAGGER_MS = 80;
 const GRID_COLS = 3;
+const POSTER_WIDTH = 800;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -25,8 +30,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function FilmsPage() {
   const films = await getFilms();
+  // The first card's poster is the page's LCP (on phones the first row is the
+  // first screen too): fetch it from <head> at high priority, same URL as the
+  // card's <video poster>.
+  const firstPoster = films[0]?.video ? hygraphImage(films[0].poster, POSTER_WIDTH) : undefined;
+  if (firstPoster) preload(firstPoster, { as: "image", fetchPriority: "high" });
   return (
     <div className="page-container">
+      <JsonLd data={filmsListJsonLd(films)} />
       <div className="films-content">
         <section className="films-header">
           <h1 className="films-title">Films</h1>
@@ -37,8 +48,12 @@ export default async function FilmsPage() {
             const row = Math.floor(i / GRID_COLS);
             const col = i % GRID_COLS;
             const delay = (row + col) * STAGGER_MS;
+            // The first row is on the first screen at every width (three
+            // columns on desktop, the first three stacked cards on phones):
+            // poster in the HTML, entrance from first paint.
+            const firstRow = row === 0;
             return (
-              <Reveal key={film.slug} delay={delay}>
+              <Reveal key={film.slug} delay={delay} immediate={firstRow}>
                 <TransitionLink
                   href={`/films/${film.slug}`}
                   className="film-card"
@@ -47,13 +62,14 @@ export default async function FilmsPage() {
                     <FilmPreview
                       title={film.title}
                       poster={film.poster}
-                      posterWidth={800}
+                      posterWidth={POSTER_WIDTH}
                       src={film.video}
                       muted
                       loop
                       playsInline
                       autoPlay
                       lazy
+                      priority={firstRow}
                       preload="metadata"
                       className="film-card-video"
                     />

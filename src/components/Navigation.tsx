@@ -35,6 +35,31 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
+  // The menu's WebGL scene is a second full Unicorn scene that nobody sees until
+  // the menu opens. Mount it on the first sign of intent (hover, focus or press
+  // on the toggle) or once the loaded page has sat idle, not during page load.
+  // Once mounted it stays mounted, as before.
+  const [menuScene, setMenuScene] = useState(false);
+  const wantMenuScene = () => setMenuScene(true);
+  useEffect(() => {
+    if (menuScene) return;
+    let timer = 0;
+    let idle = 0;
+    const whenIdle = () => {
+      timer = window.setTimeout(() => {
+        if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setMenuScene(true), { timeout: 2000 });
+        else setMenuScene(true);
+      }, 4000);
+    };
+    if (document.readyState === "complete") whenIdle();
+    else window.addEventListener("load", whenIdle, { once: true });
+    return () => {
+      window.removeEventListener("load", whenIdle);
+      clearTimeout(timer);
+      if (idle) window.cancelIdleCallback(idle);
+    };
+  }, [menuScene]);
+
   useEffect(() => {
     if (!open) return;
     const root = document.documentElement;
@@ -120,7 +145,13 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         aria-controls="site-menu"
-        onClick={() => setOpen((value) => !value)}
+        onPointerEnter={wantMenuScene}
+        onPointerDown={wantMenuScene}
+        onFocus={wantMenuScene}
+        onClick={() => {
+          wantMenuScene();
+          setOpen((value) => !value);
+        }}
       >
         <span />
         <span />
@@ -128,9 +159,9 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
 
       <div id="site-menu" className={`menu-overlay ${open ? "open" : ""}`} inert={!open} aria-hidden={!open} data-lenis-prevent>
         {/* Keep the scene mounted to avoid SDK teardown races when closing the menu. */}
-        <UnicornBackground className="menu-unicorn" paused={!open} />
+        {menuScene && <UnicornBackground className="menu-unicorn" paused={!open} />}
 
-        <MenuMarquee items={marqueeItems} />
+        <MenuMarquee items={marqueeItems} paused={!open} />
 
         <nav className="menu-cards" aria-label="Main navigation">
           {NAV.map((item) => {

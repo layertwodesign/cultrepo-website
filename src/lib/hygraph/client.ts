@@ -38,7 +38,7 @@ export async function hygraphFetch<T>(
   if (READ_TOKEN) headers.Authorization = `Bearer ${READ_TOKEN}`;
   if (STAGE) headers["gcms-stage"] = STAGE;
 
-  const res = await fetch(API_URL, {
+  const request = () => fetch(API_URL, {
     method: "POST",
     headers,
     body: JSON.stringify({ query, variables }),
@@ -48,15 +48,28 @@ export async function hygraphFetch<T>(
     },
   });
 
+  let res = await request();
+  // Brief build-time bursts can hit the CMS read limit. Honour its cooldown,
+  // then fail instead of caching local fallback content as a successful page.
+  for (let attempt = 0; res.status === 429 && attempt < 3; attempt++) {
+    const retryAfter = res.headers.get("retry-after");
+    const seconds = Number(retryAfter);
+    const dateDelay = retryAfter ? Date.parse(retryAfter) - Date.now() : NaN;
+    const delay = retryAfter && Number.isFinite(seconds)
+      ? seconds * 1000
+      : Number.isFinite(dateDelay) ? dateDelay : 1000 * 2 ** attempt;
+    if (delay > 30000) throw new Error("Hygraph rate limited; retry after its cooldown");
+    await new Promise((resolve) => setTimeout(resolve, Math.max(1000, delay)));
+    res = await request();
+  }
+
   if (!res.ok) {
-    console.error(`[hygraph] HTTP ${res.status}: ${await res.text()}`);
-    return null;
+    throw new Error(`Hygraph request failed (HTTP ${res.status})`);
   }
 
   const json = (await res.json()) as GraphQLResponse<T>;
   if (json.errors?.length) {
-    console.error(`[hygraph] GraphQL errors:`, json.errors);
-    return null;
+    throw new Error("Hygraph returned GraphQL errors");
   }
   return json.data ?? null;
 }

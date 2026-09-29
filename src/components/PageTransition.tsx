@@ -19,10 +19,13 @@ const TransitionContext = createContext<{
   navigateTo: (href: string, opts?: { skipOverlay?: boolean }) => void;
   setFilmRect: (rect: FilmTransitionRect) => void;
   consumeFilmRect: () => FilmTransitionRect;
+  /** Whether a carousel handoff is waiting for the film page (without consuming it). */
+  hasFilmRect: () => boolean;
 }>({
   navigateTo: () => {},
   setFilmRect: () => {},
   consumeFilmRect: () => null,
+  hasFilmRect: () => false,
 });
 
 export function useTransition() {
@@ -54,6 +57,8 @@ export function PageTransitionProvider({
     filmRectRef.current = null;
     return rect;
   }, []);
+
+  const hasFilmRect = useCallback(() => filmRectRef.current !== null, []);
 
   const navigateTo = useCallback(
     (href: string, opts?: { skipOverlay?: boolean }) => {
@@ -96,7 +101,7 @@ export function PageTransitionProvider({
   }, [pathname, showOverlay]);
 
   return (
-    <TransitionContext.Provider value={{ navigateTo, setFilmRect, consumeFilmRect }}>
+    <TransitionContext.Provider value={{ navigateTo, setFilmRect, consumeFilmRect, hasFilmRect }}>
       {children}
 
       {showOverlay && (

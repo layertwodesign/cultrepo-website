@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Fragment_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,12 +17,6 @@ const fragmentMono = Fragment_Mono({
   display: "swap",
 });
 
-const SITE_TITLE =
-  "CultRepo | Documenting the People Building World-Shaping Tech";
-const SITE_DESCRIPTION =
-  "CultRepo documents the people building world-shaping tech. Long-form films about the people behind open source, infrastructure, and emerging systems.";
-const SITE_URL = "https://www.cultrepo.com";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -29,10 +24,11 @@ export const metadata: Metadata = {
     template: "%s | CultRepo",
   },
   description: SITE_DESCRIPTION,
-  alternates: { canonical: "/" },
+  // No site-wide canonical: every public page sets its own through
+  // buildMetadata, and inheriting "/" would point 404s and admin at the homepage.
   openGraph: {
     type: "website",
-    siteName: "CultRepo",
+    siteName: SITE_NAME,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
@@ -55,11 +51,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${fragmentMono.variable}`}>
-      <head>
-        <link rel="preconnect" href="https://www.youtube.com" />
-        <link rel="preconnect" href="https://i.ytimg.com" />
-        <link rel="preconnect" href="https://www.google.com" />
-      </head>
       <body>
         {children}
       </body>

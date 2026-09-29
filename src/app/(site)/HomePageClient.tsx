@@ -8,6 +8,8 @@ import { useTransition } from "@/components/PageTransition";
 import type { Film } from "@/lib/films";
 import type { TickerEntry } from "@/lib/site-settings";
 import CornerSquares from "@/components/CornerSquares";
+import { setRulerY } from "@/components/RulerParallax";
+import { CAROUSEL_POSTER_WIDTH, carouselOrder } from "@/lib/carousel";
 
 type Props = {
   films: Film[];
@@ -66,22 +68,25 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const [showUI, setShowUI] = useState(false);
   const [showGradient, setShowGradient] = useState(false);
   const [gridRevealed, setGridRevealed] = useState(false);
-  const [items] = useState(() => {
-    // Films arrive pre-sorted by their `order` field (same as the films grid).
-    // Keep that order; only the featured film is pinned to the front.
-    const ordered = [...allItems];
-    if (featuredSlug) {
-      const idx = ordered.findIndex((i) => i.slug === featuredSlug);
-      if (idx > 0) {
-        const [featured] = ordered.splice(idx, 1);
-        ordered.unshift(featured);
-      }
-    }
-    return ordered;
-  });
-  // Only the clips on screen when the intro lands (the centred one and its two
-  // neighbours) load up front; the rest load when the carousel reaches them.
+  const [items] = useState(() => carouselOrder(allItems, featuredSlug));
+  // The clips on screen when the intro lands (the centred one and its two
+  // neighbours) autoplay with full preload; the rest load when the carousel reaches them.
   const eager = useMemo(() => new Set([0, 1, items.length - 1]), [items.length]);
+  // Which cards have their poster and clip attached. Only the card the intro
+  // lands on starts with them (it's in the server HTML and gates the intro);
+  // its neighbours follow once that clip is ready, and every other card when
+  // the carousel brings it near the screen. The set only grows, so a card
+  // keeps its media once loaded.
+  const [activeCards, setActiveCards] = useState<ReadonlySet<number>>(() => new Set([0]));
+  const activeCardsRef = useRef(activeCards);
+  const activateCards = useCallback((indices: number[]) => {
+    const fresh = indices.filter((i) => !activeCardsRef.current.has(i));
+    if (!fresh.length) return;
+    const next = new Set(activeCardsRef.current);
+    fresh.forEach((i) => next.add(i));
+    activeCardsRef.current = next;
+    setActiveCards(next);
+  }, []);
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);
   const [centeredSlug, setCenteredSlug] = useState<string | null>(null);
   const pendingSlugRef = useRef<string | null>(null);
@@ -162,7 +167,12 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   useEffect(() => {
     if (introPhase !== "loading") return;
 
-    const videos = videoRefs.current.filter((v, i) => v && eager.has(i)) as HTMLVideoElement[];
+    // Gate the intro on the clip it lands on (index 0) only. Its neighbours
+    // keep loading in parallel through the ~2.5s text sequence and show their
+    // posters until they can play, instead of holding the whole page (and its
+    // first contentful text) behind three downloads sharing one connection.
+    // A card without a source can never become ready, so it never gates.
+    const videos = videoRefs.current.filter((v, i) => v && i === 0 && v.hasAttribute("src")) as HTMLVideoElement[];
     // Track progress across: videos (90% weight) + fonts (10% weight)
     let fontsReady = false;
     let done = false;
@@ -234,7 +244,14 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         v.removeEventListener("error", checkProgress);
       });
     };
-  }, [introPhase, eager]);
+  }, [introPhase]);
+
+  // The landing card's clip is ready (or the intro was skipped): load its two
+  // neighbours, which are on screen when the carousel lands, during the text.
+  useEffect(() => {
+    if (introPhase === "loading") return;
+    activateCards([...eager]);
+  }, [introPhase, eager, activateCards]);
 
   // Phase: bar-fade → text-reveal
   useEffect(() => {
@@ -317,12 +334,14 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
   // Warm the YouTube player for the film the visitor settles on. Desktop only:
   // on phones this hidden iframe pulled the whole player for every film passed.
+  // Waits for the intro to finish so the player doesn't compete with the
+  // carousel clips while they're still loading.
   const [ytSlug, setYtSlug] = useState<string | null>(null);
   useEffect(() => {
-    if (!centeredSlug || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (introPhase !== "done" || !centeredSlug || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const timer = window.setTimeout(() => setYtSlug(centeredSlug), 1500);
     return () => clearTimeout(timer);
-  }, [centeredSlug]);
+  }, [introPhase, centeredSlug]);
   const preloadFilm = ytSlug ? films.find((f) => f.slug === ytSlug) : null;
   const preloadYtId = preloadFilm?.youtubeId;
 
@@ -347,6 +366,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   // 1080p one after the visitor settles on it. Wide screens only (phones and
   // tablets never show the extra pixels) and never with Save-Data on. Preloads
   // the HD asset off-DOM, then assigns it to the live element at the same time.
+  // Waits for the card's own (720p) source to be attached first.
+  const centeredActive = centeredSlug
+    ? activeCards.has(items.findIndex((item) => item.slug === centeredSlug))
+    : false;
   useEffect(() => {
     if (introPhase !== "done" || !centeredSlug) return;
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
@@ -354,7 +377,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     const idx = items.findIndex((item) => item.slug === centeredSlug);
     const hdUrl = items[idx]?.videoHd;
     const live = videoRefs.current[idx];
-    if (!hdUrl || !live || live.dataset.hdLoaded) return;
+    if (!hdUrl || !live || live.dataset.hdLoaded || !live.hasAttribute("src")) return;
 
     let pre: HTMLVideoElement | null = null;
     const onReady = () => {
@@ -389,7 +412,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         if (live.dataset.hdLoaded === "pending") delete live.dataset.hdLoaded;
       }
     };
-  }, [introPhase, centeredSlug, items]);
+  }, [introPhase, centeredSlug, items, centeredActive]);
 
   // Cursor-label lerp loop — eases the "VIEW FILM" label toward the mouse
   // each frame and writes its visibility based on cursorRef.visible (set by
@@ -399,12 +422,16 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     const tick = () => {
       const c = cursorRef.current;
       const node = cursorLabelRef.current;
-      if (node) {
+      const opacity = c.visible ? "1" : "0";
+      // At rest (settled on its target, visibility unchanged) there's nothing
+      // to write, so skip the layout read too.
+      const settled = Math.abs(c.targetX - c.x) < 0.05 && Math.abs(c.targetY - c.y) < 0.05;
+      if (node && !(settled && node.style.opacity === opacity)) {
         c.x += (c.targetX - c.x) * 0.08;
         c.y += (c.targetY - c.y) * 0.08;
         const w = node.offsetWidth;
         node.style.transform = `translate(${c.x - w / 2}px, ${c.y + 24}px)`;
-        node.style.opacity = c.visible ? "1" : "0";
+        node.style.opacity = opacity;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -449,12 +476,17 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       return sign * offset;
     }
 
-    function render() {
+    // Inputs of the last full render. When none of them change (the carousel
+    // is at rest) the per-item style work is skipped; a full pass still runs
+    // every ~30 frames so play/pause stays self-correcting.
+    let lastRenderKey = "";
+    let lastRenderParams: Params | null = null;
+    let framesSinceRender = 0;
+
+    function render(wrapperW: number, wrapperH: number) {
       const wrapper = wrapperRef.current;
       if (!wrapper) return;
       const p = paramsRef.current;
-      const wrapperH = wrapper.getBoundingClientRect().height;
-      const wrapperW = wrapper.getBoundingClientRect().width;
       const centerY = wrapperH / 2;
 
       // Cap base width so the largest (maxScale) item still fits both width and height.
@@ -505,6 +537,16 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
       const expIdx = expandingIdxRef.current;
 
+      const renderKey = [
+        wrapperW, wrapperH, state.current.toFixed(2), state.introOffsetY.toFixed(2),
+        state.introProgress, state.initialized, expIdx,
+      ].join("|");
+      if (renderKey === lastRenderKey && p === lastRenderParams && ++framesSinceRender < 30) return;
+      lastRenderKey = renderKey;
+      lastRenderParams = p;
+      framesSinceRender = 0;
+
+      const nearCards: number[] = [];
       itemRefs.current.forEach((el, idx) => {
         if (!el) return;
 
@@ -584,9 +626,16 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
           }
         }
 
+        // Attach media once a card is near the screen with its clip visible
+        // (clips stay hidden for the first 75% of the intro scroll-through,
+        // so that pass doesn't load every card).
+        if (norm < 1 && (state.initialized || state.introProgress >= 0.75)) {
+          nearCards.push(idx);
+        }
+
         // Play clips while they're on screen and pause the rest, so a clip
         // only downloads once the carousel brings it into view.
-        if (videoEl && state.initialized && !videoEl.dataset.playBlocked) {
+        if (videoEl && state.initialized && !videoEl.dataset.playBlocked && videoEl.hasAttribute("src")) {
           const onScreen = norm < 0.9;
           if (onScreen && videoEl.paused) {
             videoEl.play().catch((err: DOMException) => {
@@ -598,6 +647,8 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
           }
         }
       });
+      // No-op (no re-render) unless a card is new to the set.
+      activateCards(nearCards);
     }
 
     let rafId: number;
@@ -617,7 +668,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       // While carousel is blocked, hide all items and skip positioning
       if (state.carouselBlocked) {
         itemRefs.current.forEach(el => {
-          if (el) el.style.opacity = "0";
+          if (el && el.style.opacity !== "0") el.style.opacity = "0";
         });
         rafId = requestAnimationFrame(loop);
         return;
@@ -687,14 +738,11 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
           state.introOffsetY = 0;
         }
       }
-      render();
+      render(wW, wH);
       // Keep the side-rulers parallax in sync while the carousel is hijacking
       // wheel/touch input (window.scrollY stays at 0 in that mode). After
       // carouselDone, normal scroll takes over and contributes via scrollY.
-      document.documentElement.style.setProperty(
-        "--ruler-y",
-        `${state.rulerY + window.scrollY}px`,
-      );
+      setRulerY(state.rulerY + window.scrollY);
       rafId = requestAnimationFrame(loop);
     }
     rafId = requestAnimationFrame(loop);
@@ -793,7 +841,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", onResize);
     };
-  }, [items]);
+  }, [items, activateCards]);
 
   const updateParam = useCallback((key: keyof Params, val: number) => {
     setParams((prev) => ({ ...prev, [key]: val }));
@@ -810,6 +858,11 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
   return (
     <>
+      {/* The tagline is drawn in pieces (intro overlay, then the hero corners)
+          and only after the intro runs. Give the page one stable heading from
+          the server HTML; the drawn copies are hidden from assistive tech. */}
+      <h1 className="visually-hidden">Documenting the People Building World-Shaping Tech</h1>
+
       {/* ============ HEADER GRADIENT ============ */}
       <div className={`header-gradient ${showGradient ? "visible" : ""}`} />
 
@@ -835,7 +888,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
       {/* ============ INTRO TEXT — in corners, starts large, shrinks ============ */}
       {showIntroText && (
-        <div className={`intro-text ${introPhase === "shrink" ? "shrunk" : ""}`}>
+        <div className={`intro-text ${introPhase === "shrink" ? "shrunk" : ""}`} aria-hidden="true">
           <div className="intro-text-group-top">
             <span className="intro-text-line">
               <span className={`intro-text-line-inner ${textLines[0] ? "revealed" : ""}`}>Documenting</span>
@@ -890,15 +943,15 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       <div className={`main ${expandingIdx !== null ? "film-exiting" : ""}`}>
         {/* Hero heading — top left (visible after shrink completes) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
-          <div className={`hero ${showUI ? "with-wordmark" : ""}`}>
-            <h1 className="hero-title">
+          <div className={`hero ${showUI ? "with-wordmark" : ""}`} aria-hidden="true">
+            <div className="hero-title">
               <span className="line">
                 <span className="line-inner revealed">Documenting</span>
               </span>
               <span className="line">
                 <span className="line-inner revealed">the <span className="green">People</span></span>
               </span>
-            </h1>
+            </div>
           </div>
         )}
 
@@ -914,7 +967,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
         {/* Bottom right — big text (visible after shrink completes) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
-          <div className="bottom-right revealed">
+          <div className="bottom-right revealed" aria-hidden="true">
             <span className="bottom-right-line"><span className="bottom-right-line-inner">Building World-</span></span>
             <span className="bottom-right-line"><span className="bottom-right-line-inner">Shaping Tech</span></span>
           </div>
@@ -1039,9 +1092,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                   <FilmPreview
                     title={item.title}
                     poster={item.poster}
-                    posterWidth={960}
+                    posterWidth={CAROUSEL_POSTER_WIDTH}
                     ref={(el) => { videoRefs.current[idx] = el; }}
                     src={item.video}
+                    active={activeCards.has(idx)}
                     muted loop playsInline
                     autoPlay={eager.has(idx)}
                     preload={eager.has(idx) ? "auto" : "none"}
@@ -1107,6 +1161,8 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
           src={`https://www.youtube.com/embed/${preloadYtId}?autoplay=0&enablejsapi=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           title="Preload"
+          tabIndex={-1}
+          aria-hidden="true"
         />
       )}
 

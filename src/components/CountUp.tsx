@@ -56,13 +56,22 @@ export default function CountUp({
     return () => cancelAnimationFrame(raf);
   }, [started, to, duration]);
 
-  const formatted = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toString();
+  const format = (n: number) => (decimals > 0 ? n.toFixed(decimals) : Math.round(n).toString());
 
+  // The ticking number is decoration; screen readers and crawlers (which see
+  // the server HTML, where it reads 0) get the real figure.
   return (
     <span ref={ref}>
-      {prefix}
-      {formatted}
-      {suffix}
+      <span aria-hidden="true">
+        {prefix}
+        {format(val)}
+        {suffix}
+      </span>
+      <span className="visually-hidden">
+        {prefix}
+        {format(to)}
+        {suffix}
+      </span>
     </span>
   );
 }

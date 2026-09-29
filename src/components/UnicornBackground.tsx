@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 const UnicornScene = dynamic(() => import("unicornstudio-react/next"), {
   ssr: false,
@@ -54,18 +54,40 @@ type Props = {
 
 export default function UnicornBackground({ className = "unicorn-bg", paused = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
   useForwardPointer(ref);
+
+  // Decorative WebGL shouldn't compete with the initial content and media.
+  // Start once those resources have loaded and the main thread is available.
+  useEffect(() => {
+    let idle = 0;
+    let frame = 0;
+    const start = () => {
+      if ("requestIdleCallback" in window) {
+        idle = window.requestIdleCallback(() => setReady(true), { timeout: 1500 });
+      } else {
+        frame = requestAnimationFrame(() => setReady(true));
+      }
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      if (idle) window.cancelIdleCallback(idle);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <div ref={ref} className={className} aria-hidden>
-      <UnicornScene
+      {ready && <UnicornScene
         projectId="5jTAQ6ZayBHOM08TLJnb"
         sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.11/dist/unicornStudio.umd.js"
         width="100%"
         height="100%"
         production
         paused={paused}
-      />
+      />}
     </div>
   );
 }

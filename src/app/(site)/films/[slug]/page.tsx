@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { unstable_cache } from "next/cache";
-import { getFilmBySlug, getFilms } from "@/lib/films";
+import { cache } from "react";
+import { getFilms } from "@/lib/films";
 import { getSiteSettings } from "@/lib/site-settings";
 import { buildMetadata } from "@/lib/seo";
 import { getVideoStats } from "@/lib/youtube";
+import { filmJsonLd } from "@/lib/structured-data";
+import JsonLd from "@/components/JsonLd";
 import FilmPageClient from "./FilmPageClient";
+
+// The listing query already contains every film field. Reuse it across the
+// layout, metadata and page rather than issuing one CMS request per film.
+const getPageFilm = cache(async (slug: string) =>
+  (await getFilms()).find((film) => film.slug === slug)
+);
 
 // Cache only the stats: YouTube HTML can exceed Next's 2 MB cache limit.
 const getCachedVideoStats = unstable_cache(
@@ -19,12 +28,19 @@ const getCachedVideoStats = unstable_cache(
   { revalidate: 60 * 60, tags: ["youtube-stats"] }
 );
 
+// Prerender every known film so pages are served from the cache instead of
+// rendered per request. Films added in the CMS later still render on demand.
+export async function generateStaticParams() {
+  const films = await getFilms();
+  return films.map((film) => ({ slug: film.slug }));
+}
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
   const [film, settings] = await Promise.all([
-    getFilmBySlug(slug),
+    getPageFilm(slug),
     getSiteSettings(),
   ]);
   if (!film) return {};
@@ -35,6 +51,7 @@ export async function generateMetadata(
       title: film.title,
       description: film.description,
       ogImage: film.poster ?? null,
+      fromContent: true,
     },
     `/films/${film.slug}`
   );
@@ -47,12 +64,19 @@ export default async function FilmPage({
 }) {
   const { slug } = await params;
   const [film, allFilms] = await Promise.all([
-    getFilmBySlug(slug),
+    getPageFilm(slug),
     getFilms(),
   ]);
   if (!film) notFound();
+  // No player preconnects: direct visits show a thumbnail (served through
+  // /_next/image) and only load YouTube when the visitor presses Play.
   const stats = film.youtubeId
     ? await getCachedVideoStats(film.youtubeId).catch(() => null)
     : null;
-  return <FilmPageClient film={film} allFilms={allFilms} liveViews={stats?.viewCount ?? null} />;
+  return (
+    <>
+      <JsonLd data={filmJsonLd(film)} />
+      <FilmPageClient film={film} allFilms={allFilms} liveViews={stats?.viewCount ?? null} />
+    </>
+  );
 }

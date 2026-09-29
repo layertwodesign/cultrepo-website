@@ -7,6 +7,11 @@ type Props = {
   className?: string;
   stagger?: number;
   startDelay?: number;
+  /**
+   * For text that is always above the fold: run the reveal as a CSS animation
+   * from first paint rather than after hydration, so it doesn't hold back LCP.
+   */
+  immediate?: boolean;
 };
 
 export default function SplitReveal({
@@ -14,13 +19,14 @@ export default function SplitReveal({
   className = "",
   stagger = 40,
   startDelay = 0,
+  immediate = false,
 }: Props) {
   const [shown, setShown] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const node = ref.current;
-    if (!node) return;
+    if (!node || immediate) return;
     const trigger = () =>
       startDelay ? setTimeout(() => setShown(true), startDelay) : setShown(true);
     if (typeof IntersectionObserver === "undefined") {
@@ -38,7 +44,7 @@ export default function SplitReveal({
     );
     obs.observe(node);
     return () => obs.disconnect();
-  }, [startDelay]);
+  }, [startDelay, immediate]);
 
   // Split only on ASCII whitespace so NBSP (U+00A0) is preserved inside words —
   // lets callers glue word pairs together to prevent orphans.
@@ -48,7 +54,7 @@ export default function SplitReveal({
   return (
     <span
       ref={ref}
-      className={`split-reveal ${shown ? "split-reveal-in" : ""} ${className}`}
+      className={`split-reveal ${immediate ? "split-reveal-auto" : shown ? "split-reveal-in" : ""} ${className}`}
     >
       {tokens.map((tok, i) => {
         if (tok === "" || /^\s+$/.test(tok)) {
@@ -59,7 +65,11 @@ export default function SplitReveal({
           <span key={i} className="split-reveal-word">
             <span
               className="split-reveal-word-inner"
-              style={{ transitionDelay: `${idx * stagger}ms` }}
+              style={
+                immediate
+                  ? { animationDelay: `${startDelay + idx * stagger}ms` }
+                  : { transitionDelay: `${idx * stagger}ms` }
+              }
             >
               {tok}
             </span>

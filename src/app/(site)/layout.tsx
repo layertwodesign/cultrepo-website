@@ -35,7 +35,7 @@ export default async function SiteLayout({
         <Navigation films={navFilms} {...socials} />
         <div className="camera-ruler camera-ruler-left" />
         <div className="camera-ruler camera-ruler-right" />
-        {children}
+        <main id="main-content">{children}</main>
         <SiteFooter {...socials} />
         <div className="film-grain" />
         {/* Vercel-native analytics — Speed Insights uses Core Web Vitals,

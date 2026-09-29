@@ -7,12 +7,24 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "us-west-2.cdn.hygraph.com" },
       { protocol: "https", hostname: "us-west-2.graphassets.com" },
       { protocol: "https", hostname: "media.graphassets.com" },
+      // YouTube thumbnails for the film-page player facade.
+      { protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" },
     ],
   },
   async headers() {
+    // The grain tile loads on every page. /public files aren't fingerprinted,
+    // so cache for a day and revalidate in the background, not forever.
+    // (/_next/static is already immutable; routes are left alone.)
+    const assets = [
+      {
+        source: "/noise-tile.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
+    ];
     // Staging copies set SITE_NOINDEX=1 so review links stay out of search results.
-    if (process.env.SITE_NOINDEX !== "1") return [];
+    if (process.env.SITE_NOINDEX !== "1") return assets;
     return [
+      ...assets,
       { source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },

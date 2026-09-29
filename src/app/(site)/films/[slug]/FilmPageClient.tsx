@@ -8,6 +8,8 @@ import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 import Reveal from "@/components/Reveal";
 import { getCrewPortrait, portraitCredits } from "@/lib/people-portraits";
+import { filmCredits } from "@/lib/film-credits";
+import YouTubeFacade from "./YouTubeFacade";
 
 const STAGGER_MS = 80;
 const GRID_COLS = 3;
@@ -81,8 +83,20 @@ type Props = {
 
 export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
   const slug = film.slug;
-  const { navigateTo, consumeFilmRect } = useTransition();
-  const [entered, setEntered] = useState(false);
+  const { navigateTo, consumeFilmRect, hasFilmRect } = useTransition();
+  // "auto": the entrance runs as a CSS animation from first paint, so direct
+  // visits don't keep the content hidden until the page hydrates. "handoff":
+  // arriving from the homepage carousel, the content waits for the video to
+  // settle and then transitions in ("entered"). The server never has a handoff.
+  const [entrance, setEntrance] = useState<"auto" | "handoff" | "entered">(
+    () => (hasFilmRect() ? "handoff" : "auto")
+  );
+  const entranceClass = entrance === "auto" ? "fp-auto" : entrance === "entered" ? "fp-entered" : "";
+  // Arriving from the homepage carousel the visitor has just clicked this film,
+  // so the embed mounts and starts at once. Direct visits (the server render)
+  // show a thumbnail facade and mount the embed when Play is pressed.
+  const [playerOn, setPlayerOn] = useState(() => hasFilmRect());
+  const playerStartedByClick = useRef(false);
   const [activeSection, setActiveSection] = useState("film");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -97,7 +111,11 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
     const rect = consumeFilmRect();
     const el = videoSectionRef.current;
     if (!rect || !el) {
-      const frame = requestAnimationFrame(() => setEntered(true));
+      // Nothing to hand off (or a Strict Mode re-run after the rect was
+      // consumed): make sure the content isn't left hidden.
+      const frame = requestAnimationFrame(() =>
+        setEntrance((value) => (value === "handoff" ? "entered" : value))
+      );
       return () => cancelAnimationFrame(frame);
     }
 
@@ -127,7 +145,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         // After settle, clear inline styles and show rest of content
         settleTimer = setTimeout(() => {
           el.style.cssText = "";
-          setEntered(true);
+          setEntrance("entered");
         }, 520);
       });
     });
@@ -142,8 +160,12 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
   const scrollPausedRef = useRef(false);
 
   // Scroll-based: border-radius animation + active section tracking + parallax + auto-pause
+  // Runs at most once per frame, reads layout before writing any styles, and
+  // skips writes that wouldn't change anything (the radius saturates at 300px).
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
 
@@ -166,14 +188,6 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         }
       }
 
-      // Animate border-radius — all sections share the same value, driven by page scroll
-      // Reaches 50px by the time the user has scrolled ~300px
-      const radiusProgress = Math.max(0, Math.min(1, scrollY / 300));
-      const radius = 12 + radiusProgress * 38; // 12px → 50px
-      document.querySelectorAll<HTMLElement>(".fp-section").forEach((el) => {
-        el.style.borderRadius = `${radius}px`;
-      });
-
       // Track active section for sidebar
       const ids = ["film", "fundraising", "about", "humans", "sponsors"];
       for (let i = ids.length - 1; i >= 0; i--) {
@@ -184,20 +198,43 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         }
       }
 
-      // Parallax images
+      // Parallax images — measure every frame first, then write, so the
+      // transforms don't force a style recalc between measurements.
+      const parallax: { img: HTMLElement; offset: number }[] = [];
       parallaxRefs.current.forEach((el) => {
         if (!el) return;
         const rect = el.getBoundingClientRect();
+        // Off-screen frames keep their last offset; nobody can see them move.
+        if (rect.bottom < -vh || rect.top > vh * 2) return;
+        const img = el.querySelector<HTMLElement>(".fp-parallax-img");
+        if (!img) return;
         const center = rect.top + rect.height / 2;
         const offset = ((center / vh) - 0.5) * -30; // -30px to +30px
-        const img = el.querySelector<HTMLElement>(".fp-parallax-img");
-        if (img) img.style.transform = `translate(-50%, -50%) translateY(${offset}px)`;
+        parallax.push({ img, offset });
       });
+
+      // Animate border-radius — all sections share the same value, driven by page scroll
+      // Reaches 50px by the time the user has scrolled ~300px
+      const radiusProgress = Math.max(0, Math.min(1, scrollY / 300));
+      const radius = `${12 + radiusProgress * 38}px`; // 12px → 50px
+      document.querySelectorAll<HTMLElement>(".fp-section").forEach((el) => {
+        if (el.style.borderRadius !== radius) el.style.borderRadius = radius;
+      });
+
+      for (const { img, offset } of parallax) {
+        img.style.transform = `translate(-50%, -50%) translateY(${offset}px)`;
+      }
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Lightbox
@@ -232,14 +269,35 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         </svg>
       </button>
       <div className="fp-layout">
+        {/* Phones hide the sidebar (and its title heading); keep the page's
+            heading available to screen readers there. */}
+        <h1 className="fp-mobile-title visually-hidden">{film.title}</h1>
+
         {/* ===== MAIN CONTENT (LEFT) ===== */}
-        <div className={`fp-main ${entered ? "fp-entered" : ""}`}>
+        <div className={`fp-main ${entranceClass}`}>
 
           {/* YouTube embed */}
           <section className="fp-video fp-section" id="section-film" ref={videoSectionRef}>
-            {film.youtubeId ? (
+            {film.youtubeId && !playerOn ? (
+              <YouTubeFacade
+                youtubeId={film.youtubeId}
+                title={film.title}
+                onPlay={() => {
+                  playerStartedByClick.current = true;
+                  setPlayerOn(true);
+                }}
+              />
+            ) : film.youtubeId ? (
               <iframe
-                ref={iframeRef}
+                ref={(el) => {
+                  iframeRef.current = el;
+                  // Keyboard users pressed Play on the facade, which is now
+                  // gone: keep their focus on the player that replaced it.
+                  if (el && playerStartedByClick.current) {
+                    playerStartedByClick.current = false;
+                    el.focus();
+                  }
+                }}
                 className="fp-video-iframe"
                 src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -276,7 +334,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {film.status !== "Released" && (
             <section className="fp-section fp-status-section" id="section-fundraising">
               <Reveal>
-                <span className="fp-label">{isFundraising ? "Fundraising" : "Coming Soon"}</span>
+                <h2 className="fp-label">{isFundraising ? "Fundraising" : "Coming Soon"}</h2>
               </Reveal>
               <Reveal delay={120}>
                 <p className="fp-status-headline">
@@ -319,7 +377,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {/* About */}
           <section className="fp-section" id="section-about">
             <Reveal>
-              <span className="fp-label">About</span>
+              <h2 className="fp-label">About</h2>
             </Reveal>
             <FilmAbout key={film.slug} synopsis={film.synopsis} />
           </section>
@@ -328,10 +386,10 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {film.stills.length >= 2 && (
             <div className="fp-images-row">
               <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[0] = el; }}>
-                <Image width={1600} height={900} sizes="(max-width: 768px) 50vw, 35vw" src={film.stills[0]} alt="" className="fp-parallax-img" data-src={film.stills[0]} onClick={openLightbox} />
+                <Image width={1600} height={900} sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 35vw" src={film.stills[0]} alt="" className="fp-parallax-img" data-src={film.stills[0]} onClick={openLightbox} />
               </div>
               <div className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[1] = el; }}>
-                <Image width={1600} height={900} sizes="(max-width: 768px) 50vw, 35vw" src={film.stills[1]} alt="" className="fp-parallax-img" data-src={film.stills[1]} onClick={openLightbox} />
+                <Image width={1600} height={900} sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 35vw" src={film.stills[1]} alt="" className="fp-parallax-img" data-src={film.stills[1]} onClick={openLightbox} />
               </div>
             </div>
           )}
@@ -339,7 +397,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {/* The Humans */}
           <section className="fp-section" id="section-humans">
             <Reveal>
-              <span className="fp-label">The People</span>
+              <h2 className="fp-label">The People</h2>
             </Reveal>
 
             {/* Featuring — large portrait cards */}
@@ -424,7 +482,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
             <div className="fp-images-row">
               {film.stills.slice(3, 5).map((src, i) => (
                 <div key={src} className="fp-image-frame fp-section" ref={(el) => { parallaxRefs.current[3 + i] = el; }}>
-                  <Image width={1600} height={900} sizes="(max-width: 768px) 50vw, 35vw" src={src} alt="" className="fp-parallax-img" data-src={src} onClick={openLightbox} />
+                  <Image width={1600} height={900} sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 35vw" src={src} alt="" className="fp-parallax-img" data-src={src} onClick={openLightbox} />
                 </div>
               ))}
             </div>
@@ -434,7 +492,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {film.sponsors.length > 0 && (
             <section className="fp-section" id="section-sponsors">
               <Reveal>
-                <span className="fp-label">Sponsors</span>
+                <h2 className="fp-label">Sponsors</h2>
               </Reveal>
               <div className="fp-sponsors">
                 {film.sponsors.map((s, i) => (
@@ -455,7 +513,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
           {/* Tech tags */}
           <section className="fp-section">
             <Reveal>
-              <span className="fp-label">Technologies</span>
+              <h2 className="fp-label">Technologies</h2>
             </Reveal>
             <div className="fp-techs">
               {film.technologies.map((t, i) => (
@@ -469,7 +527,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
         </div>
 
         {/* ===== SIDEBAR (RIGHT, STICKY) ===== */}
-        <aside className={`fp-sidebar ${entered ? "fp-entered" : ""}`}>
+        <aside className={`fp-sidebar ${entranceClass}`}>
           {/* X close button */}
           <button className="fp-close" onClick={() => navigateTo("/films")} aria-label="Close">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -488,7 +546,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
                   )}
                 </span>
                 <div className="fp-sb-film-bottom">
-                  <span className="fp-sb-film-title">{film.title}</span>
+                  <h1 className="fp-sb-film-title">{film.title}</h1>
                   <span className="fp-sb-film-desc">{film.description}</span>
                 </div>
               </div>
@@ -506,10 +564,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
             <div className="fp-sb-divider" />
             <div className="fp-sb-meta-grid">
               {(() => {
-                const director =
-                  film.crew.find((c) => /director(?! of)/i.test(c.role) && !/photography/i.test(c.role))?.name
-                  ?? (film.director || null);
-                const producer = film.crew.find((c) => /producer/i.test(c.role))?.name ?? null;
+                const { director, producer } = filmCredits(film);
                 const rows: { key: string; val: string }[] = [];
                 if (director) rows.push({ key: "Director", val: director });
                 if (producer) rows.push({ key: "Producer", val: producer });
@@ -574,7 +629,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
       {/* More Films — full-width grid below the layout */}
       <section className="fp-more-films">
         <Reveal>
-          <span className="fp-label fp-more-films-label">More Films</span>
+          <h2 className="fp-label fp-more-films-label">More Films</h2>
         </Reveal>
         <div className="films-grid">
           {allFilms.filter((f) => f.slug !== slug).map((f, i) => {
