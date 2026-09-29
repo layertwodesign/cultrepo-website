@@ -2649,7 +2649,10 @@ body.invert .corner-square {
   }
   .menu-email,
   .menu-email-success { flex: 1 1 auto; max-width: none; width: 100%; }
-  .menu-email-submit { min-width: 0; padding: 0 24px; }
+  /* Tighter padding and tracking so "Enter email" fits beside the button
+     down to 360px wide (it was cut to "ENTER EMAI" at 390). */
+  .menu-email-input { padding: 0 8px 0 16px; }
+  .menu-email-submit { min-width: 0; padding: 0 16px; letter-spacing: 0.08em; }
   .menu-cta-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
