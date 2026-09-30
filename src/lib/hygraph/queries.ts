@@ -130,7 +130,7 @@ export const ABOUT_PAGE_QUERY = /* GraphQL */ `
         label
         channel
       }
-      trustedBySponsors {
+      trustedBySponsors(first: 50) {
         name
         slug
         logo {

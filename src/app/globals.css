@@ -1477,7 +1477,8 @@ body.invert .corner-square {
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  gap: clamp(20px, 3vw, 48px);
+  /* Tighter rows than columns so a long sponsor list wraps into a compact block. */
+  gap: clamp(18px, 1.6vw, 24px) clamp(20px, 3vw, 48px);
 }
 .about-partner-logo {
   height: 32px;
@@ -2606,7 +2607,7 @@ body.invert .corner-square {
   .team-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .about-image-break { height: clamp(280px, 50vh, 460px); }
   .about-hero { grid-template-columns: 1fr; align-items: start; gap: 40px; }
-  .about-partners-logos { gap: 32px; }
+  .about-partners-logos { gap: 20px 32px; }
   .about-partner-logo { height: 24px; }
   .about-story-layout { gap: 48px; }
   .about-sponsors { flex-wrap: wrap; }
