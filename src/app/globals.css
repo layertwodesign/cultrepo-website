@@ -2475,12 +2475,14 @@ body.invert .corner-square {
 /* ============ SITE FOOTER ============ */
 .site-footer {
   padding: 48px 40px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 24px;
 }
 .site-footer-socials {
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -2494,11 +2496,17 @@ body.invert .corner-square {
 }
 .site-footer-social:hover { color: #FAFFFF; }
 .site-footer-meta {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  display: contents;
+}
+.site-footer-meta > :first-child {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+.site-footer-meta > :last-child {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
 }
 .site-footer-credit {
   font-family: var(--font-mono), monospace;
@@ -2714,8 +2722,16 @@ body.invert .corner-square {
 
   /* Footer & menu */
   .site-footer { padding: 24px 16px; gap: 14px; grid-template-columns: 1fr; justify-items: center; }
-  .site-footer > :first-child,
-  .site-footer > :last-child { justify-self: center; }
+  .site-footer-socials { grid-column: 1; }
+  .site-footer-meta {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
   /* Allow vertical scroll within the menu — content can be taller than viewport */
   /* svh = the height left when Safari's toolbars are showing; plain vh
      overshoots it, pushing the bottom of the menu off-screen. */
