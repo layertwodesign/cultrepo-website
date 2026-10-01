@@ -62,11 +62,13 @@ body.invert .hamburger:hover {
 body.invert .hamburger span {
   background: #0D110F;
 }
-body.invert .top-wordmark {
-  background-color: #0D110F;
+body.invert .top-wordmark,
+body.invert .bottom-wordmark {
+  background-color: rgba(13, 17, 15, 0.5);
 }
-body.invert .top-wordmark:hover {
-  background-color: #454940;
+body.invert .top-wordmark:hover,
+body.invert .bottom-wordmark:hover {
+  background-color: #0D110F;
 }
 body.invert .site-footer-social {
   color: rgba(13, 17, 15, 0.5);
@@ -371,7 +373,7 @@ body.invert .corner-square {
   z-index: 210;
   width: 100px;
   height: 16px;
-  background-color: #454940;
+  background-color: rgba(250, 255, 255, 0.4);
   mask-image: url('/logo-wordmark.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -393,7 +395,6 @@ body.invert .corner-square {
   position: fixed;
   opacity: 1;
   pointer-events: auto;
-  background-color: #FAFFFF;
   z-index: 10001;
 }
 /* Wordmark on film pages: only show on mobile (sidebar carries the brand on desktop/tablet) */
@@ -408,7 +409,7 @@ body.invert .corner-square {
   left: 40px;
   width: 100px;
   height: 16px;
-  background-color: #FAFFFF;
+  background-color: rgba(250, 255, 255, 0.4);
   mask-image: url('/logo-wordmark.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -418,12 +419,15 @@ body.invert .corner-square {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease, background-color 0.3s ease;
   z-index: 209;
 }
 .bottom-wordmark.visible {
   opacity: 1;
   pointer-events: auto;
+}
+.bottom-wordmark:hover {
+  background-color: #FAFFFF;
 }
 @media (max-width: 768px) {
   .bottom-wordmark { left: 20px; top: 28px; width: 80px; height: 13px; }
