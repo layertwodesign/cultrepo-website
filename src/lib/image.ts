@@ -1,26 +1,8 @@
-import { getImageProps } from "next/image";
-import previewPosters from "./preview-posters.json";
+import previewFrames from "./preview-frames.json";
 
-export function previewThumbnail(url: string | null | undefined): string | undefined {
-  return url ? (previewPosters as Record<string, { poster: string; blur: string }>)[url]?.blur : undefined;
-}
+type PreviewFrame = { poster: string; blur: string; start: number };
 
-/**
- * Serve CMS video posters through the same image optimizer/CDN as other site
- * images. Native <video poster> has no srcset, so select the correctly sized
- * 1x candidate rather than the default 2x URL. Shared with server preloads to
- * avoid duplicate requests. Local and non-CMS URLs retain their existing path.
- */
-export function videoPoster(url: string | null | undefined, width: number): string | undefined {
-  if (!url) return undefined;
-  const cached = (previewPosters as Record<string, { poster: string; blur: string }>)[url];
-  if (cached) return cached.poster;
-  if (!/^https:\/\/[\w-]+\.graphassets\.com\//.test(url)) return url;
-  const { props } = getImageProps({
-    src: url,
-    alt: "",
-    width,
-    height: Math.round(width * 9 / 16),
-  });
-  return props.srcSet?.split(", ")[0]?.split(" ")[0] ?? props.src;
+/** Cache is keyed by the video itself, never by film artwork. */
+export function previewFrame(url: string | null | undefined): PreviewFrame | undefined {
+  return url ? (previewFrames as Record<string, PreviewFrame>)[url] : undefined;
 }

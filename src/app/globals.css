@@ -3656,7 +3656,7 @@ a.admin-stat-card:hover .admin-stat-arrow {
   .admin-hub-footer { flex-direction: column; align-items: flex-start; }
 }
 
-/* Preview cards always paint a tiny inline image, then a poster, then video. */
+/* One video frame: tiny inline blur → sharp opening frame → moving video. */
 .film-preview { position: relative; overflow: hidden; isolation: isolate; background: #303b32; }
 .film-preview.fp-video-fallback { position: absolute; }
 .film-preview-video, .film-preview-cover, .film-preview-poster, .film-preview-blur {

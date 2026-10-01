@@ -16,6 +16,3 @@ export function carouselOrder<T extends Pick<Film, "slug">>(films: T[], featured
   }
   return ordered;
 }
-
-/** Poster width requested for carousel cards (the centred card is ~1000 CSS px wide at most). */
-export const CAROUSEL_POSTER_WIDTH = 960;

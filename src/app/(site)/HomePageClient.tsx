@@ -9,7 +9,7 @@ import type { Film } from "@/lib/films";
 import type { TickerEntry } from "@/lib/site-settings";
 import CornerSquares from "@/components/CornerSquares";
 import { setRulerY } from "@/components/RulerParallax";
-import { CAROUSEL_POSTER_WIDTH, carouselOrder } from "@/lib/carousel";
+import { carouselOrder } from "@/lib/carousel";
 
 type Props = {
   films: Film[];
@@ -1064,8 +1064,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                 >
                   <FilmPreview
                     title={item.title}
-                    poster={item.poster}
-                    posterWidth={CAROUSEL_POSTER_WIDTH}
                     ref={(el) => { videoRefs.current[idx] = el; }}
                     src={item.video}
                     active={activeCards.has(idx)}

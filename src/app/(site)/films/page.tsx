@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { preload } from "react-dom";
 import { getFilms } from "@/lib/films";
-import { videoPoster } from "@/lib/image";
+import { previewFrame } from "@/lib/image";
 import { getSiteSettings } from "@/lib/site-settings";
 import { buildMetadata } from "@/lib/seo";
 import FilmPreview from "@/components/FilmPreview";
@@ -12,7 +12,6 @@ import { filmsListJsonLd } from "@/lib/structured-data";
 
 const STAGGER_MS = 80;
 const GRID_COLS = 3;
-const POSTER_WIDTH = 800;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -32,10 +31,10 @@ export default async function FilmsPage() {
   const films = [...await getFilms()].sort((a, b) =>
     a.title.localeCompare(b.title, "en", { sensitivity: "base", numeric: true })
   );
-  // The first card's poster is the page's LCP (on phones the first row is the
+  // The first card's opening frame is the page's LCP (on phones the first row is the
   // first screen too): fetch it from <head> at high priority, same URL as the
-  // card's <video poster>.
-  const firstPoster = films[0]?.video ? videoPoster(films[0].poster, POSTER_WIDTH) : undefined;
+  // card's frame cover.
+  const firstPoster = films[0]?.video ? previewFrame(films[0].video)?.poster : undefined;
   if (firstPoster) preload(firstPoster, { as: "image", fetchPriority: "high" });
   return (
     <div className="page-container">
@@ -63,8 +62,6 @@ export default async function FilmsPage() {
                   <div className="film-card-video-wrap">
                     <FilmPreview
                       title={film.title}
-                      poster={film.poster}
-                      posterWidth={POSTER_WIDTH}
                       src={film.video}
                       muted
                       loop

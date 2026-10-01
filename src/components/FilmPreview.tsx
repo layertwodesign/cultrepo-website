@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ComponentPropsWithRef } from "react";
-import { previewThumbnail, videoPoster } from "@/lib/image";
+import { previewFrame } from "@/lib/image";
 import blackRanges from "@/lib/preview-black-ranges.json";
 
 type Props = Omit<ComponentPropsWithRef<"video">, "src" | "poster"> & {
   src: string;
-  poster?: string | null;
   title: string;
-  posterWidth?: number;
   /** Prepare nearby clips; only play videos actually on screen. */
   lazy?: boolean;
   /** Carousel-controlled source attachment, latched by the parent. */
@@ -17,7 +15,7 @@ type Props = Omit<ComponentPropsWithRef<"video">, "src" | "poster"> & {
 };
 
 /** An image remains in front until the browser has presented a video frame. */
-export default function FilmPreview({ src, poster, title, className, ref, onError, posterWidth = 1280, lazy = false, active, priority = false, autoPlay, preload, ...props }: Props) {
+export default function FilmPreview({ src, title, className, ref, onError, lazy = false, active, priority = false, autoPlay, preload, ...props }: Props) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const [failedPoster, setFailedPoster] = useState<string | null>(null);
   const [readyPoster, setReadyPoster] = useState<string | null>(null);
@@ -27,8 +25,9 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const frameRef = useRef<number | null>(null);
   const loaded = active ?? (!lazy || seen);
-  const imageSrc = videoPoster(poster, posterWidth);
-  const thumbnail = previewThumbnail(poster);
+  const openingFrame = previewFrame(src);
+  const imageSrc = openingFrame?.poster;
+  const thumbnail = openingFrame?.blur;
   const attachPoster = priority || loaded || seen;
   const failed = !src || failedSrc === src;
 
@@ -75,7 +74,7 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
     };
     const ranges = (blackRanges as Record<string, number[][]>)[src] ?? [];
     const start = ranges.find(([from]) => from === 0)?.[1];
-    const safeStart = start === undefined ? 0 : start + 0.12;
+    const safeStart = previewFrame(src)?.start ?? (start === undefined ? 0 : start + 0.12);
     const skipBlack = () => {
       const range = ranges.find(([from, to]) => video.currentTime >= from && video.currentTime < to + 0.08);
       if (range && video.readyState >= 1) video.currentTime = range[1] + 0.12;
@@ -83,7 +82,7 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
     const reset = () => { cancelFrame(); setFrameReady(false); };
     const metadata = () => {
       // Several source clips contain seconds of encoded black at the start.
-      // Seek while the poster still covers the player, including on HD swaps.
+      // Seek to the extracted opening frame while it still covers the player, including on HD swaps.
       if (safeStart && video.currentTime < safeStart) video.currentTime = safeStart;
     };
     const presented = () => {
@@ -131,7 +130,7 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
   }, [src, props.loop]);
 
   return (
-    <div className={`film-preview ${className ?? ""}`} data-frame-ready={frameReady && !failed} data-preview-loaded={loaded}>
+    <div className={`film-preview ${className ?? ""}`} data-frame-ready={frameReady && !failed} data-preview-loaded={loaded} data-preview-frame={imageSrc}>
       <video
         {...props}
         ref={setVideoRef}

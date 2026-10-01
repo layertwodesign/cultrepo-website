@@ -307,7 +307,6 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
             ) : (
               <FilmPreview
                 title={film.title}
-                poster={film.poster}
                 src={film.video}
                 controls
                 playsInline
@@ -640,7 +639,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
               <Reveal key={f.slug} delay={delay}>
                 <TransitionLink href={`/films/${f.slug}`} className="film-card">
                   <div className="film-card-video-wrap">
-                    <FilmPreview title={f.title} poster={f.poster} posterWidth={800} src={f.video} muted loop playsInline autoPlay lazy preload="metadata" className="film-card-video" />
+                    <FilmPreview title={f.title} src={f.video} muted loop playsInline autoPlay lazy preload="metadata" className="film-card-video" />
                     <div className="film-card-overlay" />
                   </div>
                   <div className="film-card-info">
