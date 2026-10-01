@@ -1256,13 +1256,16 @@ body.invert .corner-square {
   left: 40px;
   right: 40px;
   bottom: 48px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 18px;
 }
 .menu-footer-meta {
-  width: 100%;
+  width: auto;
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1280,6 +1283,8 @@ body.invert .corner-square {
 }
 .menu-footer-credit-link:hover { color: #FAFFFF; }
 .menu-socials {
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -2781,8 +2786,8 @@ body.invert .corner-square {
     height: 24px;
   }
   .menu-footer { grid-template-columns: 1fr; gap: 12px; justify-items: center; text-align: center; }
-  .menu-footer > :first-child,
-  .menu-footer > :last-child { justify-self: center; }
+  .menu-socials { grid-column: 1; }
+  .menu-footer-meta { grid-column: 1; grid-row: 2; justify-self: center; }
   .home-footer { padding: 20px 16px; }
   .home-footer-nav { gap: 16px; }
 }
