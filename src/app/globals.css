@@ -1743,11 +1743,27 @@ body.invert .corner-square {
 }
 
 /* ============ 404 ============ */
+/* Keep the simple shared footer in the first screen, not below a 100vh hero.
+   Flow layout still allows scrolling on short screens and at large text sizes. */
+body:has(.not-found-page) {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+#main-content:has(.not-found-page) {
+  flex: 1;
+  display: grid;
+}
+body:has(.not-found-page) > .site-footer {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
 .not-found-page {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1808,6 +1824,7 @@ body.invert .corner-square {
 @media (max-width: 640px) {
   .not-found-page { padding: 112px 24px 72px; }
   .not-found-label { font-size: 11px; }
+  body:has(.not-found-page) .site-footer-meta { justify-content: center; }
 }
 
 /* ============ FILMS INDEX ============ */
