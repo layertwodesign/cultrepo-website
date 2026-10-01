@@ -83,7 +83,7 @@ type Props = {
 
 export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
   const slug = film.slug;
-  const { navigateTo, consumeFilmRect, hasFilmRect } = useTransition();
+  const { navigateTo, consumeFilmRect, hasFilmRect, shouldAutoplayFilm, clearFilmAutoplay } = useTransition();
   // "auto": the entrance runs as a CSS animation from first paint, so direct
   // visits don't keep the content hidden until the page hydrates. "handoff":
   // arriving from the homepage carousel, the content waits for the video to
@@ -92,10 +92,10 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
     () => (hasFilmRect() ? "handoff" : "auto")
   );
   const entranceClass = entrance === "auto" ? "fp-auto" : entrance === "entered" ? "fp-entered" : "";
-  // Arriving from the homepage carousel the visitor has just clicked this film,
-  // so the embed mounts and starts at once. Direct visits (the server render)
-  // show a thumbnail facade and mount the embed when Play is pressed.
-  const [playerOn, setPlayerOn] = useState(() => hasFilmRect());
+  // Any internal film link is an explicit playback request, including Films,
+  // menu links and More Films. Cold visits retain the lightweight Play facade.
+  const [playerOn, setPlayerOn] = useState(() => hasFilmRect() || shouldAutoplayFilm(slug));
+  useEffect(() => clearFilmAutoplay(slug), [clearFilmAutoplay, slug]);
   const playerStartedByClick = useRef(false);
   const [activeSection, setActiveSection] = useState("film");
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
@@ -299,7 +299,7 @@ export default function FilmPageClient({ film, allFilms, liveViews }: Props) {
                   }
                 }}
                 className="fp-video-iframe"
-                src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
+                src={`https://www.youtube.com/embed/${film.youtubeId}?autoplay=1&playsinline=1&rel=0&modestbranding=1&color=white&iv_load_policy=3&enablejsapi=1`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title={film.title}

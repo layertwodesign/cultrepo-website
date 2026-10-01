@@ -67,7 +67,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   const [revealed, setRevealed] = useState(false);
   const [showUI, setShowUI] = useState(false);
   const [showGradient, setShowGradient] = useState(false);
-  const [gridRevealed, setGridRevealed] = useState(false);
   const [items] = useState(() => carouselOrder(allItems, featuredSlug));
   // The clips on screen when the intro lands (the centred one and its two
   // neighbours) autoplay with full preload; the rest load when the carousel reaches them.
@@ -126,9 +125,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     introOffsetY: 0,
     lastInputTime: 0,
     snapping: false,
-    loopCount: 0,
-    carouselDone: false,
-    gridNotified: false,
     rulerY: 0,
     centeredIdx: 0,
   });
@@ -511,28 +507,13 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         state.centeredIdx = ((Math.round(rawIdx) % len) + len) % len;
       }
 
-      if (!state.carouselDone) {
-        if (state.current > totalH) {
-          state.current -= totalH;
-          state.target -= totalH;
-          if (state.isDragging) state.dragStart -= totalH;
-          if (state.initialized) state.loopCount++;
-        } else if (state.current < 0) {
-          state.current += totalH;
-          state.target += totalH;
-          if (state.isDragging) state.dragStart += totalH;
-          if (state.initialized) state.loopCount++;
-        }
-        if (state.loopCount >= 10) {
-          state.carouselDone = true;
-          const centerOffset = wrapperH / 2 - itemH / 2;
-          const nearestIdx = Math.round((state.current + centerOffset) / slotH);
-          state.target = nearestIdx * slotH - centerOffset;
-          if (!state.gridNotified) {
-            state.gridNotified = true;
-            setGridRevealed(true);
-          }
-        }
+      // Wrap forever. Normalize by whole loops so even large trackpad deltas
+      // stay bounded without handing the page over to a second layout.
+      if (totalH > 0) {
+        const wrap = Math.floor(state.current / totalH) * totalH;
+        state.current -= wrap;
+        state.target -= wrap;
+        if (state.isDragging) state.dragStart -= wrap;
       }
 
       const expIdx = expandingIdxRef.current;
@@ -739,9 +720,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         }
       }
       render(wW, wH);
-      // Keep the side-rulers parallax in sync while the carousel is hijacking
-      // wheel/touch input (window.scrollY stays at 0 in that mode). After
-      // carouselDone, normal scroll takes over and contributes via scrollY.
+      // Keep the side-rulers in sync with the infinite carousel input.
       setRulerY(state.rulerY + window.scrollY);
       rafId = requestAnimationFrame(loop);
     }
@@ -751,7 +730,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     const menuOpen = () => document.documentElement.classList.contains("menu-open");
 
     const onWheel = (e: WheelEvent) => {
-      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
+      if (state.carouselBlocked || menuOpen()) return;
       e.preventDefault();
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       state.target += delta * 0.8;
@@ -762,7 +741,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     window.addEventListener("wheel", onWheel, { passive: false });
 
     const onMouseDown = (e: MouseEvent) => {
-      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
+      if (state.carouselBlocked || menuOpen()) return;
       if (!state.initialized) { state.initialized = true; state.current = state.target; }
       state.isDragging = true;
       state.hasDragged = false;
@@ -785,12 +764,12 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
     let touchPrevY = 0;
     const onTouchStart = (e: TouchEvent) => {
-      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
+      if (state.carouselBlocked || menuOpen()) return;
       touchPrevY = e.touches[0].clientY;
       if (!state.initialized) { state.initialized = true; state.current = state.target; }
     };
     const onTouchMove = (e: TouchEvent) => {
-      if (state.carouselBlocked || state.carouselDone || menuOpen()) return;
+      if (state.carouselBlocked || menuOpen()) return;
       e.preventDefault();
       const y = e.touches[0].clientY;
       const inc = (touchPrevY - y) * 1.2;
@@ -908,6 +887,10 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         </div>
       )}
 
+      {/* Server-rendered gate prevents an initial flash or keyboard focus on
+          the menu while the homepage intro is still running. */}
+      {introPhase !== "done" && <style>{`.hamburger { opacity: 0 !important; visibility: hidden; pointer-events: none !important; }`}</style>}
+
       {/* Nav visibility trigger — tells layout nav to show */}
       {showUI && <style>{`.top-wordmark { opacity: 1 !important; pointer-events: auto !important; }`}</style>}
       {expandingIdx !== null && <style>{`.top-wordmark { opacity: 0 !important; transition: opacity 0.35s ease !important; }`}</style>}
@@ -940,7 +923,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         </div>
       )}
 
-      <div className={`main ${expandingIdx !== null ? "film-exiting" : ""}`}>
+      <div className={`main ${expandingIdx !== null ? "film-exiting" : ""}`} data-intro-phase={introPhase}>
         {/* Hero heading — top left (visible after shrink completes) */}
         {isShrinkOrLater && introPhase !== "shrink" && (
           <div className={`hero ${showUI ? "with-wordmark" : ""}`} aria-hidden="true">
@@ -1111,46 +1094,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
           </div>
         </div>
       </div>
-
-      {/* ============ FILM GRID SECTION ============ */}
-      {gridRevealed && (
-        <section className="home-grid-section">
-          <div className="home-grid">
-            {films.map((film) => (
-              <div
-                key={film.slug}
-                className="home-grid-card"
-                onClick={() => navigateTo(`/films/${film.slug}`)}
-              >
-                <FilmPreview
-                  title={film.title}
-                  poster={film.poster}
-                  posterWidth={800}
-                  src={film.video}
-                  muted
-                  loop
-                  playsInline
-                  lazy
-                  preload="metadata"
-                  className="home-grid-video"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ============ FOOTER ============ */}
-      {gridRevealed && (
-        <footer className="home-footer">
-          <span className="home-footer-brand">CultRepo</span>
-          <nav className="home-footer-nav">
-            <TransitionLink href="/about">About</TransitionLink>
-            <TransitionLink href="/films">Films</TransitionLink>
-            <TransitionLink href="/about">Sponsor</TransitionLink>
-          </nav>
-        </footer>
-      )}
 
       {/* Preloaded YouTube iframe — hidden, loads centered film */}
       {preloadYtId && (

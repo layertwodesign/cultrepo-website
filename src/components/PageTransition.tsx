@@ -22,11 +22,16 @@ const TransitionContext = createContext<{
   consumeFilmRect: () => FilmTransitionRect;
   /** Whether a carousel handoff is waiting for the film page (without consuming it). */
   hasFilmRect: () => boolean;
+  /** A film deliberately opened through the site's navigation, not a cold visit. */
+  shouldAutoplayFilm: (slug: string) => boolean;
+  clearFilmAutoplay: (slug: string) => void;
 }>({
   navigateTo: () => {},
   setFilmRect: () => {},
   consumeFilmRect: () => null,
   hasFilmRect: () => false,
+  shouldAutoplayFilm: () => false,
+  clearFilmAutoplay: () => {},
 });
 
 export function useTransition() {
@@ -48,6 +53,14 @@ export function PageTransitionProvider({
     stateRef.current = state;
   }, [state]);
   const filmRectRef = useRef<FilmTransitionRect>(null);
+  const filmNavigationRef = useRef<string | null>(null);
+  const shouldAutoplayFilm = useCallback(
+    (slug: string) => filmNavigationRef.current === `/films/${slug}`,
+    []
+  );
+  const clearFilmAutoplay = useCallback((slug: string) => {
+    if (filmNavigationRef.current === `/films/${slug}`) filmNavigationRef.current = null;
+  }, []);
 
   const setFilmRect = useCallback((rect: FilmTransitionRect) => {
     filmRectRef.current = rect;
@@ -64,6 +77,7 @@ export function PageTransitionProvider({
   const navigateTo = useCallback(
     (href: string, opts?: { skipOverlay?: boolean }) => {
       if (href === pathname || stateRef.current !== "idle") return;
+      filmNavigationRef.current = href.startsWith("/films/") ? href : null;
 
       if (opts?.skipOverlay) {
         setShowOverlay(false);
@@ -83,6 +97,9 @@ export function PageTransitionProvider({
   useEffect(() => {
     if (pathname === prevPathname.current) return;
     prevPathname.current = pathname;
+    // Keep the intent until the film mounts: its server component can still
+    // be streaming after the layout has already changed pathname.
+    if (filmNavigationRef.current !== pathname) filmNavigationRef.current = null;
     window.scrollTo(0, 0);
 
     let settleTimer: ReturnType<typeof setTimeout> | undefined;
@@ -102,7 +119,7 @@ export function PageTransitionProvider({
   }, [pathname, showOverlay]);
 
   return (
-    <TransitionContext.Provider value={{ navigateTo, setFilmRect, consumeFilmRect, hasFilmRect }}>
+    <TransitionContext.Provider value={{ navigateTo, setFilmRect, consumeFilmRect, hasFilmRect, shouldAutoplayFilm, clearFilmAutoplay }}>
       {children}
 
       {showOverlay && (
