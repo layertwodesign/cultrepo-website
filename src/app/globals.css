@@ -3566,3 +3566,24 @@ a.admin-stat-card:hover .admin-stat-arrow {
   .admin-type-row { grid-template-columns: 1fr; }
   .admin-hub-footer { flex-direction: column; align-items: flex-start; }
 }
+
+/* Preview cards always paint a tiny inline image, then a poster, then video. */
+.film-preview { position: relative; overflow: hidden; isolation: isolate; background: #303b32; }
+.film-preview.fp-video-fallback { position: absolute; }
+.film-preview-video, .film-preview-cover, .film-preview-poster, .film-preview-blur {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.film-preview-video { opacity: 0; }
+.film-preview[data-frame-ready="true"] .film-preview-video { opacity: 1; }
+.film-preview-cover { pointer-events: none; background: linear-gradient(135deg, #49584b, #26352c); transition: opacity .2s ease; }
+.film-preview[data-frame-ready="true"] .film-preview-cover { opacity: 0; }
+.film-preview-blur { background-size: cover; background-position: center; filter: blur(10px); transform: scale(1.08); }
+.film-preview-poster { transition: opacity .2s ease; }
+.film-preview-title { position: absolute; inset: 0; display: grid; place-items: center; color: #faffff; font: 14px var(--font-mono), monospace; text-transform: uppercase; }
+.film-preview-spinner { position: absolute; right: 16px; bottom: 16px; width: 17px; height: 17px; border: 2px solid #ffffff40; border-top-color: #fff; border-radius: 50%; animation: preview-spin .8s linear infinite, preview-wait 12s forwards; }
+@keyframes preview-spin { to { transform: rotate(360deg); } }
+@keyframes preview-wait { 0%, 90% { opacity: .8; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .film-preview-cover, .film-preview-poster { transition: none; }
+  .film-preview-spinner { animation: preview-wait 12s forwards; }
+}

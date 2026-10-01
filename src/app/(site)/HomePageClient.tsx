@@ -71,12 +71,9 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
   // The clips on screen when the intro lands (the centred one and its two
   // neighbours) autoplay with full preload; the rest load when the carousel reaches them.
   const eager = useMemo(() => new Set([0, 1, items.length - 1]), [items.length]);
-  // Which cards have their poster and clip attached. Only the card the intro
-  // lands on starts with them (it's in the server HTML and gates the intro);
-  // its neighbours follow once that clip is ready, and every other card when
-  // the carousel brings it near the screen. The set only grows, so a card
-  // keeps its media once loaded.
-  const [activeCards, setActiveCards] = useState<ReadonlySet<number>>(() => new Set([0]));
+  // All cards have inline thumbnails. Prepare the landing clip and both
+  // neighbours during the intro; latch more clips two slots ahead of view.
+  const [activeCards, setActiveCards] = useState<ReadonlySet<number>>(() => new Set([0, 1, items.length - 1]));
   const activeCardsRef = useRef(activeCards);
   const activateCards = useCallback((indices: number[]) => {
     const fresh = indices.filter((i) => !activeCardsRef.current.has(i));
@@ -241,13 +238,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
       });
     };
   }, [introPhase]);
-
-  // The landing card's clip is ready (or the intro was skipped): load its two
-  // neighbours, which are on screen when the carousel lands, during the text.
-  useEffect(() => {
-    if (introPhase === "loading") return;
-    activateCards([...eager]);
-  }, [introPhase, eager, activateCards]);
 
   // Phase: bar-fade → text-reveal
   useEffect(() => {
@@ -595,27 +585,27 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
         // Fade videos in during last 25% of intro animation
         const videoEl = el.querySelector("video") as HTMLVideoElement | null;
-        if (videoEl) {
+        const previewEl = el.querySelector(".film-preview") as HTMLElement | null;
+        if (previewEl) {
           if (!state.initialized && state.introProgress < 1) {
             const fadeStart = 0.75;
             const videoOpacity = state.introProgress < fadeStart
               ? 0
               : (state.introProgress - fadeStart) / (1 - fadeStart);
-            videoEl.style.opacity = String(Math.min(1, videoOpacity));
+            previewEl.style.opacity = String(Math.min(1, videoOpacity));
           } else {
-            videoEl.style.opacity = "1";
+            previewEl.style.opacity = "1";
           }
         }
 
         // Attach media once a card is near the screen with its clip visible
         // (clips stay hidden for the first 75% of the intro scroll-through,
         // so that pass doesn't load every card).
-        if (norm < 1 && (state.initialized || state.introProgress >= 0.75)) {
+        if (absDist < maxDist + slotH * 2 && (state.initialized || state.introProgress >= 0.75)) {
           nearCards.push(idx);
         }
 
-        // Play clips while they're on screen and pause the rest, so a clip
-        // only downloads once the carousel brings it into view.
+        // Play only visible clips; nearby paused clips can buffer ahead.
         if (videoEl && state.initialized && !videoEl.dataset.playBlocked && videoEl.hasAttribute("src")) {
           const onScreen = norm < 0.9;
           if (onScreen && videoEl.paused) {
@@ -1081,7 +1071,8 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
                     active={activeCards.has(idx)}
                     muted loop playsInline
                     autoPlay={eager.has(idx)}
-                    preload={eager.has(idx) ? "auto" : "none"}
+                    preload="auto"
+                    priority={eager.has(idx)}
                     className="carousel-video"
                   />
                   <div className="carousel-overlay">

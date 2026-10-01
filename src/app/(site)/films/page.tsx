@@ -72,7 +72,7 @@ export default async function FilmsPage() {
                       autoPlay
                       lazy
                       priority={firstRow}
-                      preload="metadata"
+                      preload="auto"
                       className="film-card-video"
                     />
                     <div className="film-card-overlay" />

@@ -1,55 +1,36 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type ComponentPropsWithRef } from "react";
-import { videoPoster } from "@/lib/image";
+import { previewThumbnail, videoPoster } from "@/lib/image";
+import blackRanges from "@/lib/preview-black-ranges.json";
 
 type Props = Omit<ComponentPropsWithRef<"video">, "src" | "poster"> & {
   src: string;
   poster?: string | null;
   title: string;
-  /** Width requested for the poster frame; Hygraph posters are served resized as WebP. */
   posterWidth?: number;
-  /**
-   * Attach the clip and poster only once the preview comes near the screen,
-   * and play it only while it's on screen. Sources are kept after that, so
-   * scrolling back is instant.
-   */
+  /** Prepare nearby clips; only play videos actually on screen. */
   lazy?: boolean;
-  /**
-   * Parent-controlled alternative to `lazy`, for layouts an observer can't
-   * judge (the homepage carousel hides and moves its cards itself). Sources
-   * attach once this is true; the parent must never set it back to false.
-   */
+  /** Carousel-controlled source attachment, latched by the parent. */
   active?: boolean;
-  /** Attach the poster from the server HTML even while the clip waits: for the first visible cards (LCP). */
   priority?: boolean;
 };
 
-/** Keep missing or unavailable clips from becoming broken media players. */
+/** An image remains in front until the browser has presented a video frame. */
 export default function FilmPreview({ src, poster, title, className, ref, onError, posterWidth = 1280, lazy = false, active, priority = false, autoPlay, preload, ...props }: Props) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const [failedPoster, setFailedPoster] = useState<string | null>(null);
-  // Latches true the first time a lazy preview comes near the screen.
+  const [readyPoster, setReadyPoster] = useState<string | null>(null);
+  const [frameReady, setFrameReady] = useState(false);
   const [seen, setSeen] = useState(false);
-  const [pageReady, setPageReady] = useState(false);
   const inViewRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const loaded = active ?? (!lazy || (seen && pageReady));
-
-  // Let the initial posters, fonts and document finish before autoplay clips
-  // compete for bandwidth. Posters are visible while their videos prepare.
-  useEffect(() => {
-    if (!lazy) return;
-    let frame = 0;
-    const ready = () => { frame = requestAnimationFrame(() => setPageReady(true)); };
-    if (document.readyState === "complete") ready();
-    else window.addEventListener("load", ready, { once: true });
-    return () => {
-      window.removeEventListener("load", ready);
-      cancelAnimationFrame(frame);
-    };
-  }, [lazy]);
+  const frameRef = useRef<number | null>(null);
+  const loaded = active ?? (!lazy || seen);
+  const imageSrc = videoPoster(poster, posterWidth);
+  const thumbnail = previewThumbnail(poster);
+  const attachPoster = priority || loaded || seen;
+  const failed = !src || failedSrc === src;
 
   const setVideoRef = useCallback((el: HTMLVideoElement | null) => {
     videoRef.current = el;
@@ -57,85 +38,123 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
     else if (ref) ref.current = el;
   }, [ref]);
 
+  // Observe independently from the video: loading must start BEFORE visibility.
   useEffect(() => {
     const video = videoRef.current;
     if (!lazy || !video) return;
     const sync = (visible: boolean) => {
       inViewRef.current = visible;
-      // Before the clip is attached there's nothing to play; the effect
-      // below starts it once the source lands.
       if (!autoPlay || !video.hasAttribute("src")) return;
       if (visible) video.play().catch(() => {});
       else video.pause();
     };
-    if (typeof IntersectionObserver === "undefined") {
-      const frame = requestAnimationFrame(() => { setSeen(true); sync(true); });
-      return () => cancelAnimationFrame(frame);
-    }
     const preloadObserver = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setSeen(true); },
-      { rootMargin: "300px 0px" }
+      { rootMargin: "900px 0px" }
     );
     const visibleObserver = new IntersectionObserver(
-      ([entry]) => sync(entry.isIntersecting),
-      { threshold: 0.01 }
+      ([entry]) => sync(entry.isIntersecting), { threshold: 0.01 }
     );
     preloadObserver.observe(video);
     visibleObserver.observe(video);
     return () => { preloadObserver.disconnect(); visibleObserver.disconnect(); };
-  }, [lazy, autoPlay, src, failedSrc]);
+  }, [lazy, autoPlay, src]);
 
-  // A lazy clip just got its source while on screen: start it.
   useEffect(() => {
     const video = videoRef.current;
     if (!lazy || !loaded || !autoPlay || !video || !inViewRef.current) return;
     video.play().catch(() => {});
   }, [lazy, loaded, autoPlay]);
 
-  if (src && failedSrc !== src) {
-    // Until it's loaded the element has no src/poster at all: an empty frame
-    // over the card background (pending), never the failure placeholder.
-    return (
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const cancelFrame = () => {
+      if (frameRef.current !== null) video.cancelVideoFrameCallback?.(frameRef.current);
+      frameRef.current = null;
+    };
+    const ranges = (blackRanges as Record<string, number[][]>)[src] ?? [];
+    const start = ranges.find(([from]) => from === 0)?.[1];
+    const safeStart = start === undefined ? 0 : start + 0.12;
+    const skipBlack = () => {
+      const range = ranges.find(([from, to]) => video.currentTime >= from && video.currentTime < to + 0.08);
+      if (range && video.readyState >= 1) video.currentTime = range[1] + 0.12;
+    };
+    const reset = () => { cancelFrame(); setFrameReady(false); };
+    const metadata = () => {
+      // Several source clips contain seconds of encoded black at the start.
+      // Seek while the poster still covers the player, including on HD swaps.
+      if (safeStart && video.currentTime < safeStart) video.currentTime = safeStart;
+    };
+    const presented = () => {
+      cancelFrame();
+      if (video.requestVideoFrameCallback) {
+        const checkFrame: VideoFrameRequestCallback = (_now, frame) => {
+          const black = ranges.some(([from, to]) => frame.mediaTime >= from && frame.mediaTime < to + 0.08);
+          setFrameReady(video.readyState >= 2 && !black);
+          if (black) skipBlack();
+          // Keep guarding loops and source edits with encoded black ranges.
+          if (ranges.length) frameRef.current = video.requestVideoFrameCallback(checkFrame);
+          else frameRef.current = null;
+        };
+        frameRef.current = video.requestVideoFrameCallback(checkFrame);
+      } else if (video.readyState >= 2 && video.currentTime > 0) {
+        skipBlack();
+        setFrameReady(video.currentTime >= safeStart);
+      }
+    };
+    // Also catches the carousel's in-place 720p -> HD source swap.
+    video.addEventListener("loadedmetadata", metadata);
+    video.addEventListener("emptied", reset);
+    video.addEventListener("loadstart", reset);
+    video.addEventListener("playing", presented);
+    const timeUpdate = () => {
+      // Restart before the native loop can show the black opening again.
+      if (safeStart && props.loop && video.duration - video.currentTime < 0.25) video.currentTime = safeStart;
+      if (!video.requestVideoFrameCallback && video.readyState >= 2 && video.currentTime > 0) {
+        const black = ranges.some(([from, to]) => video.currentTime >= from && video.currentTime < to + 0.08);
+        setFrameReady(!black);
+        if (black) skipBlack();
+      }
+    };
+    video.addEventListener("timeupdate", timeUpdate);
+    if (video.readyState >= 1) metadata();
+    if (!video.paused && video.readyState >= 2) presented();
+    return () => {
+      cancelFrame();
+      video.removeEventListener("loadedmetadata", metadata);
+      video.removeEventListener("emptied", reset);
+      video.removeEventListener("loadstart", reset);
+      video.removeEventListener("playing", presented);
+      video.removeEventListener("timeupdate", timeUpdate);
+    };
+  }, [src, props.loop]);
+
+  return (
+    <div className={`film-preview ${className ?? ""}`} data-frame-ready={frameReady && !failed} data-preview-loaded={loaded}>
       <video
         {...props}
         ref={setVideoRef}
-        src={loaded ? src : undefined}
-        poster={loaded || priority || seen ? videoPoster(poster, posterWidth) : undefined}
+        src={loaded && !failed ? src : undefined}
+        poster={thumbnail ?? imageSrc}
         autoPlay={lazy ? undefined : autoPlay}
-        preload={loaded ? preload : "none"}
-        className={className}
-        onError={(event) => {
-          setFailedSrc(src);
-          onError?.(event);
-        }}
+        preload={loaded ? (preload ?? "auto") : "none"}
+        className="film-preview-video"
+        aria-label={`${title} preview`}
+        onError={(event) => { setFailedSrc(src); setFrameReady(false); onError?.(event); }}
       />
-    );
-  }
-
-  if (poster && failedPoster !== poster) {
-    return (
-      <Image
-        src={poster}
-        alt={`${title} poster`}
-        width={1280}
-        height={720}
-        sizes="(max-width: 768px) 100vw, 60vw"
-        className={className}
-        style={{ objectFit: "contain" }}
-        preload={priority}
-        onError={() => setFailedPoster(poster)}
-      />
-    );
-  }
-
-  return (
-    <div
-      className={className}
-      role="img"
-      aria-label={`${title}: preview unavailable`}
-      style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "#282C26", color: "#ADB0A0", fontFamily: "var(--font-mono), monospace", textTransform: "uppercase" }}
-    >
-      <span>{title}</span>
+      <div className="film-preview-cover" aria-hidden="true">
+        {thumbnail ? <div className="film-preview-blur" style={{ backgroundImage: `url("${thumbnail}")` }} /> : <span className="film-preview-title">{title}</span>}
+        {imageSrc && attachPoster && failedPoster !== imageSrc && (
+          // Native image deliberately shares the server-preloaded URL. The
+          // embedded thumbnail below it needs no network or image optimizer.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={imageSrc} alt="" className="film-preview-poster" loading="eager" decoding="async" fetchPriority={priority ? "high" : "auto"}
+            style={{ opacity: readyPoster === imageSrc ? 1 : 0 }}
+            onLoad={() => setReadyPoster(imageSrc)} onError={() => setFailedPoster(imageSrc)} />
+        )}
+        {loaded && !failed && !frameReady && <span className="film-preview-spinner" />}
+      </div>
     </div>
   );
 }

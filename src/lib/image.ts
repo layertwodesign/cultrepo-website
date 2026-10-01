@@ -1,4 +1,9 @@
 import { getImageProps } from "next/image";
+import previewPosters from "./preview-posters.json";
+
+export function previewThumbnail(url: string | null | undefined): string | undefined {
+  return url ? (previewPosters as Record<string, { poster: string; blur: string }>)[url]?.blur : undefined;
+}
 
 /**
  * Serve CMS video posters through the same image optimizer/CDN as other site
@@ -8,6 +13,8 @@ import { getImageProps } from "next/image";
  */
 export function videoPoster(url: string | null | undefined, width: number): string | undefined {
   if (!url) return undefined;
+  const cached = (previewPosters as Record<string, { poster: string; blur: string }>)[url];
+  if (cached) return cached.poster;
   if (!/^https:\/\/[\w-]+\.graphassets\.com\//.test(url)) return url;
   const { props } = getImageProps({
     src: url,
