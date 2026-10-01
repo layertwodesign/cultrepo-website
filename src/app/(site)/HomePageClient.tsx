@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import FilmPreview from "@/components/FilmPreview";
 import Image from "next/image";
+import { flushSync } from "react-dom";
 import TransitionLink from "@/components/TransitionLink";
 import { useTransition } from "@/components/PageTransition";
 import type { Film } from "@/lib/films";
@@ -290,16 +291,11 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     if (introPhase !== "carousel") return;
     // Reveal the homepage wordmark after the carousel starts.
     const t1 = setTimeout(() => setShowUI(true), 800);
-    // Keep the intro cadence without rendering an unused description typewriter.
-    const completion = setTimeout(() => {
-      setIntroPhase("done");
-      try { sessionStorage.setItem("cultrepo-intro-seen", "1"); } catch { /* Storage may be disabled. */ }
-    }, 5300);
 
     // Show bottom-left area (ghost is already there from shrink)
     const t4 = setTimeout(() => setRevealed(true), 600);
 
-    return () => { clearTimeout(t1); clearTimeout(completion); clearTimeout(t4); };
+    return () => { clearTimeout(t1); clearTimeout(t4); };
   }, [introPhase]);
 
   // Track centered carousel item for YouTube preloading
@@ -645,6 +641,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         return;
       }
 
+      let introLanded = false;
       if (state.initialized) {
         // Snap to nearest item center after input settles
         const itemH = effectiveBW / (16 / 9);
@@ -702,6 +699,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         state.introOffsetY = initialOffset * (1 - slideEase);
 
         if (progress >= 1) {
+          introLanded = true;
           state.initialized = true;
           state.current = state.introEnd;
           state.target = state.introEnd;
@@ -710,6 +708,16 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
         }
       }
       render(wW, wH);
+      if (introLanded) {
+        // Commit the menu reveal with the final carousel position, before the
+        // same browser paint. No independent timer or opacity fade can drift.
+        flushSync(() => {
+          setIntroPhase("done");
+          setShowUI(true);
+          setRevealed(true);
+        });
+        try { sessionStorage.setItem("cultrepo-intro-seen", "1"); } catch { /* Storage may be disabled. */ }
+      }
       // Keep the side-rulers in sync with the infinite carousel input.
       setRulerY(state.rulerY + window.scrollY);
       rafId = requestAnimationFrame(loop);
@@ -720,7 +728,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     const menuOpen = () => document.documentElement.classList.contains("menu-open");
 
     const onWheel = (e: WheelEvent) => {
-      if (state.carouselBlocked || menuOpen()) return;
+      if (state.carouselBlocked || !state.initialized || menuOpen()) return;
       e.preventDefault();
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       state.target += delta * 0.8;
@@ -731,8 +739,7 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
     window.addEventListener("wheel", onWheel, { passive: false });
 
     const onMouseDown = (e: MouseEvent) => {
-      if (state.carouselBlocked || menuOpen()) return;
-      if (!state.initialized) { state.initialized = true; state.current = state.target; }
+      if (state.carouselBlocked || !state.initialized || menuOpen()) return;
       state.isDragging = true;
       state.hasDragged = false;
       state.startY = e.pageY;
@@ -754,12 +761,11 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
 
     let touchPrevY = 0;
     const onTouchStart = (e: TouchEvent) => {
-      if (state.carouselBlocked || menuOpen()) return;
+      if (state.carouselBlocked || !state.initialized || menuOpen()) return;
       touchPrevY = e.touches[0].clientY;
-      if (!state.initialized) { state.initialized = true; state.current = state.target; }
     };
     const onTouchMove = (e: TouchEvent) => {
-      if (state.carouselBlocked || menuOpen()) return;
+      if (state.carouselBlocked || !state.initialized || menuOpen()) return;
       e.preventDefault();
       const y = e.touches[0].clientY;
       const inc = (touchPrevY - y) * 1.2;

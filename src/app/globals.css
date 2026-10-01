@@ -463,9 +463,8 @@ body.invert .corner-square {
   width: 44px;
   height: 44px;
   background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(50px) saturate(1.4);
-  -webkit-backdrop-filter: blur(50px) saturate(1.4);
-  isolation: isolate;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -477,7 +476,8 @@ body.invert .corner-square {
   padding: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s ease;
+  /* Reveal on the carousel landing frame; keep the glass and glyphs crisp. */
+  transition: background-color 0.2s ease;
 }
 .hamburger.visible {
   opacity: 1;
