@@ -1149,7 +1149,6 @@ export default function HomePageClient({ films, featuredSlug, ticker }: Props) {
             <TransitionLink href="/films">Films</TransitionLink>
             <TransitionLink href="/about">Sponsor</TransitionLink>
           </nav>
-          <span className="home-footer-credit">Site by LayerTwo</span>
         </footer>
       )}
 

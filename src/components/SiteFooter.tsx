@@ -27,7 +27,6 @@ export default function SiteFooter({ force = false, blueskyUrl, xUrl, instagramU
 
       <div className="site-footer-meta">
         <span className="site-footer-credit">&copy; 2026</span>
-        <a href="https://layertwo.design" target="_blank" rel="noopener noreferrer" className="site-footer-credit site-footer-credit-link">Site by LayerTwo</a>
       </div>
     </footer>
   );

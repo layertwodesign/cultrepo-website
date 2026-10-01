@@ -2503,11 +2503,6 @@ body.invert .corner-square {
   grid-row: 1;
   justify-self: start;
 }
-.site-footer-meta > :last-child {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: end;
-}
 .site-footer-credit {
   font-family: var(--font-mono), monospace;
   font-size: 12px;

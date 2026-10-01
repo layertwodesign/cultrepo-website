@@ -263,7 +263,6 @@ export default function Navigation({ films, blueskyUrl, xUrl, instagramUrl, yout
 
           <div className="menu-footer-meta">
             <span className="menu-footer-credit">&copy; 2026</span>
-            <a href="https://layertwo.design" target="_blank" rel="noopener noreferrer" className="menu-footer-credit menu-footer-credit-link">Site by LayerTwo</a>
           </div>
         </div>
       </div>

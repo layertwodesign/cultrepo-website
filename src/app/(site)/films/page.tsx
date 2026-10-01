@@ -29,7 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FilmsPage() {
-  const films = await getFilms();
+  const films = [...await getFilms()].sort((a, b) =>
+    a.title.localeCompare(b.title, "en", { sensitivity: "base", numeric: true })
+  );
   // The first card's poster is the page's LCP (on phones the first row is the
   // first screen too): fetch it from <head> at high priority, same URL as the
   // card's <video poster>.
