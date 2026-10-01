@@ -1344,6 +1344,9 @@ body.invert .corner-square {
    doesn't feel cramped, while still letting the image peek above the
    fold once you've taken in the headline. */
 .about-editorial > .about-hero {
+  margin-bottom: clamp(56px, 8vh, 96px);
+}
+.about-editorial > .about-supporters {
   margin-bottom: clamp(84px, 12vh, 144px);
 }
 
@@ -1353,11 +1356,9 @@ body.invert .corner-square {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
   gap: clamp(40px, 6vw, 120px);
+  /* Line-height 1 heading vs 1.5 copy puts both last baselines within a
+     pixel of each other, so bottom-aligning lines them up. */
   align-items: end;
-}
-.about-hero-copy {
-  display: flex;
-  flex-direction: column;
 }
 .about-title {
   font-family: var(--font-sans), sans-serif;
@@ -1366,7 +1367,6 @@ body.invert .corner-square {
   line-height: 1;
   letter-spacing: -0.04em;
   color: #FAFFFF;
-  margin-bottom: 28px;
   max-width: 28ch;
   text-wrap: balance;
 }
@@ -1466,11 +1466,10 @@ body.invert .corner-square {
   color: rgba(250, 255, 255, 0.4);
 }
 
-.about-hero-trusted {
+.about-supporters {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
+  gap: 20px;
 }
 .about-partners-label {
   display: inline-block;
@@ -1481,13 +1480,49 @@ body.invert .corner-square {
   text-transform: uppercase;
   color: rgba(250, 255, 255, 0.5);
 }
-.about-partners-logos {
+/* Full-bleed logo carousel. LogoMarquee renders the list three times and
+   wraps after one copy; each copy carries its own trailing gap so the
+   wrap lands exactly on the next copy's first logo. */
+.logo-marquee {
+  --logo-gap: clamp(32px, 4vw, 64px);
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.logo-marquee-track {
   display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.logo-marquee-group {
+  display: flex;
+  flex-shrink: 0;
   align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  /* Tighter rows than columns so a long sponsor list wraps into a compact block. */
-  gap: clamp(18px, 1.6vw, 24px) clamp(20px, 3vw, 48px);
+  gap: var(--logo-gap);
+  padding-right: var(--logo-gap);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* No scrolling: one static copy that wraps inside the page grid. */
+  .logo-marquee {
+    width: auto;
+    margin-left: 0;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .logo-marquee-track {
+    width: auto;
+    transform: none !important;
+    will-change: auto;
+  }
+  .logo-marquee-group {
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    gap: clamp(18px, 1.6vw, 24px) clamp(20px, 3vw, 48px);
+    padding-right: 0;
+  }
+  .logo-marquee-group[aria-hidden] { display: none; }
 }
 .about-partner-logo {
   height: 32px;
@@ -2703,8 +2738,8 @@ body:has(.not-found-page) > .site-footer {
   .about-numbers { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .team-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .about-image-break { height: clamp(280px, 50vh, 460px); }
-  .about-hero { grid-template-columns: 1fr; align-items: start; gap: 40px; }
-  .about-partners-logos { gap: 20px 32px; }
+  .about-hero { grid-template-columns: 1fr; align-items: start; gap: 28px; }
+  .logo-marquee-group { --logo-gap: 32px; }
   .about-partner-logo { height: 24px; }
   .about-story-layout { gap: 48px; }
   .about-sponsors { flex-wrap: wrap; }

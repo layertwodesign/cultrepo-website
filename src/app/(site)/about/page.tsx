@@ -11,6 +11,7 @@ import SplitReveal from "@/components/SplitReveal";
 import Typewriter from "@/components/Typewriter";
 import CornerSquares from "@/components/CornerSquares";
 import CountUp from "@/components/CountUp";
+import LogoMarquee from "@/components/LogoMarquee";
 import SiteFooter from "@/components/SiteFooter";
 import TeamMember from "./TeamMember";
 import BottomWordmark from "./BottomWordmark";
@@ -49,31 +50,33 @@ export default async function AboutPage() {
   return (
     <div className="page-container about-editorial">
       <section className="about-hero">
-        <div className="about-hero-copy">
-          <h1 className="about-title">
-            <SplitReveal text={about.heroTitle} stagger={45} immediate />
-          </h1>
-          <p className="about-subtitle">
-            <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} immediate />
-          </p>
-        </div>
-        <Reveal delay={620} className="about-hero-trusted">
-          <span className="about-partners-label">Supported by</span>
-          <div className="about-partners-logos">
-            {about.trustedBySponsors.map((p) => (
-              <Image
-                key={p.slug}
-                src={p.logo ?? `/partners/${p.slug}.png`}
-                alt={p.name}
-                width={160}
-                height={32}
-                className="about-partner-logo"
-                unoptimized={(p.logo ?? "").endsWith(".svg")}
-              />
-            ))}
-          </div>
-        </Reveal>
+        <h1 className="about-title">
+          <SplitReveal text={about.heroTitle} stagger={45} immediate />
+        </h1>
+        <p className="about-subtitle">
+          <SplitReveal text={about.heroSubtitle} stagger={25} startDelay={500} immediate />
+        </p>
       </section>
+
+      <Reveal delay={620} className="about-supporters">
+        <span className="about-partners-label">Supported by</span>
+        <LogoMarquee
+          label="Supported by"
+          items={about.trustedBySponsors.map((p) => (
+            <Image
+              key={p.slug}
+              src={p.logo ?? `/partners/${p.slug}.png`}
+              alt={p.name}
+              width={160}
+              height={32}
+              className="about-partner-logo"
+              // Copies scroll in from off-screen; load them up front so none pop in.
+              loading="eager"
+              unoptimized={(p.logo ?? "").endsWith(".svg")}
+            />
+          ))}
+        />
+      </Reveal>
 
       <section className="about-image-break">
         <Reveal>
