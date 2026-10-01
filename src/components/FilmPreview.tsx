@@ -150,6 +150,7 @@ export default function FilmPreview({ src, poster, title, className, ref, onErro
           // embedded thumbnail below it needs no network or image optimizer.
           // eslint-disable-next-line @next/next/no-img-element
           <img src={imageSrc} alt="" className="film-preview-poster" loading="eager" decoding="async" fetchPriority={priority ? "high" : "auto"}
+            ref={(image) => { if (image?.complete && image.naturalWidth > 0) setReadyPoster(imageSrc); }}
             style={{ opacity: readyPoster === imageSrc ? 1 : 0 }}
             onLoad={() => setReadyPoster(imageSrc)} onError={() => setFailedPoster(imageSrc)} />
         )}
