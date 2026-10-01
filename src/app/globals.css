@@ -1742,6 +1742,74 @@ body.invert .corner-square {
   transform: translateY(-1px);
 }
 
+/* ============ 404 ============ */
+.not-found-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 40px 96px;
+  text-align: center;
+}
+.not-found-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(250, 255, 255, 0.5);
+}
+.not-found-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: clamp(16px, 3vw, 32px) 0 clamp(20px, 3vw, 36px);
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
+  font-size: clamp(132px, 24vw, 340px);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: #FAFFFF;
+}
+/* The ghost stands in for the zero: bobs on its own, leans toward the pointer. */
+.not-found-ghost {
+  --ghost-x: 0px;
+  --ghost-y: 0px;
+  --ghost-tilt: 0deg;
+  display: block;
+  width: 0.86em;
+  margin: 0 0.02em 0 0.04em;
+  transform: translate3d(var(--ghost-x), var(--ghost-y), 0) rotate(var(--ghost-tilt));
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.not-found-ghost img {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: ghostBob 5s ease-in-out infinite;
+  will-change: transform;
+}
+.not-found-text {
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.5;
+  color: rgba(250, 255, 255, 0.55);
+  max-width: 32ch;
+  margin-bottom: 36px;
+  text-wrap: balance;
+}
+@media (prefers-reduced-motion: reduce) {
+  .not-found-ghost { transform: none; transition: none; }
+  .not-found-ghost img { animation: none; }
+}
+@media (max-width: 640px) {
+  .not-found-page { padding: 112px 24px 72px; }
+  .not-found-label { font-size: 11px; }
+}
+
 /* ============ FILMS INDEX ============ */
 .films-content {
   width: 100%;
