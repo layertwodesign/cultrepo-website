@@ -1331,8 +1331,10 @@ body.invert .corner-square {
 .about-editorial {
   padding-top: clamp(192px, 22vh, 280px);
   padding-bottom: 0;
-  max-width: 1640px;
-  margin-inline: auto;
+  /* Content caps at 1640px via padding rather than max-width: the container
+     clips overflow, and a max-width box would cut the full-bleed logo
+     carousel short of the window edges on wide screens. */
+  padding-inline: max(40px, calc((100% - 1640px) / 2 + 40px));
 }
 .about-editorial > section {
   margin-bottom: clamp(96px, 14vw, 200px);
@@ -1488,8 +1490,6 @@ body.invert .corner-square {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 .logo-marquee-track {
   display: flex;
@@ -1508,8 +1508,6 @@ body.invert .corner-square {
   .logo-marquee {
     width: auto;
     margin-left: 0;
-    mask-image: none;
-    -webkit-mask-image: none;
   }
   .logo-marquee-track {
     width: auto;
