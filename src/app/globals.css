@@ -2778,11 +2778,10 @@ body:has(.not-found-page) > .site-footer {
   .hamburger { right: 16px; top: 22px; }
   .hero { left: 16px; top: 90px; }
   .hero.with-wordmark { top: 90px; }
-  /* Ghost sits above the two-line headline — side by side they collide on phones.
-     Offset = bottom inset + 2 lines × 0.92 line-height at the headline size + gap */
-  .bottom-left { left: 16px; bottom: calc(16px + 1.84 * clamp(28px, 9vw, 44px) + 14px); }
+  /* No corner ghost on phones — the loader and page transitions carry it.
+     (Its CTA is hidden below too, so the whole corner goes.) */
+  .bottom-left { display: none; }
   .bottom-right { right: 16px; bottom: 16px; }
-  .bottom-ghost { height: 72px; margin-bottom: 0; }
   /* Top + bottom gradient scrims so headings/logo stay legible over carousel */
   .main::before {
     content: '';
