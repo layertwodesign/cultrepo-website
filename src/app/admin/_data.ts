@@ -66,7 +66,7 @@ export const BRAND_LINKS: LinkItem[] = [
     href: "/cultrepo-brand.zip",
     hint: "Wordmark + ghost + OG card, all in one",
     download: "cultrepo-brand.zip",
-    preview: { kind: "image", src: "/opengraph-image.png", fit: "cover" },
+    preview: { kind: "image", src: "/opengraph-image.jpg", fit: "cover" },
   },
   {
     label: "Wordmark (SVG)",
@@ -91,9 +91,9 @@ export const BRAND_LINKS: LinkItem[] = [
   },
   {
     label: "OpenGraph card",
-    href: "/opengraph-image.png",
+    href: "/opengraph-image.jpg",
     hint: "1200×630, share preview",
-    download: "cultrepo-og.png",
-    preview: { kind: "image", src: "/opengraph-image.png", fit: "cover" },
+    download: "cultrepo-og.jpg",
+    preview: { kind: "image", src: "/opengraph-image.jpg", fit: "cover" },
   },
 ];

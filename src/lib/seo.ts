@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import defaultSharingImage from "@/app/opengraph-image.png";
+import defaultSharingImage from "@/app/opengraph-image.jpg";
 import { ASSET_ORIGIN, SITE_NAME, assetUrl } from "./site";
 
 // The custom domain still serves the legacy site. Keep the new artwork on
