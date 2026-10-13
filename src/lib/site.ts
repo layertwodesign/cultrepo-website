@@ -2,14 +2,11 @@
  * Site-wide identity shared by metadata, robots, sitemap and structured data.
  */
 
-// Canonical origin. The custom domain still serves the legacy Webflow site;
-// canonicals already point here so ranking carries over once DNS moves.
+// Canonical production origin.
 export const SITE_URL = "https://www.cultrepo.com";
 
-// Where this project's own static files are publicly reachable today. Used for
-// absolute asset URLs (sharing images, posters) that must resolve before the
-// custom domain is migrated.
-export const ASSET_ORIGIN = "https://cultrepo-website-lac.vercel.app";
+// Local sharing images and posters are served from the production domain.
+export const ASSET_ORIGIN = SITE_URL;
 
 export const SITE_NAME = "CultRepo";
 export const SITE_TITLE =
